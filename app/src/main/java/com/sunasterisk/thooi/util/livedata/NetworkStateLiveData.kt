@@ -25,7 +25,11 @@ class NetworkStateLiveData(context: Context) : LiveData<NetworkState>() {
         ) as ConnectivityManager
     }
 
-    private val networkCallback: ConnectivityManager.NetworkCallback by lazy { DefaultNetworkCallBack() }
+    private val networkCallback: ConnectivityManager.NetworkCallback by lazy {
+        DefaultNetworkCallBack { _, _ ->
+            postValue(getNetworkState())
+        }
+    }
 
     init {
         postValue(NetworkState.NO_NETWORK)
@@ -55,29 +59,31 @@ class NetworkStateLiveData(context: Context) : LiveData<NetworkState>() {
             }
         }
 
-    private inner class DefaultNetworkCallBack : ConnectivityManager.NetworkCallback() {
+    private class DefaultNetworkCallBack(
+        private val networkStateChangedListener: (Network?, NetworkCapabilities?) -> Unit,
+    ) : ConnectivityManager.NetworkCallback() {
 
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
-            postValue(getNetworkState())
+            networkStateChangedListener(network, null)
         }
 
         override fun onCapabilitiesChanged(
             network: Network,
-            networkCapabilities: NetworkCapabilities
+            networkCapabilities: NetworkCapabilities,
         ) {
             super.onCapabilitiesChanged(network, networkCapabilities)
-            postValue(getNetworkState())
+            networkStateChangedListener(network, networkCapabilities)
         }
 
         override fun onLost(network: Network) {
             super.onLost(network)
-            postValue(getNetworkState())
+            networkStateChangedListener(network, null)
         }
 
         override fun onUnavailable() {
             super.onUnavailable()
-            postValue(getNetworkState())
+            networkStateChangedListener(null, null)
         }
     }
 }
