@@ -32,7 +32,8 @@ data class User(
 
         val defaultZoneOffset: ZoneOffset = ZoneOffset.UTC
 
-        val default = User("",
+        val default = User(
+            "",
             "",
             "",
             LocalDateTime.ofEpochSecond(0, 0, defaultZoneOffset),
@@ -43,7 +44,8 @@ data class User(
             "",
             "",
             emptyList(),
-            UserType.CUSTOMER)
+            UserType.CUSTOMER
+        )
     }
 }
 
