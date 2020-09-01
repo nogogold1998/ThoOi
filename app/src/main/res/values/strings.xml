@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Tho Oi</string>
+    <string name="label_notification">Thông báo</string>
+    <string name="label_message">Tin nhắn</string>
 </resources>
