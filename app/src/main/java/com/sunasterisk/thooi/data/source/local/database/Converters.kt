@@ -8,7 +8,6 @@ import com.sunasterisk.thooi.data.source.entity.User
 import com.sunasterisk.thooi.data.source.entity.UserType
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
-import org.threeten.bp.ZoneOffset.UTC
 
 class Converters {
     private val gson = Gson()
@@ -24,11 +23,12 @@ class Converters {
     }
 
     @TypeConverter
-    fun localDateTimeToLong(dateTime: LocalDateTime?) = dateTime?.toEpochSecond(UTC)
+    fun localDateTimeToLong(dateTime: LocalDateTime?) =
+        dateTime?.toEpochSecond(User.defaultZoneOffset)
 
     @TypeConverter
     fun longToLocalDateTime(value: Long?) = value?.let {
-        LocalDateTime.ofEpochSecond(it, 0, UTC)
+        LocalDateTime.ofEpochSecond(it, 0, User.defaultZoneOffset)
     }
 
     @TypeConverter
