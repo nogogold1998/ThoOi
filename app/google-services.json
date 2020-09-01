@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "963330863736",
+    "firebase_url": "https://tho-oi.firebaseio.com",
+    "project_id": "tho-oi",
+    "storage_bucket": "tho-oi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963330863736:android:c408160eca5ec544c5b38d",
+        "android_client_info": {
+          "package_name": "com.sunasterisk.thooi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "963330863736-2auv4q3ugl6j38dbqou9a54sq86l85cc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUhHbA33uuhIrqPlEos8gLojSDGGZinkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "963330863736-2auv4q3ugl6j38dbqou9a54sq86l85cc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
