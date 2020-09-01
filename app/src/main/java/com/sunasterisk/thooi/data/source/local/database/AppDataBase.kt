@@ -6,12 +6,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.sunasterisk.thooi.data.source.entity.Post
 import com.sunasterisk.thooi.data.source.entity.User
+import com.sunasterisk.thooi.data.source.local.database.dao.PostDao
 import com.sunasterisk.thooi.data.source.local.database.dao.UserDao
 import java.util.concurrent.Executor
 
 @Database(
-    entities = [User::class],
+    entities = [
+        User::class,
+        Post::class,
+    ],
     version = DatabaseConstants.DATABASE_VERSION,
     exportSchema = false
 )
@@ -19,6 +24,8 @@ import java.util.concurrent.Executor
 abstract class AppDataBase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
+
+    abstract fun postDao(): PostDao
 
     companion object {
 
