@@ -25,9 +25,6 @@
 | General       | Does the code follow DRY?: Do not Repeat Yourself            | Is there any redundant or duplicate code? DRY (Do not Repeat Yourself) principle: The same code should not be repeated more than twice. Consider reusable services, functions and components. Consider generic functions and classes. | YES                      | <li>- [x] yes</li> | <li>- [ ] yes</li> |
 | General       | Exception handling and cleanup (dispose) resources           |                                                              | YES                      | <li>- [x] yes</li> | <li>- [ ] yes</li> |
 | General       | Does the code build and execute correctly?                   |                                                              | YES                      | <li>- [x] yes</li> | <li>- [ ] yes</li> |
-| Conventions   | Does the source code have end-line errors?                   |                                                              | NO                       | <li>- [x] no</li>  | <li>- [ ] no</li>  |
-| Conventions   | No hard coding, use constants/configuration values           |                                                              | YES                      | <li>- [x] yes</li> | <li>- [ ] yes</li> |
-| Conventions   | Does the code follow Sun* coding style and coding conventions? | https://github.com/framgia/coding-standards/tree/master/eng/android | YES                      | <li>- [x] yes</li> | <li>- [ ] yes</li> |
 | Redmine       | Does the ticket follow Sun* Redmine working process?         | https://github.com/framgia/Training-Guideline/blob/master/WorkingProcess/redmine/redmine.md | YES                      | <li>- [x] yes</li> | <li>- [ ] yes</li> |
 | Documentation | Is there any incomplete code? If so, should it be removed or flagged with a suitable marker like ‘TODO’? |                                                              | YES                      | <li>- [x] yes</li> | <li>- [ ] yes</li> |
 
