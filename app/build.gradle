@@ -70,6 +70,8 @@ dependencies {
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.0"
     implementation "androidx.navigation:navigation-ui-ktx:2.3.0"
+    // Three ten (android back port)
+    implementation "com.jakewharton.threetenabp:threetenabp:1.2.4"
 
     // Firebase
     implementation 'com.google.firebase:firebase-auth:19.3.2'
