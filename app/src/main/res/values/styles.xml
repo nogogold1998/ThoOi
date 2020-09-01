@@ -7,4 +7,31 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="StyleTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/dp_24</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/dp_12</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/dp_12</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/dp_12</item>
+        <item name="boxCornerRadiusTopStart">@dimen/dp_12</item>
+    </style>
+
+    <style name="StyleButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/dp_24</item>
+        <item name="cornerRadius">@dimen/dp_12</item>
+        <item name="android:padding">@dimen/dp_20</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="StyleButtonOutline" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/dp_20</item>
+        <item name="cornerRadius">@dimen/dp_12</item>
+        <item name="android:padding">@dimen/dp_20</item>
+        <item name="textAllCaps">false</item>
+    </style>
 </resources>
