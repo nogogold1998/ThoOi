@@ -5,7 +5,7 @@ import org.junit.Test
 /**
  * Tests that do not have body, derive "passed result" from [UserDaoTest]'s tests
  */
-interface MessageDaoTest {
+class MessageDaoTest {
 
     @Test
     fun insert() = Unit
