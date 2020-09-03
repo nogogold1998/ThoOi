@@ -44,5 +44,23 @@ data class Post(
 }
 
 enum class PostStatus {
-    NEW, PENDING, FINISHED
+    /**
+     * No fixer has applied
+     */
+    NEW,
+
+    /**
+     * At least one fixer applied
+     */
+    OPEN,
+
+    /**
+     * Customer picked a fixer for the job
+     */
+    PENDING,
+
+    /**
+     * Job has finished
+     */
+    FINISHED
 }

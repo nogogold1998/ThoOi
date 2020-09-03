@@ -1,21 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?android:attr/colorBackground"
-    app:elevation="0dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="navigationIcon"
+            type="android.graphics.drawable.Drawable" />
+    </data>
+
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/colorBackground"
-        android:paddingStart="@dimen/dp_8"
-        android:paddingEnd="@dimen/dp_8"
-        android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
-        app:elevation="0dp"
-        app:titleMarginStart="@dimen/dp_16"
-        app:titleTextAppearance="@style/TextAppearance.AppCompat.Headline"
-        app:titleTextColor="@color/colorPrimary" />
-</com.google.android.material.appbar.AppBarLayout>
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/colorBackground"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingEnd="@dimen/dp_8"
+            android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
+            app:elevation="0dp"
+            app:navigationIcon="@{navigationIcon, default=@drawable/ic_arrow_back_24}"
+            app:title="@{title, default=@string/app_name}"
+            app:titleMarginStart="@dimen/dp_16"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Headline"
+            app:titleTextColor="@color/colorPrimary" />
+    </com.google.android.material.appbar.AppBarLayout>
+</layout>
