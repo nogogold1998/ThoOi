@@ -121,4 +121,7 @@ dependencies {
     androidTestImplementation "androidx.test:runner:1.3.0"
     androidTestImplementation "androidx.test:rules:1.3.0"
     androidTestImplementation "org.hamcrest:hamcrest-library:1.3"
+
+    //Google places
+    implementation 'com.google.maps.android:places-ktx:0.3.1'
 }

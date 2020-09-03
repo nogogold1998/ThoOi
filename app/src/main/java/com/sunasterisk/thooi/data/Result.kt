@@ -1,14 +1,14 @@
 package com.sunasterisk.thooi.data
 
-sealed class Result<T> {
+sealed class Result<out T : Any> {
 
-    data class Success<T>(val data: T) : Result<T>()
-    data class Failed<T>(val message: String) : Result<T>()
-    class Loading<T> : Result<T>()
+    data class Success<out T : Any>(val data: T) : Result<T>()
+    data class Failed(val cause: Throwable) : Result<Nothing>()
+    object Loading : Result<Nothing>()
 
     companion object {
-        fun <T> success(data: T) = Success(data)
-        fun <T> failed(message: String) = Failed<T>(message)
-        fun <T> loading() = Loading<T>()
+        fun <T : Any> success(data: T) = Success(data)
+        fun failed(cause: Throwable) = Failed(cause)
+        fun loading() = Loading
     }
 }

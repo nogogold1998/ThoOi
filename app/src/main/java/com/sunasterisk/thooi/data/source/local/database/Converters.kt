@@ -1,9 +1,8 @@
 package com.sunasterisk.thooi.data.source.local.database
 
 import androidx.room.TypeConverter
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
-import com.google.protobuf.ByteString
-import com.google.type.LatLng
 import com.sunasterisk.thooi.data.source.entity.NotificationType
 import com.sunasterisk.thooi.data.source.entity.PostStatus
 import com.sunasterisk.thooi.data.source.entity.UserType
@@ -36,12 +35,13 @@ class Converters {
     fun longToLocalDate(value: Long?) = value?.let { LocalDate.ofEpochDay(it) }
 
     @TypeConverter
-    fun latLngToString(latLng: LatLng?) = latLng?.toByteString()?.toStringUtf8()
+    fun latLngToString(latLng: LatLng?) =
+        latLng?.latitude.toString() + " " + latLng?.longitude.toString()
 
     @TypeConverter
-    fun stringToLatLng(value: String?) = value
-        ?.let(ByteString::copyFromUtf8)
-        ?.let(LatLng::parseFrom)
+    fun stringToLatLng(value: String?) = value?.split(" ")?.let {
+        LatLng(it[0].toDouble(), it[1].toDouble())
+    }
 
     @TypeConverter
     fun listStringToJsonString(list: List<String>?): String? {
