@@ -2,6 +2,8 @@ package com.sunasterisk.thooi.data.source.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.sunasterisk.thooi.data.source.remote.dto.FirestoreNotification
+import com.sunasterisk.thooi.util.toLocalDateTime
 import org.threeten.bp.LocalDateTime
 
 @Entity
@@ -14,7 +16,17 @@ data class Notification(
     val receiverRef: String,
     val senderRef: String,
     val type: NotificationType,
-)
+) {
+    constructor(id: String, firestoreNotification: FirestoreNotification) : this(
+        id,
+        firestoreNotification.content,
+        firestoreNotification.created_at.toLocalDateTime(),
+        firestoreNotification.is_read,
+        firestoreNotification.receiver.id,
+        firestoreNotification.sender.id,
+        NotificationType.valueOf(firestoreNotification.type)
+    )
+}
 
 enum class NotificationType {
     Notification,

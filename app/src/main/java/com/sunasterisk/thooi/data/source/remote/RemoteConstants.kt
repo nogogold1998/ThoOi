@@ -13,4 +13,5 @@ object RemoteConstants {
     const val EMAIL_NOT_VERIFIED = "email_not_verified"
     const val MSG_USER_NOT_FOUND = "User not found"
     const val MSG_EMAIL_NOT_VERIFIED = "Email is not verified"
+    const val FIELD_RECEIVER = "receiver"
 }
