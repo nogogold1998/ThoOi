@@ -4,8 +4,9 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.protobuf.ByteString
 import com.google.type.LatLng
-import com.sunasterisk.thooi.data.source.entity.User
+import com.sunasterisk.thooi.data.source.entity.PostStatus
 import com.sunasterisk.thooi.data.source.entity.UserType
+import com.sunasterisk.thooi.data.source.local.database.DatabaseConstants.DEFAULT_ZONE_OFFSET
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 
@@ -13,22 +14,18 @@ class Converters {
     private val gson = Gson()
 
     @TypeConverter
-    fun userTypeToString(type: UserType?) = type?.value
+    fun userTypeToString(type: UserType?) = type?.name
 
     @TypeConverter
-    fun stringToUserType(value: String?) = when (value) {
-        User.COL_USER_TYPE_CUSTOMER -> UserType.CUSTOMER
-        User.COL_USER_TYPE_FIXER -> UserType.FIXER
-        else -> null
-    }
+    fun stringToUserType(value: String?) = value?.let(UserType::valueOf)
 
     @TypeConverter
     fun localDateTimeToLong(dateTime: LocalDateTime?) =
-        dateTime?.toEpochSecond(User.defaultZoneOffset)
+        dateTime?.toEpochSecond(DEFAULT_ZONE_OFFSET)
 
     @TypeConverter
     fun longToLocalDateTime(value: Long?) = value?.let {
-        LocalDateTime.ofEpochSecond(it, 0, User.defaultZoneOffset)
+        LocalDateTime.ofEpochSecond(it, 0, DEFAULT_ZONE_OFFSET)
     }
 
     @TypeConverter
@@ -54,4 +51,10 @@ class Converters {
     fun jsonStringToListString(value: String?): List<String>? = value?.let {
         gson.fromJson(it, Array<String>::class.java).toList()
     }
+
+    @TypeConverter
+    fun postStatusToString(status: PostStatus?): String? = status?.name
+
+    @TypeConverter
+    fun stringToPostStatus(value: String?): PostStatus? = value?.let(PostStatus::valueOf)
 }

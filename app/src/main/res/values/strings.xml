@@ -2,4 +2,25 @@
     <string name="app_name">Tho Oi</string>
     <string name="label_notification">Thông báo</string>
     <string name="label_message">Tin nhắn</string>
+    <string name="description_logo">Logo</string>
+    <string name="hint_email_address">Địa chỉ email*</string>
+    <string name="hint_password">Mật khẩu*</string>
+    <string name="label_sign_in">Đăng nhập</string>
+    <string name="label_sign_in_with_google">Đăng nhập bằng Google</string>
+    <string name="label_or">or</string>
+    <string name="label_forgot_password">Quên mật khẩu?</string>
+    <string name="label_do_not_have_an_account">Chưa có tài khoản?</string>
+    <string name="label_create_now">Tạo ngay</string>
+    <string name="app_name_">Thợ ơi</string>
+    <string name="label_customer">Khách hàng</string>
+    <string name="label_fixer">Thợ sửa</string>
+    <string name="default_notification_channel_id">default_channel</string>
+    <string name="hint_full_name">Họ tên</string>
+    <string name="hint_phone">Số điện thoại</string>
+    <string name="hint_address">Địa chỉ</string>
+    <string name="label_category">Chuyên nghành:</string>
+    <string name="hint_birthday">Ngày sinh</string>
+    <string name="hint_description">Mô tả</string>
+    <string name="hint_change_password">Đổi mật khẩu</string>
+    <string name="label_sign_up">Đăng ký</string>
 </resources>
