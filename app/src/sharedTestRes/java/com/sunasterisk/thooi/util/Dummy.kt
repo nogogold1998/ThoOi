@@ -35,7 +35,7 @@ object Dummy {
             "EOdq0TmYzm7ZpkvRCskA",
             fullName = "Nguyen Minh Tuan C",
             address = "123, duong 4",
-            userType =  UserType.FIXER
+            userType = UserType.FIXER
         )
     )
 }

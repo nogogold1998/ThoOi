@@ -4,9 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.type.LatLng
 import com.sunasterisk.thooi.data.source.entity.User.Companion.TABLE_NAME
+import com.sunasterisk.thooi.data.source.local.database.DatabaseConstants.DEFAULT_ZONE_OFFSET
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
-import org.threeten.bp.ZoneOffset
 
 @Entity(tableName = TABLE_NAME)
 data class User(
@@ -27,16 +27,10 @@ data class User(
     companion object {
         const val TABLE_NAME = "user"
 
-        const val COL_USER_TYPE_CUSTOMER = "customer"
-        const val COL_USER_TYPE_FIXER = "fixer"
-
-        val defaultZoneOffset: ZoneOffset = ZoneOffset.UTC
-
-        val default = User(
+        val default = User("",
             "",
             "",
-            "",
-            LocalDateTime.ofEpochSecond(0, 0, defaultZoneOffset),
+            LocalDateTime.ofEpochSecond(0, 0, DEFAULT_ZONE_OFFSET),
             LocalDate.ofEpochDay(0),
             "",
             "",
@@ -49,7 +43,4 @@ data class User(
     }
 }
 
-enum class UserType(val value: String) {
-    CUSTOMER(User.COL_USER_TYPE_CUSTOMER),
-    FIXER(User.COL_USER_TYPE_FIXER)
-}
+enum class UserType { CUSTOMER, FIXER }
