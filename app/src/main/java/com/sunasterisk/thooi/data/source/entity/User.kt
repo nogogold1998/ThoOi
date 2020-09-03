@@ -38,7 +38,8 @@ data class User(
             "",
             "",
             emptyList(),
-            UserType.CUSTOMER)
+            UserType.CUSTOMER
+        )
     }
 }
 
