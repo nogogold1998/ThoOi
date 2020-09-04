@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface PostDataSource {
     interface Local {
-        
+
     }
 
     interface Remote {
