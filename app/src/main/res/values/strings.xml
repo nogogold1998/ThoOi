@@ -23,4 +23,10 @@
     <string name="hint_description">Mô tả</string>
     <string name="hint_change_password">Đổi mật khẩu</string>
     <string name="label_sign_up">Đăng ký</string>
+
+    <string name="label_detail">Chi tiết</string>
+    <string name="label_description">Mô tả</string>
+    <string name="label_location">Địa điểm</string>
+    <string name="label_fixers_applied">Thợ đã ứng tuyển</string>
+    <string name="label_apply">Nhận việc</string>
 </resources>

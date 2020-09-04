@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="postDetail"
+            type="com.sunasterisk.thooi.data.model.PostDetail" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/dp_12"
+        tools:ignore="MissingConstraints">
+
+        <!--NOTE: All [View]s, which apply ignore "MissingConstraints" from line 8, derive constraints
+        implicitly from [FLow] helper-->
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flowJobDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="textJobTitle, textPostedDate,
+        dividerJobTitle, layoutSummaryCustomer,
+        dividerSummaryCustomer, textLabelJobDescription, textJobDescription,
+        dividerJobDescription, textLabelJobLocation, textJobLocation,
+        dividerJobLocation, textLabelAppliedFixers, recyclerAppliedFixer"
+            app:flow_horizontalAlign="start"
+            app:flow_horizontalBias="0"
+            app:flow_maxElementsWrap="1"
+            app:flow_verticalGap="6dp"
+            app:flow_wrapMode="chain"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textJobTitle"
+            style="@style/TextAppearance.MaterialComponents.Headline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{postDetail.title}"
+            tools:text="@tools:sample/full_names" />
+
+        <TextView
+            android:id="@+id/textPostedDate"
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            localDateTime="@{postDetail.postedDateTime}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@tools:sample/date/ddmmyy" />
+
+        <View
+            android:id="@+id/dividerJobTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <include
+            android:id="@+id/layoutSummaryCustomer"
+            layout="@layout/partial_summary_customer"
+            app:user="@{postDetail.customer}" />
+
+        <View
+            android:id="@+id/dividerSummaryCustomer"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/textLabelJobDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_description" />
+
+        <TextView
+            android:id="@+id/textJobDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{postDetail.description}"
+            tools:text="@tools:sample/lorem/random" />
+
+        <View
+            android:id="@+id/dividerJobDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/textLabelJobLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_location" />
+
+        <TextView
+            android:id="@+id/textJobLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{postDetail.location}"
+            app:drawableStartCompat="@drawable/ic_location_24"
+            tools:text="@tools:sample/cities" />
+
+        <View
+            android:id="@+id/dividerJobLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+
+        <TextView
+            android:id="@+id/textLabelAppliedFixers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_fixers_applied" />
+
+        <!--TODO bind list Customer next pull-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerAppliedFixer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_summary_fixer" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

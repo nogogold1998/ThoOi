@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        android:id="@+id/padding_scroll_transition"
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start" />
+
+    <ConstraintSet android:id="@+id/start" />
+
+    <ConstraintSet
+        android:id="@+id/end"
+        motion:deriveConstraintsFrom="@id/start">
+        <Constraint android:id="@+id/scrollViewJobDetails">
+            <Layout motion:layout_constraintBottom_toTopOf="@+id/bottomActions" />
+        </Constraint>
+    </ConstraintSet>
+</MotionScene>

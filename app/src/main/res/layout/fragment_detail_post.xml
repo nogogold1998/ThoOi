@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="postDetail"
+            type="com.sunasterisk.thooi.data.model.PostDetail" />
+    </data>
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/fragment_detail_post_scene">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollViewJobDetails"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appbarJobDetail">
+
+            <include
+                layout="@layout/partial_details_post"
+                app:postDetail="@{postDetail}" />
+
+        </androidx.core.widget.NestedScrollView>
+
+        <include
+            android:id="@+id/bottomActions"
+            layout="@layout/partial_details_post_actions_customer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <include
+            android:id="@+id/appbarJobDetail"
+            layout="@layout/tool_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@{@drawable/ic_arrow_back_24}"
+            app:title="@{@string/label_detail}" />
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+</layout>

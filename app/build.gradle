@@ -94,8 +94,12 @@ dependencies {
     // Coroutine play services
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
 
-    //ThreeTenBP
+    // ThreeTenBP
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:4.11.0"
+    implementation "jp.wasabeef:glide-transformations:4.0.0"
 
     // Test dependencies
     testImplementation 'junit:junit:4.13'
