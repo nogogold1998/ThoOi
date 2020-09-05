@@ -4,13 +4,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.android.gms.maps.model.LatLng
 import com.sunasterisk.thooi.data.source.entity.User.Companion.TABLE_NAME
-import com.sunasterisk.thooi.data.source.local.database.DatabaseConstants.DEFAULT_ZONE_OFFSET
 import com.sunasterisk.thooi.data.source.remote.dto.FirestoreUser
 import com.sunasterisk.thooi.util.toLatLng
 import com.sunasterisk.thooi.util.toLocalDate
 import com.sunasterisk.thooi.util.toLocalDateTime
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneOffset
 
 @Entity(tableName = TABLE_NAME)
 data class User(
@@ -27,9 +27,8 @@ data class User(
     val organization: String,
     val phone: String,
     val professions: List<String>,
-    val userType: UserType
+    val userType: UserType,
 ) {
-
     constructor(id: String, firestoreUser: FirestoreUser) : this(
         id,
         firestoreUser.address,
@@ -43,29 +42,18 @@ data class User(
         firestoreUser.organization,
         firestoreUser.phone,
         firestoreUser.professions,
-        if (firestoreUser.type == USER_TYPE_CUSTOMER) UserType.CUSTOMER else UserType.FIXER
+        if (firestoreUser.type == COL_USER_TYPE_CUSTOMER) UserType.CUSTOMER else UserType.FIXER
     )
 
     companion object {
         const val TABLE_NAME = "user"
-        const val USER_TYPE_CUSTOMER = "CUSTOMER"
-
-        val default = User(
-            "",
-            "",
-            "",
-            LocalDateTime.ofEpochSecond(0, 0, DEFAULT_ZONE_OFFSET),
-            LocalDate.ofEpochDay(0),
-            "",
-            "",
-            "",
-            LatLng(0.0, 0.0),
-            "",
-            "",
-            emptyList(),
-            UserType.CUSTOMER
-        )
+        const val COL_USER_TYPE_CUSTOMER = "customer"
+        const val COL_USER_TYPE_FIXER = "fixer"
+        val defaultZoneOffset: ZoneOffset = ZoneOffset.UTC
     }
 }
 
-enum class UserType { CUSTOMER, FIXER }
+enum class UserType(val value: String) {
+    CUSTOMER(User.COL_USER_TYPE_CUSTOMER),
+    FIXER(User.COL_USER_TYPE_FIXER)
+}
