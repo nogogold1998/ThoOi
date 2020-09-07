@@ -2,9 +2,13 @@ package com.sunasterisk.thooi.data.source.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.type.LatLng
+import com.google.android.gms.maps.model.LatLng
 import com.sunasterisk.thooi.data.source.entity.User.Companion.TABLE_NAME
 import com.sunasterisk.thooi.data.source.local.database.DatabaseConstants.DEFAULT_ZONE_OFFSET
+import com.sunasterisk.thooi.data.source.remote.dto.FirestoreUser
+import com.sunasterisk.thooi.util.toLatLng
+import com.sunasterisk.thooi.util.toLocalDate
+import com.sunasterisk.thooi.util.toLocalDateTime
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 
@@ -18,23 +22,44 @@ data class User(
     val dateOfBirth: LocalDate,
     val email: String,
     val fullName: String,
-    val location: LatLng?, //FIXME: assign to ToanDV fix create default LatLng value
+    val imageUrl: String,
+    val location: LatLng,
     val organization: String,
     val phone: String,
     val professions: List<String>,
-    val userType: UserType,
+    val userType: UserType
 ) {
+
+    constructor(id: String, firestoreUser: FirestoreUser) : this(
+        id,
+        firestoreUser.address,
+        firestoreUser.bio,
+        firestoreUser.created_at.toLocalDateTime(),
+        firestoreUser.date_of_birth.toLocalDate(),
+        firestoreUser.email,
+        firestoreUser.full_name,
+        firestoreUser.image_url,
+        firestoreUser.location.toLatLng(),
+        firestoreUser.organization,
+        firestoreUser.phone,
+        firestoreUser.professions,
+        if (firestoreUser.type == USER_TYPE_CUSTOMER) UserType.CUSTOMER else UserType.FIXER
+    )
+
     companion object {
         const val TABLE_NAME = "user"
+        const val USER_TYPE_CUSTOMER = "CUSTOMER"
 
-        val default = User("",
+        val default = User(
+            "",
             "",
             "",
             LocalDateTime.ofEpochSecond(0, 0, DEFAULT_ZONE_OFFSET),
             LocalDate.ofEpochDay(0),
             "",
             "",
-            null,
+            "",
+            LatLng(0.0, 0.0),
             "",
             "",
             emptyList(),
