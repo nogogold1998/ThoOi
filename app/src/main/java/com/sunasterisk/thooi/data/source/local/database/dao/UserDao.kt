@@ -1,10 +1,6 @@
 package com.sunasterisk.thooi.data.source.local.database.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.sunasterisk.thooi.data.source.entity.User
 import com.sunasterisk.thooi.data.source.local.database.DatabaseConstants.DEFAULT_CONFLICT_STRATEGY
 import kotlinx.coroutines.flow.Flow

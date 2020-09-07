@@ -5,8 +5,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.sunasterisk.thooi.data.source.entity.NotificationType
 import com.sunasterisk.thooi.data.source.entity.PostStatus
+import com.sunasterisk.thooi.data.source.entity.User
 import com.sunasterisk.thooi.data.source.entity.UserType
-import com.sunasterisk.thooi.data.source.local.database.DatabaseConstants.DEFAULT_ZONE_OFFSET
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 
@@ -14,18 +14,22 @@ class Converters {
     private val gson = Gson()
 
     @TypeConverter
-    fun userTypeToString(type: UserType?) = type?.name
+    fun userTypeToString(type: UserType?) = type?.value
 
     @TypeConverter
-    fun stringToUserType(value: String?) = value?.let(UserType::valueOf)
+    fun stringToUserType(value: String?) = when (value) {
+        User.COL_USER_TYPE_CUSTOMER -> UserType.CUSTOMER
+        User.COL_USER_TYPE_FIXER -> UserType.FIXER
+        else -> null
+    }
 
     @TypeConverter
     fun localDateTimeToLong(dateTime: LocalDateTime?) =
-        dateTime?.toEpochSecond(DEFAULT_ZONE_OFFSET)
+        dateTime?.toEpochSecond(User.defaultZoneOffset)
 
     @TypeConverter
     fun longToLocalDateTime(value: Long?) = value?.let {
-        LocalDateTime.ofEpochSecond(it, 0, DEFAULT_ZONE_OFFSET)
+        LocalDateTime.ofEpochSecond(it, 0, User.defaultZoneOffset)
     }
 
     @TypeConverter
@@ -35,12 +39,13 @@ class Converters {
     fun longToLocalDate(value: Long?) = value?.let { LocalDate.ofEpochDay(it) }
 
     @TypeConverter
-    fun latLngToString(latLng: LatLng?) =
-        latLng?.latitude.toString() + " " + latLng?.longitude.toString()
+    fun latLngToString(latLng: LatLng?): String? {
+        return latLng?.let { gson.toJson(it) }
+    }
 
     @TypeConverter
-    fun stringToLatLng(value: String?) = value?.split(" ")?.let {
-        LatLng(it[0].toDouble(), it[1].toDouble())
+    fun stringToLatLng(value: String?): LatLng? {
+        return value?.let { gson.fromJson(it, LatLng::class.java) }
     }
 
     @TypeConverter
