@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.protobuf.ByteString
 import com.google.type.LatLng
+import com.sunasterisk.thooi.data.source.entity.NotificationType
 import com.sunasterisk.thooi.data.source.entity.PostStatus
 import com.sunasterisk.thooi.data.source.entity.UserType
 import com.sunasterisk.thooi.data.source.local.database.DatabaseConstants.DEFAULT_ZONE_OFFSET
@@ -51,6 +52,12 @@ class Converters {
     fun jsonStringToListString(value: String?): List<String>? = value?.let {
         gson.fromJson(it, Array<String>::class.java).toList()
     }
+
+    @TypeConverter
+    fun notificationTypeToString(notificationType: NotificationType?) = notificationType?.name
+
+    @TypeConverter
+    fun stringToNotificationType(value: String?) = value?.let(NotificationType::valueOf)
 
     @TypeConverter
     fun postStatusToString(status: PostStatus?): String? = status?.name

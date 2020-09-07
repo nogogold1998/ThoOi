@@ -6,10 +6,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.sunasterisk.thooi.data.source.entity.Category
 import com.sunasterisk.thooi.data.source.entity.Message
+import com.sunasterisk.thooi.data.source.entity.Notification
 import com.sunasterisk.thooi.data.source.entity.Post
 import com.sunasterisk.thooi.data.source.entity.User
 import com.sunasterisk.thooi.data.source.local.database.dao.MessageDao
+import com.sunasterisk.thooi.data.source.local.database.dao.NotificationDao
 import com.sunasterisk.thooi.data.source.local.database.dao.PostDao
 import com.sunasterisk.thooi.data.source.local.database.dao.UserDao
 import java.util.concurrent.Executor
@@ -19,6 +22,8 @@ import java.util.concurrent.Executor
         User::class,
         Message::class,
         Post::class,
+        Category::class,
+        Notification::class,
     ],
     version = DatabaseConstants.DATABASE_VERSION,
     exportSchema = false
@@ -27,6 +32,8 @@ import java.util.concurrent.Executor
 abstract class AppDataBase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
+
+    abstract fun notificationDao(): NotificationDao
 
     abstract fun messageDao(): MessageDao
 
