@@ -29,4 +29,7 @@
     <string name="label_location">Địa điểm</string>
     <string name="label_fixers_applied">Thợ đã ứng tuyển</string>
     <string name="label_apply">Nhận việc</string>
+
+    <string name="default_channel_name">Mặc định</string>
+    <string name="description_default_channel">Thông báo mặc định</string>
 </resources>
