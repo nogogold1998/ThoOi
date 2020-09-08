@@ -23,10 +23,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="textJobTitle, textPostedDate,
-        dividerJobTitle, layoutSummaryCustomer,
-        dividerSummaryCustomer, textLabelJobDescription, textJobDescription,
-        dividerJobDescription, textLabelJobLocation, textJobLocation,
-        dividerJobLocation, textLabelAppliedFixers, recyclerAppliedFixer"
+            dividerJobTitle, layoutSummaryCustomer,
+            dividerSummaryCustomer, textLabelJobDescription, textJobDescription,
+            dividerJobDescription, textLabelJobLocation, textJobLocation,
+            dividerJobLocation, textLabelAppliedFixers, recyclerAppliedFixer,
+            bottomActions"
             app:flow_horizontalAlign="start"
             app:flow_horizontalBias="0"
             app:flow_maxElementsWrap="1"
@@ -80,6 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{postDetail.description}"
+            tools:maxLength="1000"
             tools:text="@tools:sample/lorem/random" />
 
         <View
@@ -121,6 +123,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="2"
             tools:listitem="@layout/item_summary_fixer" />
+
+        <include
+            android:id="@+id/bottomActions"
+            layout="@layout/partial_details_post_actions_customer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.sunasterisk.thooi.ui.post.detail.PostDetailsFragment">
 
     <data>
 
         <variable
-            name="postDetail"
-            type="com.sunasterisk.thooi.data.model.PostDetail" />
+            name="postDetailsVM"
+            type="com.sunasterisk.thooi.ui.post.detail.PostDetailsVM" />
     </data>
 
     <androidx.constraintlayout.motion.widget.MotionLayout
@@ -22,28 +24,66 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appbarJobDetail">
+            app:layout_constraintTop_toBottomOf="@id/imageSliderJobThumbnails">
 
             <include
                 layout="@layout/partial_details_post"
-                app:postDetail="@{postDetail}" />
+                app:postDetail="@{postDetailsVM.postDetail}" />
 
         </androidx.core.widget.NestedScrollView>
 
-        <include
-            android:id="@+id/bottomActions"
-            layout="@layout/partial_details_post_actions_customer"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBottomToolbar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="?android:attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <include
-            android:id="@+id/appbarJobDetail"
-            layout="@layout/tool_bar_layout"
+        <com.smarteist.autoimageslider.SliderView
+            android:id="@+id/imageSliderJobThumbnails"
+            slideImages="@{postDetailsVM.postDetail.thumbnailUrls}"
             android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_300"
+            android:background="@color/colorPrimary"
+            app:sliderAnimationDuration="@integer/slider_animation_duration"
+            app:sliderAutoCycleDirection="right"
+            app:sliderAutoCycleEnabled="true"
+            app:sliderIndicatorAnimationDuration="@integer/slider_indicator_animation_duration"
+            app:sliderIndicatorGravity="center_horizontal|bottom"
+            app:sliderIndicatorMargin="@dimen/dp_16"
+            app:sliderIndicatorOrientation="horizontal"
+            app:sliderIndicatorPadding="@dimen/dp_3"
+            app:sliderIndicatorRadius="@dimen/dp_2"
+            app:sliderIndicatorSelectedColor="@color/color_scorpion"
+            app:sliderIndicatorUnselectedColor="@color/colorZircon"
+            app:sliderScrollTimeInSec="3"
+            app:sliderStartAutoCycle="true" />
+
+        <ImageView
+            android:id="@+id/imageUpButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/dp_8"
+            android:contentDescription="@null"
+            android:elevation="@dimen/dp_1"
+            android:padding="@dimen/dp_4"
+            android:src="@drawable/ic_arrow_back_24"
+            app:layout_constraintBottom_toTopOf="@id/guidelineBottomToolbar"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textTitleDetail"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@{@drawable/ic_arrow_back_24}"
-            app:title="@{@string/label_detail}" />
+            android:layout_marginStart="@dimen/dp_24"
+            android:gravity="center_vertical"
+            android:text="@string/label_detail"
+            app:layout_constraintBottom_toBottomOf="@id/imageUpButton"
+            app:layout_constraintStart_toEndOf="@id/imageUpButton"
+            app:layout_constraintTop_toTopOf="@id/imageUpButton" />
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

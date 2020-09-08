@@ -2,6 +2,7 @@ package com.sunasterisk.thooi.util
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 
 /**
  * Used as a wrapper for data that is exposed via a LiveData that represents an event.
@@ -38,3 +39,5 @@ inline fun <T> LiveData<Event<T>>.observeEvent(
         event?.getContentIfNotHandled()?.let(handleUnhandledContent)
     }
 }
+
+fun <T> MutableLiveData<Event<T>>.postValue(value: T) = this.postValue(Event(value))
