@@ -22,12 +22,12 @@
     <string name="hint_description">Mô tả</string>
     <string name="hint_change_password">Đổi mật khẩu</string>
     <string name="label_sign_up">Đăng ký</string>
-
     <string name="label_detail">Chi tiết</string>
     <string name="label_description">Mô tả</string>
     <string name="label_location">Địa điểm</string>
     <string name="label_fixers_applied">Thợ đã ứng tuyển</string>
     <string name="label_apply">Nhận việc</string>
+
     <string name="label_schedule_manager">Quản lý công việc</string>
     <string name="label_schedule">Lịch trình</string>
     <string name="label_history">Lịch sử</string>
@@ -81,4 +81,9 @@
     <string name="msg_missing_permission">Bạn chưa cấp quyền vị trí</string>
     <string name="msg_missing_location_setting">Bạn chưa bật vị trí</string>
     <string name="label_choose_location">Chọn vị trí của bạn</string>
+
+    <string name="title_settings">Settings</string>
+    <string name="label_logout">Đăng xuất</string>
+    <string name="label_edit_profile">Chỉnh sửa thông tin cá nhân</string>
+    <string name="label_about">Thông tin ứng dụng</string>
 </resources>
