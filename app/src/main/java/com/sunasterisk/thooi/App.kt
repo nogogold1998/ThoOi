@@ -1,6 +1,7 @@
 package com.sunasterisk.thooi
 
 import android.app.Application
+import com.google.android.libraries.places.api.Places
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.sunasterisk.thooi.di.appModule
 import com.sunasterisk.thooi.di.repositoryModule
@@ -16,6 +17,7 @@ class App : Application() {
         super.onCreate()
 
         AndroidThreeTen.init(this)
+        Places.initialize(this, getString(R.string.google_maps_key))
 
         startKoin {
             androidContext(this@App)
