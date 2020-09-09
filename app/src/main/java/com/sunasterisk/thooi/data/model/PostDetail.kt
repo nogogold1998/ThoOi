@@ -11,10 +11,10 @@ data class PostDetail(
     val thumbnailUrls: List<String> = emptyList(),
     val title: String = "",
     val postedDateTime: LocalDateTime = LocalDateTime.now(),
-    val customer: User = User(),
+    val customer: SummaryUser = SummaryUser(),
     val description: String = "",
     val location: String = "",
-    val appliedFixers: List<User> = emptyList(),
+    val appliedFixers: List<SummaryUser> = emptyList(),
     val status: PostStatus = PostStatus.NEW,
 )
 

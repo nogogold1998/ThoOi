@@ -1,9 +1,9 @@
 package com.sunasterisk.thooi.ui.post.detail
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.smarteist.autoimageslider.SliderViewAdapter
 import com.sunasterisk.thooi.databinding.ItemImageSliderBinding
+import com.sunasterisk.thooi.util.inflater
 import com.sunasterisk.thooi.util.load
 
 /**
@@ -30,7 +30,7 @@ class ImageSliderAdapter : SliderViewAdapter<ImageSliderAdapter.SlideAdapterVH>(
         private val binding: ItemImageSliderBinding,
     ) : SliderViewAdapter.ViewHolder(binding.root) {
         constructor(container: ViewGroup) : this(
-            ItemImageSliderBinding.inflate(LayoutInflater.from(container.context), container, false)
+            ItemImageSliderBinding.inflate(container.inflater, container, false)
         )
 
         fun bind(url: String) {
