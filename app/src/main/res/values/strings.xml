@@ -11,6 +11,7 @@
     <string name="label_forgot_password">Quên mật khẩu?</string>
     <string name="label_do_not_have_an_account">Chưa có tài khoản?</string>
     <string name="label_create_now">Tạo ngay</string>
+    <!--FIXME: conflict name with @string/app_name. Assigned to ToanDV or KhanhNQ-->
     <string name="app_name_">Thợ ơi</string>
     <string name="label_customer">Khách hàng</string>
     <string name="label_fixer">Thợ sửa</string>
@@ -32,4 +33,6 @@
 
     <string name="default_channel_name">Mặc định</string>
     <string name="description_default_channel">Thông báo mặc định</string>
+
+    <string name="error_unknown">Đã có lỗi xảy ra</string>
 </resources>

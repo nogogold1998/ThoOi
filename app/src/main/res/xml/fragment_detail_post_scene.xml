@@ -3,17 +3,27 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        android:id="@+id/padding_scroll_transition"
-        motion:constraintSetEnd="@+id/end"
-        motion:constraintSetStart="@id/start" />
+        android:id="@+id/collapse_transition"
+        motion:constraintSetEnd="@+id/collapsed"
+        motion:constraintSetStart="@id/start">
+        <OnSwipe
+            motion:maxAcceleration="100"
+            motion:onTouchUp="autoComplete"
+            motion:touchAnchorId="@+id/scrollViewJobDetails"
+            motion:touchAnchorSide="top" />
+    </Transition>
 
     <ConstraintSet android:id="@+id/start" />
 
     <ConstraintSet
-        android:id="@+id/end"
+        android:id="@+id/collapsed"
         motion:deriveConstraintsFrom="@id/start">
-        <Constraint android:id="@+id/scrollViewJobDetails">
-            <Layout motion:layout_constraintBottom_toTopOf="@+id/bottomActions" />
+
+        <Constraint android:id="@+id/imageSliderJobThumbnails">
+            <Layout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_300"
+                motion:layout_constraintBottom_toBottomOf="@+id/guidelineBottomToolbar" />
         </Constraint>
     </ConstraintSet>
 </MotionScene>

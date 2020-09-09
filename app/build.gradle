@@ -36,6 +36,10 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
+
+        // Enable Coroutines and Flow APIs
+        freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+        freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.FlowPreview"
     }
 
     buildFeatures {
@@ -52,6 +56,12 @@ android {
         androidTest {
             java.srcDir sharedTestDir
         }
+    }
+
+    packagingOptions {
+        // from dependency com.github.smarteist:autoimageslider
+        exclude 'META-INF/AL2.0'
+        exclude 'META-INF/LGPL2.1'
     }
 }
 
@@ -101,6 +111,12 @@ dependencies {
     // Glide
     implementation "com.github.bumptech.glide:glide:4.11.0"
     implementation "jp.wasabeef:glide-transformations:4.0.0"
+    // Image slider
+    implementation "com.github.smarteist:autoimageslider:1.3.9"
+
+    // Fragment test scenario
+    debugImplementation "androidx.fragment:fragment-testing:1.2.5"
+    debugImplementation "androidx.test:core:1.3.0"
 
     // Test dependencies
     testImplementation 'junit:junit:4.13'
@@ -122,6 +138,10 @@ dependencies {
     androidTestImplementation "androidx.test:runner:1.3.0"
     androidTestImplementation "androidx.test:rules:1.3.0"
     androidTestImplementation "org.hamcrest:hamcrest-library:1.3"
+    androidTestImplementation "org.mockito:mockito-core:2.25.0"
+    // Test helpers for LiveData
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation "org.threeten:threetenbp:1.4.4"
 
     //Google places
     implementation 'com.google.maps.android:places-ktx:0.3.1'

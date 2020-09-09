@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/postDetailsFragment">
+
+    <fragment
+        android:id="@+id/postDetailsFragment"
+        android:name="com.sunasterisk.thooi.ui.post.detail.PostDetailsFragment"
+        android:label="fragment_detail_post"
+        tools:layout="@layout/fragment_detail_post">
+        <argument
+            android:name="postId"
+            app:argType="string" />
+    </fragment>
+</navigation>

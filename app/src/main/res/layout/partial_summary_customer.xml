@@ -27,13 +27,13 @@
             tools:src="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/textFixerName"
+            android:id="@+id/textUserFullName"
             style="@style/TextAppearance.MaterialComponents.Headline5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_12"
             android:text="@{user.fullName}"
-            app:layout_constraintBottom_toTopOf="@id/textFixerLastActive"
+            app:layout_constraintBottom_toTopOf="@id/textUserLastActive"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@id/imageFixerAvatar"
@@ -42,7 +42,7 @@
             tools:text="@tools:sample/full_names" />
 
         <TextView
-            android:id="@+id/textFixerLastActive"
+            android:id="@+id/textUserLastActive"
             style="@style/TextAppearance.MaterialComponents.Subtitle1"
             localDateTime="@{user.lastActive}"
             android:layout_width="0dp"
@@ -50,8 +50,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/imageFixerAvatar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="@+id/textFixerName"
-            app:layout_constraintTop_toBottomOf="@id/textFixerName"
+            app:layout_constraintStart_toStartOf="@+id/textUserFullName"
+            app:layout_constraintTop_toBottomOf="@id/textUserFullName"
             tools:text="@tools:sample/date/ddmmyy" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
