@@ -2,10 +2,16 @@ package com.sunasterisk.thooi.data.source.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.sunasterisk.thooi.data.source.remote.dto.FirestoreCategory
 
 @Entity
 data class Category(
     @PrimaryKey
     val id: String,
     val title: String,
-)
+) {
+    constructor(id: String, firestoreCategory: FirestoreCategory) : this(
+        id,
+        firestoreCategory.title
+    )
+}

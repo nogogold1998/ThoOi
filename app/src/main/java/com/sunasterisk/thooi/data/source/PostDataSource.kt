@@ -2,6 +2,7 @@ package com.sunasterisk.thooi.data.source
 
 import com.google.firebase.firestore.DocumentReference
 import com.sunasterisk.thooi.data.Result
+import com.sunasterisk.thooi.data.source.entity.Category
 import com.sunasterisk.thooi.data.source.entity.Post
 import kotlinx.coroutines.flow.Flow
 
@@ -11,13 +12,15 @@ interface PostDataSource {
     }
 
     interface Remote {
-        fun getAllPosts(): Flow<Result<List<Post>>>
+        suspend fun getAllPosts(categories: List<Category>): Flow<Result<List<Post>>>
 
-        fun getPostById(id: String): Flow<Result<Post>>
+        suspend fun getPostsByCustomer(userId: String): Flow<Result<List<Post>>>
 
-        fun addNewPost(post: Post): Flow<Result<DocumentReference>>
+        suspend fun getPostById(id: String): Flow<Result<Post>>
 
-        fun updatePost(post: Post): Flow<Result<Unit>>
+        suspend fun addNewPost(post: Post): Result<DocumentReference>
+
+        suspend fun updatePost(post: Post): Result<Unit>
     }
 }
 
