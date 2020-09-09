@@ -82,7 +82,7 @@ class UserRemoteDataSource(
         getOneShotResult {
             firebaseAuth.signInWithCredential(credential).await()
             userDocument?.run {
-                if (get().await().exists()) set(FirestoreUser(user)).await()
+                if (get().await().exists().not()) set(FirestoreUser(user)).await()
                 Unit
             } ?: throw authException
         }
