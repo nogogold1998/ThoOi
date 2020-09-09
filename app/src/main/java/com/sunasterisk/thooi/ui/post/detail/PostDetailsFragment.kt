@@ -9,8 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
+import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.databinding.FragmentDetailPostBinding
+import com.sunasterisk.thooi.util.MarginItemDecoration
 
 class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
 
@@ -30,11 +32,15 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
         it.lifecycleOwner = viewLifecycleOwner
     }
 
+    override fun setupView() {
+        setupSliderView()
+        setupAppliedFixersRecyclerView()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.loadPost(args.postId)
-        setupSliderView()
     }
 
     private fun setupSliderView() = with(binding.imageSliderJobThumbnails) {
@@ -44,4 +50,10 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
         isAutoCycle = true
         startAutoCycle()
     }
+
+    private fun setupAppliedFixersRecyclerView() =
+        with(binding.layoutPartialDetailsPost.recyclerAppliedFixer) {
+            adapter = SummaryUserAdapter()
+            addItemDecoration(MarginItemDecoration(resources, R.dimen.dp_8))
+        }
 }

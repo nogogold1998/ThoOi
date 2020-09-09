@@ -27,6 +27,7 @@
             app:layout_constraintTop_toBottomOf="@id/imageSliderJobThumbnails">
 
             <include
+                android:id="@+id/layoutPartialDetailsPost"
                 layout="@layout/partial_details_post"
                 app:postDetail="@{postDetailsVM.postDetail}" />
 

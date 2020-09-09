@@ -61,7 +61,7 @@
 
         <include
             android:id="@+id/layoutSummaryCustomer"
-            layout="@layout/partial_summary_customer"
+            layout="@layout/partial_summary_user"
             app:user="@{postDetail.customer}" />
 
         <View
@@ -120,11 +120,12 @@
         <!--TODO bind list Customer next pull-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerAppliedFixer"
+            listSummaryUser="@{postDetail.appliedFixers}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="2"
-            tools:listitem="@layout/item_summary_fixer" />
+            tools:listitem="@layout/item_summary_user" />
 
         <include
             android:id="@+id/bottomActions"
