@@ -34,4 +34,13 @@
 
     <string name="error_unknown">Đã có lỗi xảy ra</string>
     <string name="type_your_message">Nhập tin nhắn...</string>
+    <string name="msg_email_invalid">Email không hợp lệ</string>
+    <string name="msg_weak_password">Mật khẩu quá ngắn</string>
+    <string name="msg_require_not_empty">Không được để trống</string>
+    <string name="msg_password_invalid">Mật khẩu không chính xác</string>
+    <string name="msg_email_not_exist">Email không chính xác</string>
+    <string name="msg_unknown_error">Có lỗi xảy ra</string>
+    <string name="label_confirm">Xác nhận</string>
+    <string name="label_confirm_reset_password">Bạn sẽ nhận được email reset mật khẩu</string>
+    <string name="msg_email_not_verified">Chưa xác thực email này</string>
 </resources>
