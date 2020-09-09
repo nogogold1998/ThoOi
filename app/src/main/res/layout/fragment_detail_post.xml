@@ -17,21 +17,16 @@
         android:layout_height="match_parent"
         app:layoutDescription="@xml/fragment_detail_post_scene">
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/scrollViewJobDetails"
+            listPostDetailsAdapterItem="@{postDetailsVM.postDetailsAdapterItems}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageSliderJobThumbnails">
-
-            <include
-                android:id="@+id/layoutPartialDetailsPost"
-                layout="@layout/partial_details_post"
-                app:postDetail="@{postDetailsVM.postDetail}" />
-
-        </androidx.core.widget.NestedScrollView>
+            app:layout_constraintTop_toBottomOf="@id/imageSliderJobThumbnails"
+            tools:listitem="@layout/item_details_post" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineBottomToolbar"

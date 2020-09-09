@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.sunasterisk.thooi.R
@@ -52,8 +53,9 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
     }
 
     private fun setupAppliedFixersRecyclerView() =
-        with(binding.layoutPartialDetailsPost.recyclerAppliedFixer) {
-            adapter = SummaryUserAdapter()
-            addItemDecoration(MarginItemDecoration(resources, R.dimen.dp_8))
+        with(binding.scrollViewJobDetails) {
+            adapter = PostDetailsAdapter()
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(MarginItemDecoration(resources, R.dimen.dp_8, R.dimen.dp_8))
         }
 }

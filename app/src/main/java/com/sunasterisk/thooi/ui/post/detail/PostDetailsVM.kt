@@ -12,10 +12,12 @@ import androidx.lifecycle.asLiveData
 import androidx.savedstate.SavedStateRegistryOwner
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.data.repository.PostDetailRepository
+import com.sunasterisk.thooi.ui.post.detail.model.toPostDetailsAdapterItem
 import com.sunasterisk.thooi.util.Event
 import com.sunasterisk.thooi.util.postValue
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.mapLatest
 
 /**
  * Created by Cong Vu Chi on 04/09/20 09:59.
@@ -29,6 +31,10 @@ class PostDetailsVM(
     val postDetail = _requestedPostId.asFlow()
         .flatMapLatest { postDetailRepo.getPostDetailById(it) }
         .catch { _errorRes.postValue(R.string.error_unknown) }
+        .asLiveData()
+
+    val postDetailsAdapterItems = postDetail.asFlow()
+        .mapLatest { it.toPostDetailsAdapterItem() }
         .asLiveData()
 
     private val _errorRes = MutableLiveData<Event<@StringRes Int>>()
