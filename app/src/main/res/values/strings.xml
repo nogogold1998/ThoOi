@@ -31,12 +31,16 @@
     <string name="label_schedule_manager">Quản lý công việc</string>
     <string name="label_schedule">Lịch trình</string>
     <string name="label_history">Lịch sử</string>
+    <string name="label_home">Trang chủ</string>
+    <string name="label_post_create">Tạo bài viết</string>
+    <string name="label_ranking">Xếp hạng</string>
+    <string name="label_setting">Cài đặt</string>
 
     <string name="default_channel_name">Mặc định</string>
     <string name="description_default_channel">Thông báo mặc định</string>
 
     <string name="error_unknown">Đã có lỗi xảy ra</string>
-    <string name="type_your_message">Nhập tin nhắn...</string>
+    <string name="type_your_message">Nhập tin nhắn…</string>
     <string name="msg_email_invalid">Email không hợp lệ</string>
     <string name="msg_weak_password">Mật khẩu quá ngắn</string>
     <string name="msg_require_not_empty">Không được để trống</string>
