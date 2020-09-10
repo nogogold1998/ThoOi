@@ -13,7 +13,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/dp_12"
         tools:ignore="MissingConstraints">
 
         <!--NOTE: All [View]s, which apply ignore "MissingConstraints" from line 8, derive constraints
@@ -26,8 +25,7 @@
             dividerJobTitle, layoutSummaryCustomer,
             dividerSummaryCustomer, textLabelJobDescription, textJobDescription,
             dividerJobDescription, textLabelJobLocation, textJobLocation,
-            dividerJobLocation, textLabelAppliedFixers, recyclerAppliedFixer,
-            bottomActions"
+            dividerJobLocation, textLabelAppliedFixers"
             app:flow_horizontalAlign="start"
             app:flow_horizontalBias="0"
             app:flow_maxElementsWrap="1"
@@ -116,22 +114,5 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_fixers_applied" />
-
-        <!--TODO bind list Customer next pull-->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerAppliedFixer"
-            listSummaryUser="@{postDetail.appliedFixers}"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="2"
-            tools:listitem="@layout/item_summary_user" />
-
-        <include
-            android:id="@+id/bottomActions"
-            layout="@layout/partial_details_post_actions_customer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
