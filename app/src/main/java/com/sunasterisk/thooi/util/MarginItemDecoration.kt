@@ -12,7 +12,7 @@ class MarginItemDecoration(
     @DimenRes horizontalDimenRes: Int? = null,
 ) : RecyclerView.ItemDecoration() {
     private val spaceHeight = verticalDimenRes?.let(resources::getDimension)?.toInt() ?: 0
-    private val spaceWidth = horizontalDimenRes?.let(resources::getDimension)?.toInt() ?: 0
+    private val spaceWidth = (horizontalDimenRes?.let(resources::getDimension)?.toInt() ?: 0) / 2
 
     override fun getItemOffsets(
         outRect: Rect, view: View,

@@ -9,6 +9,7 @@ data class Category(
     @PrimaryKey
     val id: String,
     val title: String,
+    val span: Int = 1,
 ) {
     constructor(id: String, firestoreCategory: FirestoreCategory) : this(
         id,
