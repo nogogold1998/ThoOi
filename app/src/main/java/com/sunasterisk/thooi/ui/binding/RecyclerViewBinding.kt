@@ -12,3 +12,8 @@ import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAdapterItem
 fun RecyclerView.bindSummaryUser(items: List<PostDetailsAdapterItem<*>>?) {
     (adapter as? PostDetailsAdapter)?.submitList(items)
 }
+
+@BindingAdapter("setAdapter")
+fun RecyclerView.bindRecyclerViewAdapter(adapter: RecyclerView.Adapter<*>?) {
+    this.adapter = adapter
+}

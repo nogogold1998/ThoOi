@@ -87,5 +87,11 @@ class UserRemoteDataSource(
             } ?: throw authException
         }
 
+    override suspend fun checkGoogleAccount(credential: AuthCredential) =
+        getOneShotResult {
+            firebaseAuth.signInWithCredential(credential).await()
+            userDocument?.get()?.await()?.exists() ?: throw authException
+        }
+
     override fun signOut() = firebaseAuth.signOut()
 }

@@ -15,18 +15,18 @@ import org.threeten.bp.ZoneOffset
 @Entity(tableName = TABLE_NAME)
 data class User(
     @PrimaryKey
-    val id: String,
-    val address: String,
-    val bio: String,
-    val createdDateTime: LocalDateTime,
-    val dateOfBirth: LocalDate,
+    val id: String = "",
+    val address: String = "",
+    val bio: String = "",
+    val createdDateTime: LocalDateTime = LocalDateTime.now(),
+    val dateOfBirth: LocalDate = LocalDate.now(),
     val email: String,
     val fullName: String,
-    val imageUrl: String,
-    val location: LatLng,
-    val organization: String,
+    val imageUrl: String = "",
+    val location: LatLng = LatLng(0.0, 0.0),
+    val organization: String = "",
     val phone: String,
-    val professions: List<String>,
+    val professions: List<String> = emptyList(),
     val userType: UserType,
 ) {
     constructor(id: String, firestoreUser: FirestoreUser) : this(

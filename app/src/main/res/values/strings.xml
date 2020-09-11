@@ -50,4 +50,8 @@
     <string name="label_confirm">Xác nhận</string>
     <string name="label_confirm_reset_password">Bạn sẽ nhận được email reset mật khẩu</string>
     <string name="msg_email_not_verified">Chưa xác thực email này</string>
+    <string name="msg_email_already_in_use">Email đã được sử dụng</string>
+    <string name="msg_missing_permission">Bạn chưa cấp quyền vị trí</string>
+    <string name="msg_missing_location_setting">Bạn chưa bật vị trí</string>
+    <string name="label_choose_location">Chọn vị trí của bạn</string>
 </resources>
