@@ -1,7 +1,12 @@
 package com.sunasterisk.thooi.ui.notification.notifications
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.data.repository.NotificationRepository
 import com.sunasterisk.thooi.data.repository.UserRepository

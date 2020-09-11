@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 
+@Deprecated("")
 class FakePostDetailRepo : PostDetailRepository {
     private val dispatcher = Dispatchers.Default
     val channel = ConflatedBroadcastChannel<PostDetail>()

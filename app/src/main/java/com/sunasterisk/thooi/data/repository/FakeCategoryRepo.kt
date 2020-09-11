@@ -4,6 +4,7 @@ import com.sunasterisk.thooi.data.source.entity.Category
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
+@Deprecated("")
 class FakeCategoryRepo : CategoryRepository {
     override fun getAllCategories(): Flow<List<Category>> = flowOf(listOf(
         foo("Thợ điện lạnh", 2),

@@ -7,6 +7,7 @@ import com.sunasterisk.thooi.util.DummyPosts
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
+@Deprecated("")
 class FakePostRepo : PostRepository {
     override fun getAllPosts(): Flow<List<Post>> {
         TODO("Not yet implemented")
