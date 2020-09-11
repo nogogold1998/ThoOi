@@ -35,11 +35,37 @@
     <string name="label_post_create">Tạo bài viết</string>
     <string name="label_ranking">Xếp hạng</string>
     <string name="label_setting">Cài đặt</string>
+    <string name="label_discovery">Khám phá danh mục</string>
+    <string name="label_post">Bài viết</string>
+    <string name="label_pending">Đang chờ thợ</string>
+    <string name="label_job_finished">Đã hoàn thành</string>
+    <string name="label_job_applied">Đã nhận việc</string>
+    <string name="label_job_assigned_to_other">Đã được giao cho người khác</string>
+    <string name="label_job_assigned_to_you">Đã được giao cho bạn</string>
+    <string name="label_job_on_progress">Đang tiến hành</string>
+
+    <string name="action_apply_job">Nhận việc</string>
+    <string name="action_close_post">Đóng bài viết</string>
+    <string name="action_reassign">Chọn lại thợ</string>
+    <string name="action_cancel_fixing">Hủy sửa chữa</string>
+    <string name="action_assign_fixer">Phân công thợ</string>
+    <string name="action_start_fixing">Bắt đầu sửa</string>
+    <string name="action_finish_job">Hoàn thành công việc</string>
 
     <string name="default_channel_name">Mặc định</string>
     <string name="description_default_channel">Thông báo mặc định</string>
 
     <string name="error_unknown">Đã có lỗi xảy ra</string>
+    <string name="error_unable_select_fixer">Lỗi: không thể chọn thợ</string>
+    <string name="error_not_select_fixer">Lỗi: chưa chọn thợ</string>
+    <string name="error_wrong_post_status">Lỗi: trạng thái bài viết sai</string>
+
+    <string name="msg_assign_fixer_done">Đã phân công thợ</string>
+    <string name="msg_reassign_fixer_done">Đã hủy phân công thợ</string>
+    <string name="msg_cancel_fixing_done">Đã hủy trạng thái đang sửa chữa</string>
+    <string name="msg_closed_post_done">Đã đóng bài viết</string>
+
+    <string name="format_msg_fixer_selected">Bạn đã chọn thợ %s</string>
     <string name="type_your_message">Nhập tin nhắn…</string>
     <string name="error_user_not_found">Không tìm thấy người dùng</string>
     <string name="msg_email_invalid">Email không hợp lệ</string>

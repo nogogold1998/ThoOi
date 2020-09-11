@@ -1,26 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <import type="com.sunasterisk.thooi.data.source.entity.PostStatus" />
+
+        <import type="com.sunasterisk.thooi.data.model.PostDetail" />
+
+        <import type="androidx.lifecycle.LiveData" />
+
+        <variable
+            name="postDetail"
+            type="LiveData&lt;PostDetail>" />
+
+        <import type="com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.CustomerAction" />
+
+        <variable
+            name="actionListener"
+            type="com.sunasterisk.thooi.ui.post.detail.PostDetailsAdapter.ClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
 
-        <Button
-            android:id="@+id/button"
-            style="@style/StyleButtonOutline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:backgroundTint="@color/colorZircon"
-            android:text="@string/label_apply"
-            app:icon="@drawable/ic_work_24"
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flowPostActions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:constraint_referenced_ids="buttonAssignFixer, buttonReassignFixer,
+            buttonCancelFixing, buttonFinishJob,
+            buttonClosePost"
+            app:flow_horizontalGap="@dimen/dp_16"
+            app:flow_maxElementsWrap="2"
+            app:flow_verticalGap="@dimen/dp_8"
+            app:flow_wrapMode="chain"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonAssignFixer"
+            style="@style/StyleButtonOutline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorZircon"
+            android:onClick="@{()-> actionListener.onClick(CustomerAction.assignFixer())}"
+            android:text="@string/action_assign_fixer"
+            app:icon="@drawable/ic_assignment_ind_24" />
+
+        <Button
+            android:id="@+id/buttonReassignFixer"
+            style="@style/StyleButtonOutline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorZircon"
+            android:onClick="@{()-> actionListener.onClick(CustomerAction.reassignFixer)}"
+            android:text="@string/action_reassign"
+            app:icon="@drawable/ic_round_redo_24" />
+
+        <Button
+            android:id="@+id/buttonCancelFixing"
+            style="@style/StyleButtonOutline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorZircon"
+            android:onClick="@{()-> actionListener.onClick(CustomerAction.cancelFixing())}"
+            android:text="@string/action_cancel_fixing"
+            app:icon="@drawable/ic_round_close_24" />
+
+        <Button
+            android:id="@+id/buttonFinishJob"
+            style="@style/StyleButtonOutline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/color_leaf_green"
+            android:enabled="@{postDetail.status == PostStatus.ON_PROGRESS}"
+            android:onClick="@{()-> actionListener.onClick(CustomerAction.finishFixing())}"
+            android:text="@{postDetail.status == PostStatus.FINISHED ? @string/label_job_finished : @string/action_finish_job}"
+            android:textColor="@color/colorZircon"
+            app:icon="@drawable/ic_round_check_24"
+            app:iconTint="@color/colorZircon" />
+
+        <Button
+            android:id="@+id/buttonClosePost"
+            style="@style/StyleButtonOutline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/color_orange"
+            android:onClick="@{()-> actionListener.onClick(CustomerAction.closePost())}"
+            android:text="@string/action_close_post"
+            android:textColor="@color/colorZircon"
+            app:icon="@drawable/ic_round_close_24"
+            app:iconTint="@color/colorZircon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

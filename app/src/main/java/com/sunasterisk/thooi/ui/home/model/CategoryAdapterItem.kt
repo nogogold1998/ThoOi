@@ -1,5 +1,6 @@
 package com.sunasterisk.thooi.ui.home.model
 
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.DiffUtil
 import com.sunasterisk.thooi.base.BaseAdapterItem
 import com.sunasterisk.thooi.data.source.entity.Category
@@ -26,8 +27,8 @@ sealed class CategoryAdapterItem<T : Any>(
 }
 
 class TitleTextDividerItem(
-    override val data: String,
-) : CategoryAdapterItem<String>(CategoryAdapterViewType.TEXT_DIVIDER) {
+    override val data: Int,
+) : CategoryAdapterItem<@StringRes Int>(CategoryAdapterViewType.TEXT_DIVIDER) {
     override fun isTheSame(other: BaseAdapterItem<*>) = other is TitleTextDividerItem
 
     override fun isContentTheSame(other: BaseAdapterItem<*>) =

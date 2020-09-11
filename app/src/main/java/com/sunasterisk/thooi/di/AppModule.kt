@@ -1,6 +1,9 @@
 package com.sunasterisk.thooi.di
 
 import com.google.android.libraries.places.api.Places
+import com.sunasterisk.thooi.data.repository.FakeCategoryRepo
+import com.sunasterisk.thooi.data.repository.FakePostRepo
+import com.sunasterisk.thooi.ui.home.HomeVM
 import com.sunasterisk.thooi.ui.notification.notifications.NotificationViewModel
 import com.sunasterisk.thooi.ui.signin.SignInViewModel
 import com.sunasterisk.thooi.ui.signup.SignUpViewModel
@@ -16,4 +19,5 @@ val viewModelModule = module {
     viewModel { SignInViewModel(get()) }
     viewModel { NotificationViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get()) }
+    viewModel { HomeVM(FakeCategoryRepo(), FakePostRepo()) }
 }

@@ -10,5 +10,7 @@ enum class PostDetailsAdapterViewType(
 
     SUMMARY_USER(R.layout.item_summary_user),
 
-    ACTION_BOTTOM(R.layout.item_details_post_actions_customer)
+    CUSTOMER_ACTION_BOTTOM(R.layout.item_details_post_actions_customer),
+
+    FIXER_ACTION_BOTTOM(R.layout.item_details_post_actions_fixer)
 }

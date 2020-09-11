@@ -3,7 +3,7 @@ package com.sunasterisk.thooi.ui.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.NavigationUI
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseActivity
 import com.sunasterisk.thooi.databinding.ActivityMainBinding
@@ -19,6 +19,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     ) = ActivityMainBinding.inflate(inflater)
 
     override fun setupViews() {
-        binding.bottomNavView.setupWithNavController(navController)
+        setupBottomNavView()
+    }
+
+    private fun setupBottomNavView() = binding.bottomNavView.let {
+        NavigationUI.setupWithNavController(it, navController)
+        it.setOnNavigationItemSelectedListener { item ->
+            if (navController.currentDestination?.id != item.itemId) {
+                NavigationUI.onNavDestinationSelected(item, navController)
+            } else {
+                true
+            }
+        }
     }
 }

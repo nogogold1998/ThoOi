@@ -32,9 +32,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_12"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
             android:text="@{user.fullName}"
             app:layout_constraintBottom_toTopOf="@id/textUserLastActive"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageSelectedTick"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@id/imageFixerAvatar"
             app:layout_constraintTop_toTopOf="@+id/imageFixerAvatar"
@@ -48,11 +51,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@+id/imageFixerAvatar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintEnd_toStartOf="@+id/imageSelectedTick"
             app:layout_constraintStart_toStartOf="@+id/textUserFullName"
             app:layout_constraintTop_toBottomOf="@id/textUserFullName"
             tools:text="@tools:sample/date/ddmmyy" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageSelectedTick"
+            android:layout_width="@dimen/dp_32"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_round_check_circle_24"
+            android:tint="@color/colorAccent"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/textUserLastActive"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textUserFullName"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -16,13 +16,13 @@ import com.sunasterisk.thooi.data.source.remote.dto.FirestorePost
 import com.sunasterisk.thooi.util.getOneShotResult
 import com.sunasterisk.thooi.util.getSnapshotFlow
 import com.sunasterisk.thooi.util.toObjectWithId
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
-@ExperimentalCoroutinesApi
 class PostRemoteDataSource(
     database: FirebaseFirestore,
 ) : PostDataSource.Remote {
@@ -33,17 +33,17 @@ class PostRemoteDataSource(
         FirebaseFirestoreException(MSG_FIRESTORE_EXCEPTION, FirebaseFirestoreException.Code.ABORTED)
     }
 
-    override suspend fun getAllPosts(categories: List<Category>): Flow<Result<List<Post>>> =
+    override fun getAllPosts(categories: List<Category>): Flow<Result<List<Post>>> =
         getPostsWithCriteria(
             null,
             Pair(FIELD_CATEGORY, categories.map { it.id }),
             Pair(FIELD_STATUS, listOf(PostStatus.NEW.name, PostStatus.PENDING.name))
         )
 
-    override suspend fun getPostsByCustomer(userId: String): Flow<Result<List<Post>>> =
+    override fun getPostsByCustomer(userId: String): Flow<Result<List<Post>>> =
         getPostsWithCriteria(Pair(FIELD_CUSTOMER, userId))
 
-    override suspend fun getPostById(id: String): Flow<Result<Post>> =
+    override fun getPostById(id: String): Flow<Result<Post>> =
         postCollection.document(id).getSnapshotFlow {
             it.toObjectWithId(FirestorePost::class.java, Post::class)
         }
@@ -58,9 +58,9 @@ class PostRemoteDataSource(
         Unit
     }
 
-    private suspend fun getPostsWithCriteria(
+    private fun getPostsWithCriteria(
         equalCriteria: Pair<String, String>? = null,
-        vararg containCriteria: Pair<String, List<String>>
+        vararg containCriteria: Pair<String, List<String>>,
     ): Flow<Result<List<Post>>> = callbackFlow {
         offer(Result.loading())
         val collection = postCollection.apply {

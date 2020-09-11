@@ -11,6 +11,7 @@ import com.sunasterisk.thooi.data.source.entity.Message
 import com.sunasterisk.thooi.data.source.entity.Notification
 import com.sunasterisk.thooi.data.source.entity.Post
 import com.sunasterisk.thooi.data.source.entity.User
+import com.sunasterisk.thooi.data.source.local.database.dao.CategoryDao
 import com.sunasterisk.thooi.data.source.local.database.dao.MessageDao
 import com.sunasterisk.thooi.data.source.local.database.dao.NotificationDao
 import com.sunasterisk.thooi.data.source.local.database.dao.PostDao
@@ -38,6 +39,8 @@ abstract class AppDataBase : RoomDatabase() {
     abstract fun messageDao(): MessageDao
 
     abstract fun postDao(): PostDao
+
+    abstract fun categoryDao(): CategoryDao
 
     companion object {
 

@@ -24,6 +24,9 @@ interface PostDao {
 
     suspend fun getAllPosts(): List<Post> = getAllPostsFlow().first()
 
+    @Query("select * from post where customerRef = :customerId")
+    fun getAllPostsByCustomerId(customerId: String): Flow<List<Post>>
+
     @Query("select * from post where id = :id limit 1")
     fun findPostByIdFlow(id: String): Flow<Post>
 

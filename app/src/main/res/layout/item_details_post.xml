@@ -29,7 +29,7 @@
             app:flow_horizontalAlign="start"
             app:flow_horizontalBias="0"
             app:flow_maxElementsWrap="1"
-            app:flow_verticalGap="6dp"
+            app:flow_verticalGap="@dimen/dp_8"
             app:flow_wrapMode="chain"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,7 @@
         <View
             android:id="@+id/dividerJobTitle"
             android:layout_width="wrap_content"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/dp_1"
             android:background="?android:attr/listDivider" />
 
         <include
@@ -65,7 +65,7 @@
         <View
             android:id="@+id/dividerSummaryCustomer"
             android:layout_width="wrap_content"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/dp_1"
             android:background="?android:attr/listDivider" />
 
         <TextView
@@ -85,7 +85,7 @@
         <View
             android:id="@+id/dividerJobDescription"
             android:layout_width="wrap_content"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/dp_1"
             android:background="?android:attr/listDivider" />
 
         <TextView
@@ -98,14 +98,14 @@
             android:id="@+id/textJobLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{postDetail.location}"
+            android:text="@{postDetail.address}"
             app:drawableStartCompat="@drawable/ic_location_24"
             tools:text="@tools:sample/cities" />
 
         <View
             android:id="@+id/dividerJobLocation"
             android:layout_width="wrap_content"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/dp_1"
             android:background="?android:attr/listDivider" />
 
 
