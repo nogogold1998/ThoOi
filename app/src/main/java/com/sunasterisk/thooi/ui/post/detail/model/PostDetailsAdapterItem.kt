@@ -3,10 +3,8 @@ package com.sunasterisk.thooi.ui.post.detail.model
 import androidx.recyclerview.widget.DiffUtil
 import com.sunasterisk.thooi.data.model.PostDetail
 import com.sunasterisk.thooi.data.model.SummaryUser
-import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAdapterItem.*
+import com.sunasterisk.thooi.data.source.entity.UserType
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAdapterViewType.*
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 
 sealed class PostDetailsAdapterItem<T>(val viewType: PostDetailsAdapterViewType) {
     abstract val data: T
@@ -25,19 +23,27 @@ sealed class PostDetailsAdapterItem<T>(val viewType: PostDetailsAdapterViewType)
 
     data class SummaryUserItem(
         override val data: SummaryUser,
+        val isSelected: Boolean = false,
     ) : PostDetailsAdapterItem<SummaryUser>(SUMMARY_USER) {
         override fun isTheSame(other: PostDetailsAdapterItem<*>) =
             other is SummaryUserItem && data.id == other.data.id
 
         override fun isContentTheSame(other: PostDetailsAdapterItem<*>) =
-            other is SummaryUserItem && this.data == other.data
+            other is SummaryUserItem && this.data == other.data && isSelected == other.isSelected
     }
 
-    object ActionBottomItem : PostDetailsAdapterItem<Unit>(ACTION_BOTTOM) {
-        override val data = Unit
-        override fun isTheSame(other: PostDetailsAdapterItem<*>) = this === other
+    class ActionBottomItem(
+        override val data: UserType,
+    ) : PostDetailsAdapterItem<UserType>(
+        when (data) {
+            UserType.CUSTOMER -> CUSTOMER_ACTION_BOTTOM
+            UserType.FIXER -> FIXER_ACTION_BOTTOM
+        }
+    ) {
+        override fun isTheSame(other: PostDetailsAdapterItem<*>) = other is ActionBottomItem
 
-        override fun isContentTheSame(other: PostDetailsAdapterItem<*>) = this == other
+        override fun isContentTheSame(other: PostDetailsAdapterItem<*>) =
+            other is ActionBottomItem && data == other.data
     }
 
     companion object {
@@ -54,11 +60,3 @@ sealed class PostDetailsAdapterItem<T>(val viewType: PostDetailsAdapterViewType)
         }
     }
 }
-
-suspend fun PostDetail.toPostDetailsAdapterItem() =
-    coroutineScope {
-        val top = async { PostDetailsItem(this@toPostDetailsAdapterItem) }
-        val middle = async { appliedFixers.map { SummaryUserItem(it) }.toTypedArray() }
-        val bottom = ActionBottomItem
-        listOf(top.await(), *middle.await(), bottom)
-    }

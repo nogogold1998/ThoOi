@@ -13,8 +13,10 @@ data class PostDetail(
     val postedDateTime: LocalDateTime = LocalDateTime.now(),
     val customer: SummaryUser = SummaryUser(),
     val description: String = "",
-    val location: String = "",
+    val address: String = "",
     val appliedFixers: List<SummaryUser> = emptyList(),
     val status: PostStatus = PostStatus.NEW,
+    val assignedFixerId: String? = null,
+    val loggedInUserId: String = "",
 )
 
