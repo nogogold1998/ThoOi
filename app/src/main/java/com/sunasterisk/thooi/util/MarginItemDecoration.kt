@@ -6,7 +6,7 @@ import android.view.View
 import androidx.annotation.DimenRes
 import androidx.recyclerview.widget.RecyclerView
 
-class MarginItemDecoration(
+open class MarginItemDecoration(
     resources: Resources,
     @DimenRes verticalDimenRes: Int? = null,
     @DimenRes horizontalDimenRes: Int? = null,

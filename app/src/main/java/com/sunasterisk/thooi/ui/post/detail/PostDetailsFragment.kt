@@ -12,7 +12,10 @@ import com.smarteist.autoimageslider.SliderAnimations
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.databinding.FragmentDetailPostBinding
-import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.*
+import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction
+import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.CustomerAction.*
+import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.FixerAction.ApplyJob
+import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.FixerAction.StartFixing
 import com.sunasterisk.thooi.util.MarginItemDecoration
 import com.sunasterisk.thooi.util.observeEvent
 import com.sunasterisk.thooi.util.toast
@@ -23,7 +26,7 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
     private val args: PostDetailsFragmentArgs by navArgs()
 
     private val viewModel by viewModels<PostDetailsVM> {
-        PostDetailsVM.Factory(get(), this)
+        PostDetailsVM.Factory(get(), get(), this)
     }
 
     override fun onCreateBinding(
@@ -62,17 +65,36 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
 
     private fun setupAppliedFixersRecyclerView() =
         with(binding.scrollViewJobDetails) {
-            adapter = PostDetailsAdapter { action ->
+            adapter = PostDetailsAdapter(viewModel.postDetail, viewLifecycleOwner) { action ->
                 when (action) {
-                    is SelectFixer -> viewModel.selectFixer(action.summaryUser)
-                    AssignFixer -> viewModel.assignFixer()
-                    ReassignFixer -> viewModel.reassignFixer()
-                    CancelFixing -> viewModel.cancelFixing()
-                    FinishFixing -> viewModel.finishFixing()
-                    ClosePost -> viewModel.closePost()
+                    is PostDetailsAction.CustomerAction -> {
+                        val viewModel = checkViewModelInstance<CustomerPostDetailsVM>()
+                        when (action) {
+                            is SelectFixer -> viewModel.selectFixer(action.summaryUser)
+                            AssignFixer -> viewModel.assignFixer()
+                            ReassignFixer -> viewModel.reassignFixer()
+                            CancelFixing -> viewModel.cancelFixing()
+                            FinishFixing -> viewModel.finishFixing()
+                            ClosePost -> viewModel.closePost()
+                        }
+                    }
+                    is PostDetailsAction.FixerAction -> {
+                        val viewModel = checkViewModelInstance<FixerPostDetailsVM>()
+                        when (action) {
+                            ApplyJob -> viewModel.applyJob()
+                            StartFixing -> viewModel.startFixing()
+                        }
+                    }
                 }
             }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(MarginItemDecoration(resources, R.dimen.dp_8, R.dimen.dp_8))
+        }
+
+    private inline fun <reified VM : PostDetailsVM> checkViewModelInstance() =
+        checkNotNull(viewModel as? VM) {
+            val expectClassName = VM::class.java.simpleName
+            val actualClassName = viewModel::class.java.simpleName
+            "Wrong instance of PostDetailsVM, required $expectClassName but was $actualClassName"
         }
 }

@@ -11,6 +11,7 @@
         tools:layout="@layout/fragment_detail_post">
         <argument
             android:name="postId"
+            android:defaultValue='""'
             app:argType="string" />
         <action
             android:id="@+id/postDetails_to_profile"

@@ -7,32 +7,49 @@ import com.sunasterisk.thooi.data.model.SummaryUser
  */
 sealed class PostDetailsAction {
 
-    data class SelectFixer(val summaryUser: SummaryUser) : PostDetailsAction()
+    sealed class CustomerAction : PostDetailsAction() {
 
-    object AssignFixer : PostDetailsAction()
+        data class SelectFixer(val summaryUser: SummaryUser) : CustomerAction()
 
-    object ReassignFixer : PostDetailsAction()
+        object AssignFixer : CustomerAction()
 
-    object CancelFixing : PostDetailsAction()
+        object ReassignFixer : CustomerAction()
 
-    object FinishFixing : PostDetailsAction()
+        object CancelFixing : CustomerAction()
 
-    object ClosePost : PostDetailsAction()
+        object FinishFixing : CustomerAction()
 
-    companion object {
-        @JvmStatic
-        fun assignFixer() = AssignFixer
+        object ClosePost : CustomerAction()
 
-        @JvmStatic
-        fun reassignFixer() = ReassignFixer
+        companion object {
+            @JvmStatic
+            fun assignFixer() = AssignFixer
 
-        @JvmStatic
-        fun cancelFixing() = CancelFixing
+            @JvmStatic
+            fun reassignFixer() = ReassignFixer
 
-        @JvmStatic
-        fun finishFixing() = FinishFixing
+            @JvmStatic
+            fun cancelFixing() = CancelFixing
 
-        @JvmStatic
-        fun closePost() = ClosePost
+            @JvmStatic
+            fun finishFixing() = FinishFixing
+
+            @JvmStatic
+            fun closePost() = ClosePost
+        }
+    }
+
+    sealed class FixerAction : PostDetailsAction() {
+        object ApplyJob : FixerAction()
+
+        object StartFixing : FixerAction()
+
+        companion object {
+            @JvmStatic
+            fun applyJob() = ApplyJob
+
+            @JvmStatic
+            fun startFixing() = StartFixing
+        }
     }
 }

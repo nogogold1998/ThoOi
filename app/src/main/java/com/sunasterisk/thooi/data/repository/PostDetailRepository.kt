@@ -18,4 +18,8 @@ interface PostDetailRepository {
     suspend fun finishFixing(postId: String)
 
     suspend fun closePost(postId: String)
+
+    suspend fun applyJob(postId: String)
+
+    suspend fun startFixing(postId: String)
 }

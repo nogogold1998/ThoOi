@@ -3,11 +3,8 @@ package com.sunasterisk.thooi.ui.post.detail.model
 import androidx.recyclerview.widget.DiffUtil
 import com.sunasterisk.thooi.data.model.PostDetail
 import com.sunasterisk.thooi.data.model.SummaryUser
-import com.sunasterisk.thooi.data.source.entity.PostStatus
-import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAdapterItem.*
+import com.sunasterisk.thooi.data.source.entity.UserType
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAdapterViewType.*
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 
 sealed class PostDetailsAdapterItem<T>(val viewType: PostDetailsAdapterViewType) {
     abstract val data: T
@@ -35,12 +32,18 @@ sealed class PostDetailsAdapterItem<T>(val viewType: PostDetailsAdapterViewType)
             other is SummaryUserItem && this.data == other.data && isSelected == other.isSelected
     }
 
-    data class ActionBottomItem(
-        override val data: PostStatus,
-    ) : PostDetailsAdapterItem<PostStatus>(ACTION_BOTTOM) {
+    class ActionBottomItem(
+        override val data: UserType,
+    ) : PostDetailsAdapterItem<UserType>(
+        when (data) {
+            UserType.CUSTOMER -> CUSTOMER_ACTION_BOTTOM
+            UserType.FIXER -> FIXER_ACTION_BOTTOM
+        }
+    ) {
         override fun isTheSame(other: PostDetailsAdapterItem<*>) = other is ActionBottomItem
 
-        override fun isContentTheSame(other: PostDetailsAdapterItem<*>) = this == other
+        override fun isContentTheSame(other: PostDetailsAdapterItem<*>) =
+            other is ActionBottomItem && data == other.data
     }
 
     companion object {
@@ -57,17 +60,3 @@ sealed class PostDetailsAdapterItem<T>(val viewType: PostDetailsAdapterViewType)
         }
     }
 }
-
-suspend fun PostDetail.toPostDetailsAdapterItem(selectedFixerId: String) =
-    coroutineScope {
-        val middle = async {
-            appliedFixers.map { summaryUser ->
-                val isSelected =
-                    summaryUser.id == selectedFixerId || summaryUser.id == assignedFixerId
-                SummaryUserItem(summaryUser, isSelected)
-            }.toTypedArray()
-        }
-        val top = PostDetailsItem(this@toPostDetailsAdapterItem)
-        val bottom = ActionBottomItem(status)
-        listOf(top, *middle.await(), bottom)
-    }

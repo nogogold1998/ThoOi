@@ -37,6 +37,10 @@
     <string name="label_setting">Cài đặt</string>
     <string name="label_pending">Đang chờ thợ</string>
     <string name="label_job_finished">Đã hoàn thành</string>
+    <string name="label_job_applied">Đã nhận việc</string>
+    <string name="label_job_assigned_to_other">Đã được giao cho người khác</string>
+    <string name="label_job_assigned_to_you">Đã được giao cho bạn</string>
+    <string name="label_job_on_progress">Đang tiến hành</string>
 
     <string name="action_apply_job">Nhận việc</string>
     <string name="action_close_post">Đóng bài viết</string>
