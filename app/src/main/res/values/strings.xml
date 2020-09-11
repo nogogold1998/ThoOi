@@ -35,6 +35,8 @@
     <string name="label_post_create">Tạo bài viết</string>
     <string name="label_ranking">Xếp hạng</string>
     <string name="label_setting">Cài đặt</string>
+    <string name="label_discovery">Khám phá danh mục</string>
+    <string name="label_post">Bài viết</string>
 
     <string name="default_channel_name">Mặc định</string>
     <string name="description_default_channel">Thông báo mặc định</string>

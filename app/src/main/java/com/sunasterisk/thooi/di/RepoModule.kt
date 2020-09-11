@@ -3,6 +3,8 @@ package com.sunasterisk.thooi.di
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.sunasterisk.thooi.data.repository.FakePostDetailRepo
+import com.sunasterisk.thooi.data.repository.PostDetailRepository
 import com.sunasterisk.thooi.data.repository.UserRepository
 import com.sunasterisk.thooi.data.repository.UserRepositoryImpl
 import com.sunasterisk.thooi.data.source.UserDataSource
@@ -39,4 +41,6 @@ val repositoryModule = module {
 
     //Repository modules
     single<UserRepository> { UserRepositoryImpl(get(), get()) }
+
+    single<PostDetailRepository> { FakePostDetailRepo() }
 }

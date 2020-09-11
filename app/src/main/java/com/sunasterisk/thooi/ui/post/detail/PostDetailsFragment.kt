@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
@@ -14,15 +14,15 @@ import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.databinding.FragmentDetailPostBinding
 import com.sunasterisk.thooi.util.MarginItemDecoration
+import org.koin.android.ext.android.get
 
 class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
 
-    @VisibleForTesting
-    lateinit var viewModelFactory: PostDetailsVM.Factory
-
     private val args: PostDetailsFragmentArgs by navArgs()
 
-    private val viewModel by viewModels<PostDetailsVM> { viewModelFactory }
+    private val viewModel by viewModels<PostDetailsVM> {
+        PostDetailsVM.Factory(get(), this)
+    }
 
     override fun onCreateBinding(
         inflater: LayoutInflater,
@@ -36,6 +36,10 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
     override fun setupView() {
         setupSliderView()
         setupAppliedFixersRecyclerView()
+    }
+
+    override fun initListener() {
+        binding.imageUpButton.setOnClickListener { findNavController().navigateUp() }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,6 +60,6 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
         with(binding.scrollViewJobDetails) {
             adapter = PostDetailsAdapter()
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            addItemDecoration(MarginItemDecoration(resources, R.dimen.dp_8, R.dimen.dp_8))
+            addItemDecoration(MarginItemDecoration(resources, R.dimen.dp_16, R.dimen.dp_16))
         }
 }

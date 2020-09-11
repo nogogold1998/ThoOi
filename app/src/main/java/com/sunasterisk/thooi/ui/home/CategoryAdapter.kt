@@ -51,7 +51,9 @@ class TitleTextVH(
     ItemDividerTextBinding.inflate(parent.inflater, parent, false)
 ) {
     override fun onBind(item: TitleTextDividerItem, binding: ItemDividerTextBinding) {
-        binding.textDividerCategory.text = item.data
+        binding.textDividerCategory.run {
+            text = resources.getString(item.data)
+        }
     }
 }
 

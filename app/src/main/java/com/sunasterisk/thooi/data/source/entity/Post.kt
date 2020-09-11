@@ -25,6 +25,7 @@ data class Post(
     val suggestedPrice: Int,
     val status: PostStatus,
     val voucher: String?,
+    val title: String = "",
 ) {
     constructor(id: String, firestorePost: FirestorePost) : this(
         id,

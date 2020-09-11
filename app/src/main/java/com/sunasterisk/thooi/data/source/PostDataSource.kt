@@ -9,14 +9,21 @@ import kotlinx.coroutines.flow.Flow
 interface PostDataSource {
     interface Local {
 
+        fun getAllPosts(): Flow<List<Post>>
+
+        fun getAllPosts(categories: List<Category>): Flow<List<Post>>
+
+        fun getPostsByCustomer(userId: String): Flow<List<Post>>
+
+        fun getPostById(id: String): Flow<Post>
     }
 
     interface Remote {
-        suspend fun getAllPosts(categories: List<Category>): Flow<Result<List<Post>>>
+        fun getAllPosts(categories: List<Category>): Flow<Result<List<Post>>>
 
-        suspend fun getPostsByCustomer(userId: String): Flow<Result<List<Post>>>
+        fun getPostsByCustomer(userId: String): Flow<Result<List<Post>>>
 
-        suspend fun getPostById(id: String): Flow<Result<Post>>
+        fun getPostById(id: String): Flow<Result<Post>>
 
         suspend fun addNewPost(post: Post): Result<DocumentReference>
 
