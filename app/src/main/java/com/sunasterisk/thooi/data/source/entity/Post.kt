@@ -78,7 +78,28 @@ enum class PostStatus {
     PENDING,
 
     /**
+     * Fixer is doing her/his job
+     */
+    ON_PROGRESS,
+
+    /**
      * Job has finished
      */
-    FINISHED
+    FINISHED;
+
+    fun nextStatus() = when (this) {
+        NEW -> OPEN
+        OPEN -> PENDING
+        PENDING -> ON_PROGRESS
+        ON_PROGRESS -> FINISHED
+        FINISHED -> FINISHED
+    }
+
+    fun previousStatus() = when (this) {
+        NEW -> NEW
+        OPEN -> NEW
+        PENDING -> OPEN
+        ON_PROGRESS -> PENDING
+        FINISHED -> FINISHED
+    }
 }

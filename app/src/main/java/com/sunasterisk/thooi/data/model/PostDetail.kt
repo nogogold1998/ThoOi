@@ -1,6 +1,7 @@
 package com.sunasterisk.thooi.data.model
 
 import com.sunasterisk.thooi.data.source.entity.PostStatus
+import com.sunasterisk.thooi.data.source.entity.UserType
 import org.threeten.bp.LocalDateTime
 
 /**
@@ -13,8 +14,11 @@ data class PostDetail(
     val postedDateTime: LocalDateTime = LocalDateTime.now(),
     val customer: SummaryUser = SummaryUser(),
     val description: String = "",
-    val location: String = "",
+    val address: String = "",
     val appliedFixers: List<SummaryUser> = emptyList(),
     val status: PostStatus = PostStatus.NEW,
+    val assignedFixerId: String? = null,
+    val loginUserId: String = "",
+    val userType: UserType,
 )
 

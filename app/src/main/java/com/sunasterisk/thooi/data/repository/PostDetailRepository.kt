@@ -8,4 +8,14 @@ import kotlinx.coroutines.flow.Flow
  */
 interface PostDetailRepository {
     fun getPostDetailById(id: String): Flow<PostDetail>
+
+    suspend fun assignPostToFixer(postId: String, fixerId: String)
+
+    suspend fun clearAssignedFixer(postId: String)
+
+    suspend fun cancelFixing(postId: String)
+
+    suspend fun finishFixing(postId: String)
+
+    suspend fun closePost(postId: String)
 }

@@ -3,6 +3,7 @@ package com.sunasterisk.thooi.ui.post.detail.model
 import androidx.recyclerview.widget.DiffUtil
 import com.sunasterisk.thooi.data.model.PostDetail
 import com.sunasterisk.thooi.data.model.SummaryUser
+import com.sunasterisk.thooi.data.source.entity.PostStatus
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAdapterItem.*
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAdapterViewType.*
 import kotlinx.coroutines.async
@@ -25,17 +26,19 @@ sealed class PostDetailsAdapterItem<T>(val viewType: PostDetailsAdapterViewType)
 
     data class SummaryUserItem(
         override val data: SummaryUser,
+        val isSelected: Boolean = false,
     ) : PostDetailsAdapterItem<SummaryUser>(SUMMARY_USER) {
         override fun isTheSame(other: PostDetailsAdapterItem<*>) =
             other is SummaryUserItem && data.id == other.data.id
 
         override fun isContentTheSame(other: PostDetailsAdapterItem<*>) =
-            other is SummaryUserItem && this.data == other.data
+            other is SummaryUserItem && this.data == other.data && isSelected == other.isSelected
     }
 
-    object ActionBottomItem : PostDetailsAdapterItem<Unit>(ACTION_BOTTOM) {
-        override val data = Unit
-        override fun isTheSame(other: PostDetailsAdapterItem<*>) = this === other
+    data class ActionBottomItem(
+        override val data: PostStatus,
+    ) : PostDetailsAdapterItem<PostStatus>(ACTION_BOTTOM) {
+        override fun isTheSame(other: PostDetailsAdapterItem<*>) = other is ActionBottomItem
 
         override fun isContentTheSame(other: PostDetailsAdapterItem<*>) = this == other
     }
@@ -55,10 +58,16 @@ sealed class PostDetailsAdapterItem<T>(val viewType: PostDetailsAdapterViewType)
     }
 }
 
-suspend fun PostDetail.toPostDetailsAdapterItem() =
+suspend fun PostDetail.toPostDetailsAdapterItem(selectedFixerId: String) =
     coroutineScope {
-        val top = async { PostDetailsItem(this@toPostDetailsAdapterItem) }
-        val middle = async { appliedFixers.map { SummaryUserItem(it) }.toTypedArray() }
-        val bottom = ActionBottomItem
-        listOf(top.await(), *middle.await(), bottom)
+        val middle = async {
+            appliedFixers.map { summaryUser ->
+                val isSelected =
+                    summaryUser.id == selectedFixerId || summaryUser.id == assignedFixerId
+                SummaryUserItem(summaryUser, isSelected)
+            }.toTypedArray()
+        }
+        val top = PostDetailsItem(this@toPostDetailsAdapterItem)
+        val bottom = ActionBottomItem(status)
+        listOf(top, *middle.await(), bottom)
     }
