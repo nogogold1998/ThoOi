@@ -45,6 +45,12 @@ class UserRemoteDataSource(
         Unit
     }
 
+    override suspend fun deleteToken(token: String) = getOneShotResult {
+        userDocument?.update(FIELD_TOKEN, FieldValue.arrayRemove(token))?.await()
+            ?: throw authException
+        Unit
+    }
+
     override suspend fun updateUser(user: User) = getOneShotResult {
         userDocument?.set(FirestoreUser(user))?.await() ?: throw authException
         Unit

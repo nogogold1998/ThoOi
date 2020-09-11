@@ -81,9 +81,10 @@
     <string name="msg_missing_permission">Bạn chưa cấp quyền vị trí</string>
     <string name="msg_missing_location_setting">Bạn chưa bật vị trí</string>
     <string name="label_choose_location">Chọn vị trí của bạn</string>
-
-    <string name="title_settings">Settings</string>
+    <string name="title_settings">Cài đặt</string>
     <string name="label_logout">Đăng xuất</string>
     <string name="label_edit_profile">Chỉnh sửa thông tin cá nhân</string>
     <string name="label_about">Thông tin ứng dụng</string>
+    <string name="hint_reset_password">Đổi mật khẩu</string>
+    <string name="label_save">Lưu</string>
 </resources>

@@ -27,6 +27,8 @@ class UserRepositoryImpl(
 
     override suspend fun setToken(token: String) = remote.setToken(token)
 
+    override suspend fun deleteToken(token: String) = remote.deleteToken(token)
+
     override suspend fun signIn(username: String, password: String) =
         remote.signIn(username, password)
 

@@ -7,12 +7,17 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuthEmailException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.iid.FirebaseInstanceId
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.data.repository.UserRepository
 import com.sunasterisk.thooi.util.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
-class SignInViewModel(private val userRepo: UserRepository) : ViewModel() {
+class SignInViewModel(
+    private val userRepo: UserRepository,
+    private val firebaseInstanceId: FirebaseInstanceId
+) : ViewModel() {
 
     val email = MutableLiveData<String>()
     val emailRule = email.transform { if (it.isEmail) null else R.string.msg_email_invalid }
@@ -29,6 +34,7 @@ class SignInViewModel(private val userRepo: UserRepository) : ViewModel() {
             getValidValue()?.apply {
                 userRepo.signIn(first, second).check({
                     _signIn.value = Event(Unit)
+                    setToken()
                 }, {
                     when (it) {
                         is FirebaseAuthInvalidUserException -> {
@@ -62,5 +68,14 @@ class SignInViewModel(private val userRepo: UserRepository) : ViewModel() {
             emailRule.value == null || passwordRule.value == null -> return emailValue to passwordValue
         }
         return null
+    }
+
+    private fun setToken() {
+        viewModelScope.launch {
+            getOneShotResult {
+                val token = firebaseInstanceId.instanceId.await().token
+                userRepo.setToken(token)
+            }
+        }
     }
 }

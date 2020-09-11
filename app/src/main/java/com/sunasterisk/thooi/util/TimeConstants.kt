@@ -5,4 +5,5 @@ package com.sunasterisk.thooi.util
  */
 object TimeConstants {
     const val FORMAT_DATE_LONG_TIME_SHORT = "dd MMM yyyy, h:mm a"
+    const val FORMAT_DATE = "dd MMM yyyy"
 }

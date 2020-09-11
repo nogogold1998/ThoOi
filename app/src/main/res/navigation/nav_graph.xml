@@ -78,7 +78,9 @@
             app:popUpTo="@id/homeFragment" />
     </fragment>
 
-    <fragment android:id="@+id/settingFragment">
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.sunasterisk.thooi.ui.settings.SettingsFragment">
         <action
             android:id="@+id/setting_to_editProfile"
             app:destination="@id/editProfileFragment" />
