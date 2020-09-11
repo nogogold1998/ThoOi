@@ -19,3 +19,8 @@ fun RecyclerView.bindSummaryUser(items: List<PostDetailsAdapterItem<*>>?) {
 fun RecyclerView.bindNotification(items: List<Notification>?) {
     (adapter as? NotificationAdapter)?.submitList(items)
 }
+
+@BindingAdapter("setAdapter")
+fun RecyclerView.bindRecyclerViewAdapter(adapter: RecyclerView.Adapter<*>?) {
+    this.adapter = adapter
+}
