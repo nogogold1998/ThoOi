@@ -1,6 +1,6 @@
 package com.sunasterisk.thooi.data.source.remote
 
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sunasterisk.thooi.data.Result
 import com.sunasterisk.thooi.data.source.NotificationDataSource
@@ -10,18 +10,20 @@ import com.sunasterisk.thooi.data.source.remote.RemoteConstants.NOTIFICATIONS_CO
 import com.sunasterisk.thooi.data.source.remote.dto.FirestoreNotification
 import com.sunasterisk.thooi.util.getSnapshotFlow
 import com.sunasterisk.thooi.util.toObjectWithId
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
 @ExperimentalCoroutinesApi
 class NotificationRemoteDataSource(
-    user: FirebaseUser,
+    auth: FirebaseAuth,
     database: FirebaseFirestore
 ) : NotificationDataSource.Remote {
 
-    private val userId = user.uid
+    private val userId = auth.uid
     private val notificationCollection = database.collection(NOTIFICATIONS_COLLECTION)
 
     override fun getAllNotification(): Flow<Result<List<Notification>>> = callbackFlow {
@@ -31,7 +33,7 @@ class NotificationRemoteDataSource(
         val listener =
             notificationCollection
                 .whereEqualTo(
-                    FIELD_RECEIVER, notificationCollection.document(userId)
+                    FIELD_RECEIVER, userId?.let { notificationCollection.document(it) }
                 )
                 .addSnapshotListener { snapshot, exception ->
                     val notifications = ArrayList<Notification>()
