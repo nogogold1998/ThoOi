@@ -2,14 +2,12 @@ package com.sunasterisk.thooi.data.repository
 
 import com.google.firebase.firestore.DocumentReference
 import com.sunasterisk.thooi.data.Result
-import com.sunasterisk.thooi.data.source.PostDataSource
 import com.sunasterisk.thooi.data.source.entity.Post
+import com.sunasterisk.thooi.util.DummyPosts
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
-class PostRepositoryImpl(
-    private val local: PostDataSource.Local,
-    private val remote: PostDataSource.Remote,
-) : PostRepository {
+class FakePostRepo : PostRepository {
     override fun getAllPosts(): Flow<List<Post>> {
         TODO("Not yet implemented")
     }
@@ -30,7 +28,5 @@ class PostRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override fun getPostsByUserId(id: String): Flow<List<Post>> {
-        TODO("Not yet implemented")
-    }
+    override fun getPostsByUserId(id: String): Flow<List<Post>> = flowOf(DummyPosts.posts)
 }

@@ -28,8 +28,6 @@ class SummaryPostVH(
 ) : BaseViewHolder<SummaryPost, ItemSummaryPostBinding>(
     ItemSummaryPostBinding.inflate(parent.inflater, parent, false)
 ) {
-    // TODO remove in the next pull
-    private var cachedValue: SummaryPost? = null
 
     init {
         with(binding) {

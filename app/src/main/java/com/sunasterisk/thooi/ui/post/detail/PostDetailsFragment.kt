@@ -18,6 +18,7 @@ import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.CustomerActi
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.FixerAction.ApplyJob
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.FixerAction.StartFixing
 import com.sunasterisk.thooi.util.MarginItemDecoration
+import com.sunasterisk.thooi.util.observeEvent
 import com.sunasterisk.thooi.util.toast
 import org.koin.android.ext.android.get
 

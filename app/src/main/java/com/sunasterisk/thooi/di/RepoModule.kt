@@ -8,6 +8,7 @@ import com.sunasterisk.thooi.data.repository.PostDetailRepository
 import com.sunasterisk.thooi.data.repository.UserRepository
 import com.sunasterisk.thooi.data.repository.UserRepositoryImpl
 import com.sunasterisk.thooi.data.source.UserDataSource
+import com.sunasterisk.thooi.data.source.entity.UserType
 import com.sunasterisk.thooi.data.source.local.UserLocalDataSource
 import com.sunasterisk.thooi.data.source.local.database.AppDataBase
 import com.sunasterisk.thooi.data.source.local.database.DatabaseConstants
@@ -43,4 +44,5 @@ val repositoryModule = module {
     single<UserRepository> { UserRepositoryImpl(get(), get()) }
 
     single<PostDetailRepository> { FakePostDetailRepo() }
+    single { UserType.CUSTOMER }
 }
