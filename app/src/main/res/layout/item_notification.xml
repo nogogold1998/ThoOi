@@ -1,40 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dp_8"
-    android:background="@drawable/background_card_view"
-    android:elevation="@dimen/dp_4"
-    android:padding="@dimen/dp_8">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/imageNotification"
-        android:layout_width="@dimen/dp_96"
-        android:layout_height="@dimen/dp_96"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <TextView
-        android:id="@+id/textTitle"
-        style="@style/TextAppearance.Compat.Notification.Title"
-        android:layout_width="wrap_content"
+        <variable
+            name="notification"
+            type="com.sunasterisk.thooi.data.model.Notification" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_8"
-        android:ellipsize="end"
-        android:maxLines="1"
-        app:layout_constraintBottom_toTopOf="@+id/textTimestamp"
-        app:layout_constraintStart_toEndOf="@+id/imageNotification"
-        app:layout_constraintTop_toTopOf="@+id/imageNotification" />
+        android:layout_margin="@dimen/dp_8"
+        android:background="@drawable/background_card_view"
+        android:elevation="@dimen/dp_4"
+        android:padding="@dimen/dp_8">
 
-    <TextView
-        android:id="@+id/textTimestamp"
-        style="@style/TextAppearance.Compat.Notification.Time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        app:layout_constraintBottom_toBottomOf="@+id/imageNotification"
-        app:layout_constraintStart_toStartOf="@+id/textTitle"
-        app:layout_constraintTop_toBottomOf="@+id/textTitle" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/imageNotification"
+            imageUrl="@{notification.senderProfileImageUrl}"
+            android:layout_width="@dimen/dp_96"
+            android:layout_height="@dimen/dp_96"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/textContent"
+            style="@style/TextAppearance.Compat.Notification.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{notification.content}"
+            app:layout_constraintBottom_toTopOf="@+id/textTimestamp"
+            app:layout_constraintStart_toEndOf="@+id/imageNotification"
+            app:layout_constraintTop_toTopOf="@+id/imageNotification" />
+
+        <TextView
+            android:id="@+id/textTimestamp"
+            style="@style/TextAppearance.Compat.Notification.Time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="@{notification.createdAt.toString()}"
+            app:layout_constraintBottom_toBottomOf="@+id/imageNotification"
+            app:layout_constraintStart_toStartOf="@+id/textContent"
+            app:layout_constraintTop_toBottomOf="@+id/textContent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
