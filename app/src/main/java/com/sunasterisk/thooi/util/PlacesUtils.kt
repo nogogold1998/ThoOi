@@ -6,6 +6,7 @@ import androidx.annotation.RequiresPermission
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.Place.Field.*
+import com.google.android.libraries.places.api.model.PlaceLikelihood
 import com.google.android.libraries.places.api.model.RectangularBounds
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.PlacesClient
@@ -21,8 +22,9 @@ private val VN_SW = LatLng(8.1790665, 102.14441)
 private val VN_NE = LatLng(23.393395, 114.3337595)
 
 @RequiresPermission(allOf = [ACCESS_FINE_LOCATION, ACCESS_WIFI_STATE])
-suspend fun PlacesClient.getCurrentPlaces() =
-    awaitFindCurrentPlace(findCurrentPlaceRequest(listOf(NAME, ADDRESS, LAT_LNG))).placeLikelihoods
+suspend fun PlacesClient.getCurrentPlaces(): List<PlaceLikelihood> = awaitFindCurrentPlace(
+    findCurrentPlaceRequest(listOf(ID, NAME, ADDRESS, LAT_LNG))
+).placeLikelihoods
 
 suspend fun PlacesClient.queryAutoComplete(query: String): MutableList<AutocompletePrediction> {
     delay(QUERY_DELAY)

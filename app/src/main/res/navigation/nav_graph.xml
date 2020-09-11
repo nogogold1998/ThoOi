@@ -57,15 +57,24 @@
         <action
             android:id="@+id/home_to_ranking"
             app:destination="@id/rankingFragment" />
+        <action
+            android:id="@+id/home_to_sign_in"
+            app:destination="@id/signInFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/signupFragment"
+        android:name="com.sunasterisk.thooi.ui.signup.SignUpFragment"
         tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/action_signupFragment_to_signInFragment"
             app:destination="@id/signInFragment"
             app:popUpTo="@id/signInFragment" />
+
+        <action
+            android:id="@+id/sign_up_to_home"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment" />
     </fragment>
 
     <fragment android:id="@+id/settingFragment">
