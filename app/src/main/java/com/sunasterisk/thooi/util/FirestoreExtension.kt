@@ -67,11 +67,17 @@ suspend fun <T : Any> getOneShotResult(function: suspend () -> T): Result<T> = t
 fun <T : Any> Result<T>.check(
     success: ((success: T) -> Unit)? = null,
     failed: ((exception: Throwable) -> Unit)? = null,
-    loading: (() -> Unit)? = null,
+    loading: ((isLoading: Boolean) -> Unit)? = null,
 ) {
     when (this) {
-        is Result.Success -> success?.invoke(data)
-        is Result.Failed -> failed?.invoke(cause)
-        is Result.Loading -> loading?.invoke()
+        is Result.Success -> {
+            success?.invoke(data)
+            loading?.invoke(false)
+        }
+        is Result.Failed -> {
+            failed?.invoke(cause)
+            loading?.invoke(false)
+        }
+        is Result.Loading -> loading?.invoke(true)
     }
 }

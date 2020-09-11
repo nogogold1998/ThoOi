@@ -28,6 +28,8 @@ interface UserDataSource {
 
         suspend fun signInWithCredential(user: User, credential: AuthCredential): Result<Unit>
 
+        suspend fun checkGoogleAccount(credential: AuthCredential): Result<Boolean>
+
         fun signOut()
     }
 }

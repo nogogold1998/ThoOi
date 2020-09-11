@@ -35,6 +35,9 @@ class UserRepositoryImpl(
     override suspend fun signInWithCredential(user: User, credential: AuthCredential) =
         remote.signInWithCredential(user, credential)
 
+    override suspend fun checkGoogleAccount(credential: AuthCredential) =
+        remote.checkGoogleAccount(credential)
+
     override fun signOut() = remote.signOut()
 
 }
