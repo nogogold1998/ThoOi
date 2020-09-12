@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.sunasterisk.thooi.data.repository.*
 import com.sunasterisk.thooi.data.source.NotificationDataSource
+import com.sunasterisk.thooi.data.source.PostDataSource
 import com.sunasterisk.thooi.data.source.UserDataSource
 import com.sunasterisk.thooi.data.source.entity.UserType
 import com.sunasterisk.thooi.data.source.local.NotificationLocalDataSource
@@ -13,6 +14,7 @@ import com.sunasterisk.thooi.data.source.local.UserLocalDataSource
 import com.sunasterisk.thooi.data.source.local.database.AppDataBase
 import com.sunasterisk.thooi.data.source.local.database.DatabaseConstants
 import com.sunasterisk.thooi.data.source.remote.NotificationRemoteDataSource
+import com.sunasterisk.thooi.data.source.remote.PostRemoteDataSource
 import com.sunasterisk.thooi.data.source.remote.UserRemoteDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.koin.androidContext
@@ -44,9 +46,13 @@ val repositoryModule = module {
     single<NotificationDataSource.Remote> { NotificationRemoteDataSource(get(), get()) }
     single<NotificationDataSource.Local> { NotificationLocalDataSource() } //FIXME: Not implemented yet
 
+    single<PostDataSource.Remote> { PostRemoteDataSource(get()) }
+
     //Repository modules
     single<UserRepository> { UserRepositoryImpl(get(), get()) }
     single<NotificationRepository> { NotificationRepositoryImpl(get(), get()) }
+
+    single<FirestoreRepository> { FirestoreRepositoryImpl(get()) }
 
     single<PostDetailRepository> { FakePostDetailRepo() }
     single { UserType.CUSTOMER }

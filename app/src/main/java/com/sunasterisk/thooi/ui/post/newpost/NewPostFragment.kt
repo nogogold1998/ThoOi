@@ -1,21 +1,23 @@
-package com.sunasterisk.thooi.ui.settings
+package com.sunasterisk.thooi.ui.post.newpost
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.sunasterisk.thooi.base.BaseFragment
-import com.sunasterisk.thooi.databinding.FragmentEditProfileBinding
+import com.sunasterisk.thooi.databinding.FragmentNewPostBinding
 import org.koin.android.ext.android.inject
 
-class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
+class NewPostFragment : BaseFragment<FragmentNewPostBinding>() {
 
-    private val viewModel by inject<SettingsViewModel>()
+    private val viewModel by inject<NewPostViewModel>()
 
     override fun onCreateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         attachToRoot: Boolean
-    ) = FragmentEditProfileBinding.inflate(inflater).also {
+    ) = FragmentNewPostBinding.inflate(inflater).also {
         it.lifecycleOwner = viewLifecycleOwner
         it.viewModel = viewModel
     }
+
+
 }

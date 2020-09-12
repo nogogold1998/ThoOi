@@ -6,11 +6,11 @@
 
         <variable
             name="adapter"
-            type="com.sunasterisk.thooi.ui.signup.AddressAdapter" />
+            type="com.sunasterisk.thooi.ui.placespicker.AddressAdapter" />
 
         <variable
             name="viewModel"
-            type="com.sunasterisk.thooi.ui.signup.SignUpViewModel" />
+            type="com.sunasterisk.thooi.ui.placespicker.AddressViewModel" />
     </data>
 
     <FrameLayout

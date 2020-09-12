@@ -7,9 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.javaType
 
@@ -79,5 +77,15 @@ fun <T : Any> Result<T>.check(
             loading?.invoke(false)
         }
         is Result.Loading -> loading?.invoke(true)
+    }
+}
+
+fun <T : Any, R : Any> Flow<Result<List<T>>>.mapResult(function: (T) -> R) = map { value ->
+    when (value) {
+        is Result.Success -> Result.success(
+            value.data.map { function(it) }
+        )
+        is Result.Failed -> value
+        is Result.Loading -> value
     }
 }

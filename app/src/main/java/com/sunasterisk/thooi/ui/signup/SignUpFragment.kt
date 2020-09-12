@@ -1,13 +1,9 @@
 package com.sunasterisk.thooi.ui.signup
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
@@ -21,7 +17,8 @@ import com.google.firebase.Timestamp
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.databinding.FragmentSignUpBinding
-import com.sunasterisk.thooi.ui.signup.AddressBottomSheet.Companion.RESULT_PLACES
+import com.sunasterisk.thooi.ui.placespicker.AddressBottomSheet
+import com.sunasterisk.thooi.ui.placespicker.AddressBottomSheet.Companion.RESULT_PLACES
 import com.sunasterisk.thooi.util.beginTransition
 import com.sunasterisk.thooi.util.check
 import com.sunasterisk.thooi.util.getOneShotResult
@@ -59,19 +56,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                 }
             } else {
                 activity?.onBackPressed()
-            }
-        }
-
-    private val permissionResult =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            @SuppressLint("MissingPermission")
-            if (it) {
-                AddressBottomSheet().show(
-                    parentFragmentManager,
-                    AddressBottomSheet::class.simpleName
-                )
-            } else {
-                viewModel.nameRule.value = R.string.msg_missing_permission
             }
         }
 
@@ -130,18 +114,10 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
         }
 
         binding.editTextAddress.setOnClickListener {
-            if (ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                permissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-            } else {
-                AddressBottomSheet().show(
-                    parentFragmentManager,
-                    AddressBottomSheet::class.simpleName
-                )
-            }
+            AddressBottomSheet().show(
+                parentFragmentManager,
+                AddressBottomSheet::class.simpleName
+            )
         }
 
         binding.editTextBirthday.setOnClickListener {
