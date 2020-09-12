@@ -2,17 +2,18 @@ package com.sunasterisk.thooi.ui.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.sunasterisk.thooi.NavGraphDirections
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseActivity
 import com.sunasterisk.thooi.databinding.ActivityMainBinding
-import org.koin.android.ext.android.inject
+import com.sunasterisk.thooi.di.ViewModelFactory
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
-    private val mainVM: MainVM by inject()
+    private val mainVM: MainVM by viewModels { ViewModelFactory(this) }
 
     private val navController by lazy { findNavController(R.id.navHostFragment) }
 
@@ -42,17 +43,26 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (it == null) return@observe
             if (it.currentUser == null) navController.navigate(NavGraphDirections.globalSignIn())
         }
+        mainVM.toolbarState.observe(this) {
+            if (it == null) return@observe
+            val motionLayout = binding.root
+            motionLayout.transitionToState(
+                when (it) {
+                    ToolbarState.NORMAL -> R.id.main_toolbar_normal
+                    ToolbarState.COLLAPSED -> R.id.main_toolbar_collapsed
+                    ToolbarState.HIDDEN -> R.id.main_toolbar_hidden
+                })
+        }
     }
 
     override fun initListeners() {
         with(binding.root) {
             val fullScreenDestinations = setOf(R.id.signInFragment, R.id.signupFragment)
             navController.addOnDestinationChangedListener { _, destination, _ ->
-                setTransition(R.id.transition_merge_fab_hide_bottom_nav)
                 if (destination.id in fullScreenDestinations) {
-                    transitionToEnd()
+                    mainVM.hideToolbar()
                 } else {
-                    transitionToStart()
+                    mainVM.showToolbar()
                 }
             }
         }

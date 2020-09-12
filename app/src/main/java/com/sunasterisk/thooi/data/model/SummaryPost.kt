@@ -16,7 +16,7 @@ data class SummaryPost(
     constructor(post: Post) : this(post.id,
         post.imagesRefs.randomOrNull(),
         post.title,
-        post.suggestedPrice.toString(),
+        post.suggestedPrice,
         post.address)
 
     companion object {

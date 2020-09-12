@@ -7,14 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".ui.category.CategoryFragment">
 
-    <include
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/layoutToolbar"
-        layout="@layout/tool_bar_layout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back_24"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:title="@string/label_category" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerCategory"

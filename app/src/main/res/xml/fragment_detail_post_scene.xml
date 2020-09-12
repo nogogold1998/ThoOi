@@ -4,7 +4,7 @@
 
     <Transition
         android:id="@+id/collapse_transition"
-        motion:constraintSetEnd="@+id/collapsed"
+        motion:constraintSetEnd="@+id/main_toolbar_collapsed"
         motion:constraintSetStart="@id/start">
         <OnSwipe
             motion:maxAcceleration="100"
@@ -16,7 +16,7 @@
     <ConstraintSet android:id="@+id/start" />
 
     <ConstraintSet
-        android:id="@+id/collapsed"
+        android:id="@+id/main_toolbar_collapsed"
         motion:deriveConstraintsFrom="@id/start">
 
         <Constraint android:id="@+id/imageSliderJobThumbnails">

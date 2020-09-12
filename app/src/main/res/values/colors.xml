@@ -10,4 +10,5 @@
     <color name="colorPizazz">#FF9100</color>
     <color name="color_orange">#FF5722</color>
     <color name="color_leaf_green">#8BC34A</color>
+    <color name="blur_gray">#40000000</color>
 </resources>

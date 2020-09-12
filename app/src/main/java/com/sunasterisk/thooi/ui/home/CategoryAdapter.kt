@@ -6,6 +6,7 @@ import com.sunasterisk.thooi.base.BaseViewHolder
 import com.sunasterisk.thooi.data.source.entity.Category
 import com.sunasterisk.thooi.databinding.ItemCategoryPostBinding
 import com.sunasterisk.thooi.databinding.ItemDividerTextBinding
+import com.sunasterisk.thooi.ui.binding.loadImage
 import com.sunasterisk.thooi.ui.home.model.CategoryAdapterItem
 import com.sunasterisk.thooi.ui.home.model.CategoryAdapterViewType
 import com.sunasterisk.thooi.ui.home.model.CategoryAdapterViewType.POST_CATEGORY
@@ -75,5 +76,6 @@ class PostCategoryVH(
 
     override fun onBind(item: PostCategoryItem, binding: ItemCategoryPostBinding) {
         binding.textTitleCategory.text = item.data.title
+        binding.imageCategoryPost.loadImage(item.data.imageUrls.randomOrNull())
     }
 }

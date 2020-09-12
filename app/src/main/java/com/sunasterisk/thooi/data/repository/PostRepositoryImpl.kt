@@ -7,7 +7,6 @@ import com.sunasterisk.thooi.data.source.entity.Post
 import kotlinx.coroutines.flow.Flow
 
 class PostRepositoryImpl(
-    private val local: PostDataSource.Local,
     private val remote: PostDataSource.Remote,
 ) : PostRepository {
     override fun getAllPosts(): Flow<List<Post>> {
@@ -30,7 +29,6 @@ class PostRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override fun getPostsByUserId(id: String): Flow<List<Post>> {
-        TODO("Not yet implemented")
-    }
+    override fun getPostsByUserId(id: String): Flow<Result<List<Post>>> =
+        remote.getPostsByCustomer(id)
 }

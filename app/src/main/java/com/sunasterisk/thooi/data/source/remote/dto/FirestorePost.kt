@@ -16,9 +16,10 @@ data class FirestorePost(
     val fixers_id: List<String> = emptyList(),
     val images: List<String> = emptyList(),
     val location: GeoPoint = GeoPoint(0.0, 0.0),
-    val suggestedPrice: Int = 0,
+    val suggestedPrice: String = "",
     val status: String = "",
-    val voucher: String? = null
+    val title: String = "",
+    val voucher: String? = null,
 ) {
     constructor() : this(
         "",
@@ -30,7 +31,8 @@ data class FirestorePost(
         emptyList(),
         emptyList(),
         GeoPoint(0.0, 0.0),
-        0,
+        "",
+        "",
         "",
         null
     )
@@ -47,6 +49,7 @@ data class FirestorePost(
         post.location.toGeoPoint(),
         post.suggestedPrice,
         post.status.name,
+        post.title,
         post.voucher
     )
 }

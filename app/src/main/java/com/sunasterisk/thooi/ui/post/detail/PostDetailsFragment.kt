@@ -13,6 +13,7 @@ import com.smarteist.autoimageslider.SliderAnimations
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.databinding.FragmentDetailPostBinding
+import com.sunasterisk.thooi.di.getViewModelFactory
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.CustomerAction.*
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.FixerAction.ApplyJob
@@ -20,15 +21,12 @@ import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.FixerAction.
 import com.sunasterisk.thooi.util.MarginItemDecoration
 import com.sunasterisk.thooi.util.observeEvent
 import com.sunasterisk.thooi.util.toast
-import org.koin.android.ext.android.get
 
 class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
 
     private val args: PostDetailsFragmentArgs by navArgs()
 
-    private val viewModel by viewModels<PostDetailsVM> {
-        PostDetailsVM.Factory(get(), get(), this)
-    }
+    private val viewModel by viewModels<PostDetailsVM> { getViewModelFactory() }
 
     override fun onCreateBinding(
         inflater: LayoutInflater,

@@ -1,27 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_128"
-    android:background="@drawable/background_category"
-    android:clickable="true"
-    android:elevation="@dimen/dp_2"
-    android:focusable="true"
-    android:foreground="@drawable/foreground_ripple_item">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="@dimen/dp_12">
 
-    <TextView
-        android:id="@+id/textTitleCategory"
-        style="@style/TextAppearance.MaterialComponents.Headline6"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="@dimen/dp_8"
-        android:gravity="start|bottom"
-        android:textColor="@color/colorZircon"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/full_names" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:elevation="@dimen/dp_2"
+        android:focusable="true"
+        android:foreground="@drawable/foreground_ripple_item">
+
+        <ImageView
+            android:id="@+id/imageCategoryPost"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_category"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/blur_gray" />
+
+        <TextView
+            android:id="@+id/textTitleCategory"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/dp_8"
+            android:gravity="start|bottom"
+            android:textColor="@color/colorZircon"
+            android:textStyle="bold"
+            tools:text="@tools:sample/full_names" />
+    </FrameLayout>
+</androidx.cardview.widget.CardView>
