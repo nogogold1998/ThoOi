@@ -18,6 +18,7 @@ import com.sunasterisk.thooi.data.source.NotificationDataSource
 import com.sunasterisk.thooi.data.source.PostDataSource
 import com.sunasterisk.thooi.data.source.UserDataSource
 import com.sunasterisk.thooi.data.source.entity.UserType
+import com.sunasterisk.thooi.data.source.local.LocalPostDataSource
 import com.sunasterisk.thooi.data.source.local.NotificationLocalDataSource
 import com.sunasterisk.thooi.data.source.local.UserLocalDataSource
 import com.sunasterisk.thooi.data.source.local.database.AppDataBase
@@ -56,13 +57,14 @@ val repositoryModule = module {
     single<NotificationDataSource.Local> { NotificationLocalDataSource() } //FIXME: Not implemented yet
 
     //Repository modules
-    single<UserRepository> { UserRepositoryImpl(get()) }
+    single<UserRepository> { UserRepositoryImpl(get(), get()) }
     single<NotificationRepository> { NotificationRepositoryImpl(get(), get()) }
 
     // CongVC
     single<PostDataSource.Remote> { PostRemoteDataSource(get()) }
-    single<PostRepository> { PostRepositoryImpl(get()) }
-    single<PostDetailRepository> { PostDetailRepositoryImpl(get()) }
+    single<PostDataSource.Local> { LocalPostDataSource(get()) }
+    single<PostRepository> { PostRepositoryImpl(get(), get()) }
+    single<PostDetailRepository> { PostDetailRepositoryImpl(get(), get(), get()) }
     single<CategoryDataSource.Remote> { CategoryRemoteDataSource(get()) }
     single<CategoryRepository> { CategoryRepositoryImpl(get()) }
     single { UserType.CUSTOMER }

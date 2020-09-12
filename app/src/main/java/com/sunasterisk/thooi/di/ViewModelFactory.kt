@@ -7,12 +7,17 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.savedstate.SavedStateRegistryOwner
+import com.google.firebase.auth.FirebaseAuth
+import com.sunasterisk.thooi.data.Result
+import com.sunasterisk.thooi.data.repository.UserRepository
 import com.sunasterisk.thooi.data.source.entity.UserType
+import com.sunasterisk.thooi.ui.category.CategoryVM
 import com.sunasterisk.thooi.ui.home.HomeVM
 import com.sunasterisk.thooi.ui.main.MainVM
 import com.sunasterisk.thooi.ui.post.detail.CustomerPostDetailsVM
 import com.sunasterisk.thooi.ui.post.detail.FixerPostDetailsVM
 import com.sunasterisk.thooi.ui.post.detail.PostDetailsVM
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.core.KoinComponent
 import org.koin.core.get
@@ -28,19 +33,21 @@ class ViewModelFactory(
         handle: SavedStateHandle,
     ): T = with(modelClass) {
         when {
-            isAssignableFrom(MainVM::class.java) -> MainVM(get())
-            isAssignableFrom(HomeVM::class.java) -> HomeVM(get(), get())
+            isAssignableFrom(MainVM::class.java) -> get<MainVM>()
+            isAssignableFrom(HomeVM::class.java) -> get<HomeVM>()
             isAssignableFrom(PostDetailsVM::class.java) -> runBlocking {
-                // val firebaseAuth: FirebaseAuth = get()
-                // val userRepo: UserRepository = get()
-                // val user =
-                //     userRepo.getCurrentUser().first { it is Result.Success } as Result.Success
-                val userType = UserType.CUSTOMER
-                when (userType) {
-                    UserType.CUSTOMER -> CustomerPostDetailsVM(get())
-                    UserType.FIXER -> FixerPostDetailsVM(get())
+                val firebaseAuth: FirebaseAuth = get()
+                val userRepo: UserRepository = get()
+                val userId = checkNotNull(firebaseAuth.currentUser?.uid)
+                val user = checkNotNull(userRepo.getUser(userId))
+                val user1 =
+                    userRepo.getCurrentUser().first { it is Result.Success } as Result.Success
+                when (user1.data.userType) {
+                    UserType.CUSTOMER -> get<CustomerPostDetailsVM>()
+                    UserType.FIXER -> get<FixerPostDetailsVM>()
                 }
             }
+            isAssignableFrom(CategoryVM::class.java) -> get<CategoryVM>()
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
     } as T

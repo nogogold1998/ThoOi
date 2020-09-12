@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sunasterisk.thooi.R
@@ -26,7 +26,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         attachToRoot: Boolean,
     ) = FragmentHomeBinding.inflate(inflater, container, attachToRoot)
 
-    private val viewModel: HomeVM by viewModels { getViewModelFactory() }
+    private val viewModel: HomeVM by navGraphViewModels(R.id.nav_graph) { getViewModelFactory() }
 
     private val mainVM: MainVM by activityViewModels { getViewModelFactory() }
 
@@ -42,7 +42,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private fun setupRecyclerView() {
         val categoryAdapter = CategoryAdapter {
-            findNavController().navigate(HomeFragmentDirections.homeToCategory("asdas"))
+            findNavController().navigate(HomeFragmentDirections.homeToCategory(it.id))
         }
         val summaryPostAdapter = SummaryPostAdapter {
             viewModel.navigateToPost(it.id)

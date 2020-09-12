@@ -9,6 +9,7 @@ import com.sunasterisk.thooi.util.toTimeStamp
 data class FirestorePost(
     val address: String = "",
     val appointment: Timestamp = Timestamp.now(),
+    val createdDateTime: Timestamp = Timestamp.now(),
     val category: String = "",
     val customer: String = "",
     val description: String = "",
@@ -23,6 +24,7 @@ data class FirestorePost(
 ) {
     constructor() : this(
         "",
+        Timestamp.now(),
         Timestamp.now(),
         "",
         "",
@@ -40,6 +42,7 @@ data class FirestorePost(
     constructor(post: Post) : this(
         post.address,
         post.appointment.toTimeStamp(),
+        post.createdDateTime.toTimeStamp(),
         post.categoryRef,
         post.customerRef,
         post.description,

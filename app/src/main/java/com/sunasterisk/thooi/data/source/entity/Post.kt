@@ -15,6 +15,7 @@ data class Post(
     val id: String,
     val address: String,
     val appointment: LocalDateTime,
+    val createdDateTime: LocalDateTime,
     val categoryRef: String,
     val customerRef: String,
     val description: String,
@@ -31,6 +32,7 @@ data class Post(
         id,
         firestorePost.address,
         firestorePost.appointment.toLocalDateTime(),
+        firestorePost.createdDateTime.toLocalDateTime(),
         firestorePost.category,
         firestorePost.customer,
         firestorePost.description,
@@ -48,6 +50,7 @@ data class Post(
         val default = Post(
             "",
             "",
+            LocalDateTime.ofEpochSecond(0, 0, DEFAULT_ZONE_OFFSET),
             LocalDateTime.ofEpochSecond(0, 0, DEFAULT_ZONE_OFFSET),
             "",
             "",

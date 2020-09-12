@@ -25,7 +25,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutToolbar"
         tools:context=".ui.category.CategoryFragment"
-
         tools:listitem="@layout/item_category_job" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

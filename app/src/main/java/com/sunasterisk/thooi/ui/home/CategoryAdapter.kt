@@ -69,7 +69,7 @@ class PostCategoryVH(
 ) {
 
     init {
-        binding.root.setOnClickListener {
+        binding.frameCategoryPost.setOnClickListener {
             cachedValue?.data?.let(itemClickListener)
         }
     }
