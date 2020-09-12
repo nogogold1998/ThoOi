@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorZircon">
+
+    <ImageView
+        android:id="@+id/imageCategoryPost"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintHeight_max="@dimen/dp_128"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        app:constraint_referenced_ids="textTitlePost, textDescriptionPost,
+        textPostSummaryPrice, textPostSummaryAddress"
+        app:flow_horizontalBias="0"
+        app:flow_maxElementsWrap="1"
+        app:flow_verticalGap="@dimen/dp_8"
+        app:flow_wrapMode="chain"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageCategoryPost"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textTitlePost"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textSize="@dimen/sp_18"
+        android:textStyle="bold"
+        tools:ignore="MissingConstraints"
+        tools:text="@tools:sample/lorem/random" />
+
+    <TextView
+        android:id="@+id/textDescriptionPost"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textSize="@dimen/sp_18"
+        tools:ignore="MissingConstraints"
+        tools:text="@tools:sample/lorem/random" />
+
+
+    <TextView
+        android:id="@+id/textPostSummaryPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:text="@{summaryPost.suggestedPrice}"
+        app:drawableStartCompat="@drawable/ic_round_money_coin_24"
+        tools:ignore="MissingConstraints"
+        tools:text="@tools:sample/us_zipcodes" />
+
+    <TextView
+        android:id="@+id/textPostSummaryAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:text="@{summaryPost.address}"
+        app:drawableStartCompat="@drawable/ic_location_24"
+        tools:ignore="MissingConstraints"
+        tools:text="@tools:sample/cities" />
+</androidx.constraintlayout.widget.ConstraintLayout>

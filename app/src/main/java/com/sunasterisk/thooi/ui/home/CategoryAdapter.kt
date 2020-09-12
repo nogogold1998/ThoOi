@@ -3,6 +3,7 @@ package com.sunasterisk.thooi.ui.home
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.sunasterisk.thooi.base.BaseViewHolder
+import com.sunasterisk.thooi.data.source.entity.Category
 import com.sunasterisk.thooi.databinding.ItemCategoryPostBinding
 import com.sunasterisk.thooi.databinding.ItemDividerTextBinding
 import com.sunasterisk.thooi.ui.home.model.CategoryAdapterItem
@@ -16,7 +17,9 @@ import com.sunasterisk.thooi.util.inflater
 /**
  * Created by Cong Vu Chi on 10/09/20 08:37.
  */
-class CategoryAdapter : ListAdapter<CategoryAdapterItem<*>, BaseViewHolder<*, *>>(
+class CategoryAdapter(
+    private val categoryItemClickListener: (Category) -> Unit,
+) : ListAdapter<CategoryAdapterItem<*>, BaseViewHolder<*, *>>(
     CategoryAdapterItem.diffUtil
 ) {
     override fun getItemViewType(position: Int) = getItem(position).viewType.layoutRes
@@ -29,7 +32,7 @@ class CategoryAdapter : ListAdapter<CategoryAdapterItem<*>, BaseViewHolder<*, *>
             .firstOrNull { it.layoutRes == viewType }
         return when (adapterViewType) {
             TEXT_DIVIDER -> TitleTextVH(parent)
-            POST_CATEGORY -> PostCategoryVH(parent)
+            POST_CATEGORY -> PostCategoryVH(parent, categoryItemClickListener)
             null -> throw IllegalArgumentException("Cannot find a match for given viewType, was: $viewType")
         }
     }
@@ -59,9 +62,17 @@ class TitleTextVH(
 
 class PostCategoryVH(
     parent: ViewGroup,
+    itemClickListener: (Category) -> Unit,
 ) : BaseViewHolder<PostCategoryItem, ItemCategoryPostBinding>(
     ItemCategoryPostBinding.inflate(parent.inflater, parent, false)
 ) {
+
+    init {
+        binding.root.setOnClickListener {
+            cachedValue?.data?.let(itemClickListener)
+        }
+    }
+
     override fun onBind(item: PostCategoryItem, binding: ItemCategoryPostBinding) {
         binding.textTitleCategory.text = item.data.title
     }

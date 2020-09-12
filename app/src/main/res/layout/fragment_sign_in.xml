@@ -82,6 +82,7 @@
             <Button
                 android:id="@+id/buttonSignIn"
                 style="@style/StyleButton"
+                android:onClick="@{()-> viewModel.signInClick()}"
                 android:text="@string/label_sign_in"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

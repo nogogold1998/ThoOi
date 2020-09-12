@@ -34,7 +34,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     private fun setupRecyclerView() {
-        val categoryAdapter = CategoryAdapter()
+        val categoryAdapter = CategoryAdapter {
+            findNavController().navigate(HomeFragmentDirections.homeToCategory("asdas"))
+        }
         val summaryPostAdapter = SummaryPostAdapter {
             viewModel.navigateToPost(it.id)
         }

@@ -58,11 +58,8 @@
             android:id="@+id/home_to_postDetails"
             app:destination="@id/postDetailsFragment" />
         <action
-            android:id="@+id/home_to_fixerCategory"
-            app:destination="@id/fixerCategoryFragment" />
-        <action
-            android:id="@+id/home_to_customerCategory"
-            app:destination="@id/customerCategoryFragment" />
+            android:id="@+id/home_to_category"
+            app:destination="@id/categoryFragment" />
         <action
             android:id="@+id/home_to_ranking"
             app:destination="@id/rankingFragment" />
@@ -145,16 +142,17 @@
             app:popUpTo="@id/settingFragment" />
     </fragment>
 
-    <fragment android:id="@+id/customerCategoryFragment">
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.sunasterisk.thooi.ui.category.CategoryFragment"
+        tools:layout="@layout/fragment_category">
         <action
             android:id="@+id/customerCategory_to_profile"
             app:destination="@id/profileFragment" />
-    </fragment>
-
-    <fragment android:id="@+id/fixerCategoryFragment">
         <action
             android:id="@+id/fixerCategory_to_postDetails"
             app:destination="@id/postDetailsFragment" />
+        <argument android:name="categoryId" />
     </fragment>
 
     <action
