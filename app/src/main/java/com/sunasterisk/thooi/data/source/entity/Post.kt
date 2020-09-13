@@ -15,6 +15,7 @@ data class Post(
     val id: String,
     val address: String,
     val appointment: LocalDateTime,
+    val createdDateTime: LocalDateTime,
     val categoryRef: String,
     val customerRef: String,
     val description: String,
@@ -22,7 +23,7 @@ data class Post(
     val appliedFixerIds: List<String>,
     val imagesRefs: List<String>,
     val location: LatLng,
-    val suggestedPrice: Int,
+    val suggestedPrice: String,
     val status: PostStatus,
     val voucher: String?,
     val title: String = "",
@@ -31,6 +32,7 @@ data class Post(
         id,
         firestorePost.address,
         firestorePost.appointment.toLocalDateTime(),
+        firestorePost.createdDateTime.toLocalDateTime(),
         firestorePost.category,
         firestorePost.customer,
         firestorePost.description,
@@ -40,13 +42,15 @@ data class Post(
         firestorePost.location.toLatLng(),
         firestorePost.suggestedPrice,
         PostStatus.valueOf(firestorePost.status),
-        firestorePost.voucher
+        firestorePost.voucher,
+        firestorePost.title
     )
 
     companion object {
         val default = Post(
             "",
             "",
+            LocalDateTime.ofEpochSecond(0, 0, DEFAULT_ZONE_OFFSET),
             LocalDateTime.ofEpochSecond(0, 0, DEFAULT_ZONE_OFFSET),
             "",
             "",
@@ -55,7 +59,7 @@ data class Post(
             emptyList(),
             emptyList(),
             LatLng(0.0, 0.0),
-            0,
+            "0",
             PostStatus.NEW,
             null
         )

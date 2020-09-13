@@ -42,6 +42,5 @@ class SummaryPostVH(
     override fun onBind(item: SummaryPost, binding: ItemSummaryPostBinding) = with(binding) {
         summaryPost = item
         executePendingBindings()
-        cachedValue = item
     }
 }

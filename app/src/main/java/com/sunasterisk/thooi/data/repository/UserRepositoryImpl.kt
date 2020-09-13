@@ -5,21 +5,33 @@ import com.sunasterisk.thooi.data.Result
 import com.sunasterisk.thooi.data.source.UserDataSource
 import com.sunasterisk.thooi.data.source.entity.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.transform
 
 class UserRepositoryImpl(
-    private val local: UserDataSource.Local,
     private val remote: UserDataSource.Remote,
+    private val local: UserDataSource.Local,
 ) : UserRepository {
 
     @ExperimentalCoroutinesApi
     override fun getCurrentUser() = merge(
         remote.getCurrentUser().transform {
-            if (it is Result.Success) local.setCurrentUser(it.data) else emit(it)
+            if (it is Result.Success) local.saveUser(it.data) else emit(it)
         },
         local.getCurrentUser()
     )
+
+    override fun getAllUsers(): Flow<List<User>> = merge(
+        remote.getAllUsers().transform {
+            if (it is Result.Success) local.saveUser(*it.data.toTypedArray())
+        },
+        local.getAllUser()
+    )
+
+    override suspend fun getUser(id: String): User? {
+        return local.getUser(id)
+    }
 
     override suspend fun updateUser(user: User) = remote.updateUser(user)
 

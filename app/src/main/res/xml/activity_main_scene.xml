@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        android:id="@+id/transition_merge_fab_hide_bottom_nav"
+        motion:constraintSetEnd="@+id/main_toolbar_hidden"
+        motion:constraintSetStart="@id/main_toolbar_normal"
+        motion:duration="@android:integer/config_mediumAnimTime" />
+
+    <Transition
+        android:id="@+id/transition_merge_fab"
+        motion:constraintSetEnd="@+id/main_toolbar_collapsed"
+        motion:constraintSetStart="@id/main_toolbar_normal"
+        motion:duration="@android:integer/config_mediumAnimTime" />
+
+    <Transition
+        android:id="@+id/transition_hide_bottom_nav"
+        motion:constraintSetEnd="@+id/main_toolbar_hidden"
+        motion:constraintSetStart="@id/main_toolbar_collapsed"
+        motion:duration="@android:integer/config_mediumAnimTime" />
+
+    <ConstraintSet android:id="@+id/main_toolbar_normal" />
+
+    <ConstraintSet
+        android:id="@+id/main_toolbar_collapsed"
+        motion:deriveConstraintsFrom="@id/main_toolbar_normal">
+        <Constraint android:id="@+id/floatingActionButton">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                motion:layout_constraintEnd_toEndOf="@id/bottomNavView"
+                motion:layout_constraintStart_toStartOf="@id/bottomNavView"
+                motion:layout_constraintTop_toBottomOf="@id/bottomNavView"
+                motion:layout_constraintTop_toTopOf="@id/bottomNavView" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet
+        android:id="@+id/main_toolbar_hidden"
+        motion:deriveConstraintsFrom="@id/main_toolbar_collapsed">
+        <Constraint android:id="@+id/bottomNavView">
+            <Layout
+                android:layout_height="wrap_content"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toBottomOf="parent" />
+        </Constraint>
+    </ConstraintSet>
+</MotionScene>

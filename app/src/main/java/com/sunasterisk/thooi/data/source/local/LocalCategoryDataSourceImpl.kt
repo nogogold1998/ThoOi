@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.withContext
 
+@Deprecated("")
 class LocalCategoryDataSourceImpl(
     db: AppDataBase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,

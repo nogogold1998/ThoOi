@@ -16,5 +16,5 @@ interface PostRepository {
 
     fun updatePost(post: Post): Flow<Result<Void>>
 
-    fun getPostsByUserId(id: String): Flow<List<Post>>
+    fun getPostsByUserId(id: String): Flow<Result<List<Post>>>
 }

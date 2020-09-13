@@ -23,4 +23,8 @@ class LocalPostDataSource(db: AppDataBase) : PostDataSource.Local {
         postDao.getAllPostsByCustomerId(userId)
 
     override fun getPostById(id: String): Flow<Post> = postDao.findPostByIdFlow(id)
+
+    override suspend fun savePost(vararg post: Post) {
+        postDao.insert(*post)
+    }
 }

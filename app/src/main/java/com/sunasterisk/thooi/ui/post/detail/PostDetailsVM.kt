@@ -1,16 +1,13 @@
 package com.sunasterisk.thooi.ui.post.detail
 
-import android.os.Bundle
+import android.util.Log
 import androidx.annotation.StringRes
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.savedstate.SavedStateRegistryOwner
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.data.model.PostDetail
 import com.sunasterisk.thooi.data.model.SummaryUser
@@ -31,9 +28,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 
-/**
- * Created by Cong Vu Chi on 04/09/20 09:59.
- */
+private val TAG = "PostDetailVM"
 sealed class PostDetailsVM(
     postDetailRepo: PostDetailRepository,
     protected val userType: UserType,
@@ -42,7 +37,11 @@ sealed class PostDetailsVM(
 
     val postDetail: LiveData<PostDetail> = _requestedPostId.asFlow()
         .flatMapLatest { postDetailRepo.getPostDetailById(it) }
-        .catch { _toastStringRes.postValue(R.string.error_unknown) }
+        .catch {
+            Log.d(TAG, "PostDetailsVM.getPostDetail: .catch()")
+            it.printStackTrace()
+            _toastStringRes.postValue(R.string.error_unknown)
+        }
         .asLiveData()
 
     abstract val postDetailsAdapterItems: LiveData<List<PostDetailsAdapterItem<out Any>>>
@@ -83,31 +82,6 @@ sealed class PostDetailsVM(
     fun loadPost(postId: String) {
         _requestedPostId.postValue(postId)
     }
-
-    @Suppress("UNCHECKED_CAST")
-    class Factory(
-        private val postDetailRepo: PostDetailRepository,
-        private val userType: UserType,
-        owner: SavedStateRegistryOwner,
-        defaultArgs: Bundle? = null,
-    ) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-
-        override fun <T : ViewModel> create(
-            key: String,
-            modelClass: Class<T>,
-            handle: SavedStateHandle,
-        ) = when {
-            modelClass.isAssignableFrom(PostDetailsVM::class.java) -> {
-                when (userType) {
-                    UserType.CUSTOMER -> CustomerPostDetailsVM(postDetailRepo)
-                    UserType.FIXER -> FixerPostDetailsVM(postDetailRepo)
-                }
-            }
-            else -> {
-                throw IllegalStateException("Unknown ViewModel class: ${modelClass.name}")
-            }
-        } as T
-    }
 }
 
 class CustomerPostDetailsVM(
@@ -116,7 +90,9 @@ class CustomerPostDetailsVM(
 
     private val _selectedFixerId = MutableLiveData("")
 
-    private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
+    private val exceptionHandler = CoroutineExceptionHandler { _, th ->
+        Log.d(TAG, "CustomerPostDetailsVM.exceptionHandler: ")
+        th.printStackTrace()
         _toastStringRes.postValue(R.string.error_unknown)
     }
 

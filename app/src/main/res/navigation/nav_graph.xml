@@ -36,10 +36,18 @@
         tools:layout="@layout/fragment_sign_in">
         <action
             android:id="@+id/signIn_to_signUp"
-            app:destination="@id/signupFragment" />
+            app:destination="@id/signupFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/signIn_to_home"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/signInFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -50,11 +58,8 @@
             android:id="@+id/home_to_postDetails"
             app:destination="@id/postDetailsFragment" />
         <action
-            android:id="@+id/home_to_fixerCategory"
-            app:destination="@id/fixerCategoryFragment" />
-        <action
-            android:id="@+id/home_to_customerCategory"
-            app:destination="@id/customerCategoryFragment" />
+            android:id="@+id/home_to_category"
+            app:destination="@id/categoryFragment" />
         <action
             android:id="@+id/home_to_ranking"
             app:destination="@id/rankingFragment" />
@@ -68,14 +73,20 @@
         android:name="com.sunasterisk.thooi.ui.signup.SignUpFragment"
         tools:layout="@layout/fragment_sign_up">
         <action
-            android:id="@+id/action_signupFragment_to_signInFragment"
+            android:id="@+id/signup_to_signIn"
             app:destination="@id/signInFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
             app:popUpTo="@id/signInFragment" />
 
         <action
             android:id="@+id/sign_up_to_home"
             app:destination="@id/homeFragment"
             app:popUpTo="@id/homeFragment" />
+        <argument
+            android:name="isGoogleSignUp"
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
 
     <fragment
@@ -128,27 +139,29 @@
 
     <fragment android:id="@+id/editProfileFragment">
         <action
-            android:id="@+id/action_editProfileFragment_to_settingFragment"
+            android:id="@+id/editProfile_to_setting"
             app:destination="@id/settingFragment"
             app:popUpTo="@id/settingFragment" />
     </fragment>
 
-    <fragment android:id="@+id/customerCategoryFragment">
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.sunasterisk.thooi.ui.category.CategoryFragment"
+        tools:layout="@layout/fragment_category">
         <action
             android:id="@+id/customerCategory_to_profile"
             app:destination="@id/profileFragment" />
-    </fragment>
-
-    <fragment android:id="@+id/fixerCategoryFragment">
         <action
             android:id="@+id/fixerCategory_to_postDetails"
             app:destination="@id/postDetailsFragment" />
+        <argument android:name="categoryId" />
     </fragment>
 
     <action
         android:id="@+id/global_signIn"
         app:destination="@id/signInFragment"
-        app:popUpTo="@id/signInFragment" />
+        app:popUpTo="@id/homeFragment"
+        app:popUpToInclusive="true" />
 
     <action
         android:id="@+id/global_home"

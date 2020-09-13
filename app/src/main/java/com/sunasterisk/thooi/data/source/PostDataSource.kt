@@ -16,10 +16,14 @@ interface PostDataSource {
         fun getPostsByCustomer(userId: String): Flow<List<Post>>
 
         fun getPostById(id: String): Flow<Post>
+
+        suspend fun savePost(vararg post: Post)
     }
 
     interface Remote {
         fun getAllPosts(categories: List<Category>): Flow<Result<List<Post>>>
+
+        fun getAllPosts(): Flow<Result<List<Post>>>
 
         fun getPostsByCustomer(userId: String): Flow<Result<List<Post>>>
 

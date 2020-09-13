@@ -4,15 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.databinding.FragmentHomeBinding
+import com.sunasterisk.thooi.di.getViewModelFactory
 import com.sunasterisk.thooi.ui.home.model.HomeNavigationEvent
+import com.sunasterisk.thooi.ui.main.MainVM
 import com.sunasterisk.thooi.util.MarginItemDecoration
-import org.koin.android.ext.android.inject
+import com.sunasterisk.thooi.util.observeEvent
+import com.sunasterisk.thooi.util.verticalScrollProgress
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun onCreateBinding(
@@ -21,7 +26,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         attachToRoot: Boolean,
     ) = FragmentHomeBinding.inflate(inflater, container, attachToRoot)
 
-    private val viewModel: HomeVM by inject()
+    private val viewModel: HomeVM by navGraphViewModels(R.id.nav_graph) { getViewModelFactory() }
+
+    private val mainVM: MainVM by activityViewModels { getViewModelFactory() }
 
     private var categoryAdapter: CategoryAdapter? = null
 
@@ -34,7 +41,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     private fun setupRecyclerView() {
-        val categoryAdapter = CategoryAdapter()
+        val categoryAdapter = CategoryAdapter {
+            findNavController().navigate(HomeFragmentDirections.homeToCategory(it.id))
+        }
         val summaryPostAdapter = SummaryPostAdapter {
             viewModel.navigateToPost(it.id)
         }
@@ -53,6 +62,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 }
             }
             it.addItemDecoration(MarginItemDecoration(resources, R.dimen.dp_8, R.dimen.dp_8))
+            it.setOnScrollChangeListener { _, _, _, _, _ ->
+                if (it.verticalScrollProgress == 1f) {
+                    mainVM.collapseToolbar()
+                } else {
+                    mainVM.showToolbar()
+                }
+            }
         }
         this.categoryAdapter = categoryAdapter
         this.summaryAdapter = summaryPostAdapter
@@ -82,7 +98,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.loadDataByUserId("")
+        mainVM.loginUserId.observeEvent(viewLifecycleOwner) {
+            if (it == null) return@observeEvent
+            viewModel.loadDataByUserId(it)
+        }
     }
 
     override fun onDestroyView() {

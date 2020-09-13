@@ -40,6 +40,25 @@ class PostRemoteDataSource(
             Pair(FIELD_STATUS, listOf(PostStatus.NEW.name, PostStatus.PENDING.name))
         )
 
+    override fun getAllPosts(): Flow<Result<List<Post>>> = callbackFlow {
+        offer(Result.loading())
+        val listener = postCollection.addSnapshotListener { snapshot, e ->
+            try {
+                snapshot?.documents
+                    ?.mapNotNull { it.toObjectWithId(FirestorePost::class.java, Post::class) }
+                    ?.let { offer(Result.success(it)) }
+                    ?: throw e!!
+            } catch (e: Exception) {
+                offer(Result.failed(e))
+            }
+        }
+
+        awaitClose {
+            listener.remove()
+            cancel()
+        }
+    }
+
     override fun getPostsByCustomer(userId: String): Flow<Result<List<Post>>> =
         getPostsWithCriteria(Pair(FIELD_CUSTOMER, userId))
 

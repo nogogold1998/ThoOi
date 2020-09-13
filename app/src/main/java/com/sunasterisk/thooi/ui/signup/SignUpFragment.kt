@@ -1,13 +1,17 @@
 package com.sunasterisk.thooi.ui.signup
 
 import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.transition.Fade
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -27,9 +31,11 @@ import kotlinx.android.synthetic.main.fragment_sign_up.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.koin.android.ext.android.inject
-import java.util.*
+import java.util.Date
 
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
+
+    private val navArgs: SignUpFragmentArgs by navArgs()
 
     private val viewModel by inject<SignUpViewModel>()
     private val navController by lazy { findNavController() }
@@ -43,7 +49,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
         )
     }
 
-    private val resultLauncher =
+    private val resultLauncher: ActivityResultLauncher<Intent> by lazy {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
                 lifecycleScope.launch {
@@ -58,6 +64,21 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                 activity?.onBackPressed()
             }
         }
+    }
+
+    private val permissionResult: ActivityResultLauncher<String> by lazy {
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            @SuppressLint("MissingPermission")
+            if (it) {
+                AddressBottomSheet().show(
+                    parentFragmentManager,
+                    AddressBottomSheet::class.simpleName
+                )
+            } else {
+                viewModel.nameRule.value = R.string.msg_missing_permission
+            }
+        }
+    }
 
     private val picker by lazy {
         MaterialDatePicker.Builder.datePicker().setSelection(System.currentTimeMillis()).build()
@@ -73,7 +94,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
     }
 
     override fun setupView() {
-        if (arguments?.getBoolean(ACTION_GOOGLE_SIGN_IN) == true) {
+        if (navArgs.isGoogleSignUp) {
             resultLauncher.launch(googleSignInClient.signInIntent)
         }
     }
@@ -87,7 +108,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
 
         googleSignIn.observe(viewLifecycleOwner) {
             if (it.getContentIfNotHandled() != null) {
-                navController.navigate(R.id.sign_up_to_home)
+                navController.navigate(SignUpFragmentDirections.signUpToHome())
             }
         }
 
@@ -104,8 +125,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                 textLabelCategory.isVisible = it
                 chipGroupCategory.isVisible = it
                 inputLayoutDescription.isVisible = it
-                inputLayoutPassword.isVisible =
-                    arguments?.getBoolean(ACTION_GOOGLE_SIGN_IN) != true
+                inputLayoutPassword.isVisible = !navArgs.isGoogleSignUp
             }
         }
 
@@ -141,9 +161,5 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
             }
             addView(chip)
         }
-    }
-
-    companion object {
-        const val ACTION_GOOGLE_SIGN_IN = "google_sign_in"
     }
 }
