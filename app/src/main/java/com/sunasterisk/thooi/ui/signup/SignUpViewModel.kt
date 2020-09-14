@@ -117,6 +117,7 @@ class SignUpViewModel(
                 imageUrl = imageUrl ?: "",
                 dateOfBirth = birthday.value?.second ?: LocalDate.now(),
                 address = address.value?.address ?: "",
+                bio = bio.value ?: "",
                 location = address.value?.location ?: LatLng(0.0, 0.0),
                 userType = if (fixer.value == true) FIXER else CUSTOMER
             )

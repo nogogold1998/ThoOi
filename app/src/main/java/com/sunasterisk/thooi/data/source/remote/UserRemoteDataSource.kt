@@ -37,11 +37,10 @@ class UserRemoteDataSource(
         FirebaseNoSignedInUserException(MSG_USER_NOT_FOUND)
     }
 
-    private val userDocument by lazy {
-        firebaseAuth.currentUser?.run {
+    private val userDocument
+        get() = firebaseAuth.currentUser?.run {
             firestore.collection(USERS_COLLECTION).document(uid)
         }
-    }
 
     private val userCollection by lazy {
         firestore.collection(USERS_COLLECTION)
@@ -105,9 +104,10 @@ class UserRemoteDataSource(
     }
 
     override suspend fun signUp(user: User, password: String) = getOneShotResult {
-        firebaseAuth.createUserWithEmailAndPassword(user.email, password).await()
-            .user?.sendEmailVerification()
-        userDocument?.set(FirestoreUser(user))?.await() ?: throw authException
+        firebaseAuth.createUserWithEmailAndPassword(user.email, password).await().user?.run {
+            sendEmailVerification()
+            firestore.collection(USERS_COLLECTION).document(uid).set(FirestoreUser(user)).await()
+        } ?: throw authException
         Unit
     }
 

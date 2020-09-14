@@ -59,15 +59,12 @@ val repositoryModule = module {
     single<NotificationDataSource.Remote> { NotificationRemoteDataSource(get(), get()) }
     single<NotificationDataSource.Local> { NotificationLocalDataSource() } //FIXME: Not implemented yet
 
-    single<PostDataSource.Remote> { PostRemoteDataSource(get()) }
-
     //Repository modules
     single<UserRepository> { UserRepositoryImpl(get(), get()) }
     single<NotificationRepository> { NotificationRepositoryImpl(get(), get()) }
 
     single<FirestoreRepository> { FirestoreRepositoryImpl(get()) }
 
-    single<PostDetailRepository> { FakePostDetailRepo() }
     // CongVC
     single<PostDataSource.Remote> { PostRemoteDataSource(get()) }
     single<PostDataSource.Local> { LocalPostDataSource(get()) }

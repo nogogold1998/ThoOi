@@ -61,6 +61,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         lifecycleScope.launchWhenResumed {
             get<UserRepository>().getCurrentUser().collect { toast(it.toString()) }
         }
+        binding.floatingActionButton.setOnClickListener {
+            navController.navigate(R.id.global_newPost)
+        }
     }
 
     override fun initListeners() {

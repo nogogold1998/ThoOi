@@ -92,4 +92,5 @@
     <string name="hint_work_time">Giờ làm việc</string>
     <string name="hint_suggest_price">Giá đề xuất</string>
     <string name="label_find_a_fixer">Tìm thợ</string>
+    <string name="msg_permission_denied">Yêu cầu cấp quyền bị từ chối</string>
 </resources>

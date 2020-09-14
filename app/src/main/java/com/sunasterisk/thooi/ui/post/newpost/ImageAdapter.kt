@@ -4,15 +4,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.sunasterisk.thooi.databinding.ItemAddressBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.sunasterisk.thooi.databinding.ItemNewPostBinding
 import com.sunasterisk.thooi.util.inflater
-import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.item_new_post.view.*
+import java.io.File
 
 class ImageAdapter : ListAdapter<String, ImageAdapter.ViewHolder>(Companion) {
 
-    private var onItemClick: ((String) -> Unit)? = null
+    private var onItemClick: ((Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(ItemNewPostBinding.inflate(parent.inflater), onItemClick)
@@ -21,20 +22,28 @@ class ImageAdapter : ListAdapter<String, ImageAdapter.ViewHolder>(Companion) {
         holder.bind(getItem(position))
     }
 
-    fun setOnclickListener(listener: (String) -> Unit) {
+    fun setOnclickListener(listener: (Int) -> Unit) {
         onItemClick = listener
     }
 
-    class ViewHolder(val binding: ItemNewPostBinding, onItemClick: ((String) -> Unit)?) :
+    class ViewHolder(val binding: ItemNewPostBinding, onItemClick: ((Int) -> Unit)?) :
         RecyclerView.ViewHolder(binding.root) {
-        private var address: String? = null
+        private var path: String? = null
 
         init {
-            if (onItemClick != null) itemView.fabClose.setOnClickListener { address?.let { onItemClick(it) } }
+            if (onItemClick != null) itemView.fabClose.setOnClickListener {
+                onItemClick(layoutPosition)
+            }
         }
 
         fun bind(item: String) {
-
+            path = item
+            binding.path = item
+            Glide.with(itemView.context)
+                .load(File(item))
+                .fitCenter()
+                .transition(DrawableTransitionOptions().crossFade())
+                .into(binding.imagePost)
         }
     }
 

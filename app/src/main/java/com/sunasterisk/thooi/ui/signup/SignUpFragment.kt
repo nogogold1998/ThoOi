@@ -2,7 +2,6 @@ package com.sunasterisk.thooi.ui.signup
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
@@ -31,7 +30,7 @@ import kotlinx.android.synthetic.main.fragment_sign_up.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.koin.android.ext.android.inject
-import java.util.Date
+import java.util.*
 
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
 
@@ -62,20 +61,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                 }
             } else {
                 activity?.onBackPressed()
-            }
-        }
-    }
-
-    private val permissionResult: ActivityResultLauncher<String> by lazy {
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            @SuppressLint("MissingPermission")
-            if (it) {
-                AddressBottomSheet().show(
-                    parentFragmentManager,
-                    AddressBottomSheet::class.simpleName
-                )
-            } else {
-                viewModel.nameRule.value = R.string.msg_missing_permission
             }
         }
     }

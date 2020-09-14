@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="adapter"
+            type="com.sunasterisk.thooi.ui.post.newpost.ImageAdapter" />
+
+        <variable
             name="viewModel"
             type="com.sunasterisk.thooi.ui.post.newpost.NewPostViewModel" />
     </data>
@@ -35,6 +39,7 @@
                 android:hint="@string/hint_address"
                 android:text="@{viewModel.places.address}"
                 android:textAlignment="textStart"
+                android:textColor="?android:attr/textColorPrimary"
                 app:cornerRadius="@dimen/dp_4"
                 app:icon="@drawable/ic_location"
                 app:iconPadding="@dimen/dp_8"
@@ -50,6 +55,7 @@
                 android:hint="@string/hint_category"
                 android:text="@{viewModel.category.title}"
                 android:textAlignment="textStart"
+                android:textColor="?android:attr/textColorPrimary"
                 app:cornerRadius="@dimen/dp_4"
                 app:icon="@drawable/ic_round_category_24"
                 app:iconPadding="@dimen/dp_8"
@@ -59,14 +65,15 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerImage"
-                android:layout_width="0dp"
+                setAdapter="@{adapter}"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_128"
                 android:layout_marginStart="@dimen/dp_16"
                 android:layout_marginTop="@dimen/dp_16"
                 android:layout_marginEnd="@dimen/dp_16"
                 android:background="@drawable/bg_round"
                 android:orientation="horizontal"
-                android:paddingStart="@dimen/dp_72"
+                android:paddingStart="@dimen/dp_64"
                 android:paddingEnd="@dimen/dp_8"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_28"
-                android:background="@android:color/transparent"
+                android:background="?attr/selectableItemBackground"
                 android:padding="@dimen/dp_8"
                 app:layout_constraintBottom_toBottomOf="@+id/recyclerImage"
                 app:layout_constraintStart_toStartOf="parent"
@@ -95,6 +102,7 @@
                 android:hint="@string/hint_work_time"
                 android:text="@{viewModel.workTime}"
                 android:textAlignment="textStart"
+                android:textColor="?android:attr/textColorPrimary"
                 app:cornerRadius="@dimen/dp_4"
                 app:icon="@drawable/ic_round_calendar_24"
                 app:iconPadding="@dimen/dp_8"
