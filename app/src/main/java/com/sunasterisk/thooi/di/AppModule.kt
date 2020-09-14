@@ -21,7 +21,7 @@ val viewModelModule = module {
     viewModel { SignInViewModel(get()) }
     viewModel { NotificationViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get()) }
-    viewModel { MainVM(get(), get()) }
+    viewModel { MainVM(get()) }
     viewModel { HomeVM(get(), get()) }
     viewModel { CustomerPostDetailsVM(get()) }
     viewModel { FixerPostDetailsVM(get()) }
