@@ -6,31 +6,65 @@ import com.sunasterisk.thooi.data.source.UserDataSource
 import com.sunasterisk.thooi.data.source.entity.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.launch
 
 class UserRepositoryImpl(
     private val remote: UserDataSource.Remote,
     private val local: UserDataSource.Local,
 ) : UserRepository {
 
+    private val currentUserFlow by lazy {
+        merge(
+            remote.getCurrentUser().transform {
+                if (it is Result.Success) local.saveUser(it.data) else emit(it)
+            },
+            local.getCurrentUser()
+        )
+    }
+
+    private val allUsersFlow by lazy {
+        merge(
+            remote.getAllUsers().transform {
+                if (it is Result.Success) local.saveUser(*it.data.toTypedArray())
+            },
+            local.getAllUser()
+        )
+    }
+
+    private val cachedUserFlows = hashMapOf<String, Flow<Result<User>>>()
+
     @ExperimentalCoroutinesApi
-    override fun getCurrentUser() = merge(
-        remote.getCurrentUser().transform {
-            if (it is Result.Success) local.saveUser(it.data) else emit(it)
-        },
-        local.getCurrentUser()
-    )
+    override fun getCurrentUser(): Flow<Result<User>> = currentUserFlow
 
-    override fun getAllUsers(): Flow<List<User>> = merge(
-        remote.getAllUsers().transform {
-            if (it is Result.Success) local.saveUser(*it.data.toTypedArray())
-        },
-        local.getAllUser()
-    )
+    override fun getAllUsers(): Flow<List<User>> = allUsersFlow
 
-    override suspend fun getUser(id: String): User? {
-        return local.getUser(id)
+    override suspend fun getUser(id: String): User? = local.getUser(id)
+
+    override fun getUserFlow(id: String): Flow<Result<User>> = synchronized(cachedUserFlows) {
+        cachedUserFlows.getOrPut(id) {
+            channelFlow<Result<User>> {
+                launch {
+                    remote.getUser(id)
+                        .filterIsInstance<Result.Success<User>>()
+                        .distinctUntilChanged()
+                        .collect { local.saveUser(it.data) }
+                }
+                launch {
+                    local.getUserFlow(id)
+                        .map { Result.success(it) }
+                        .distinctUntilChanged()
+                        .collect { offer(it) }
+                }
+            }.onStart { emit(Result.loading()) }
+        }
     }
 
     override suspend fun updateUser(user: User) = remote.updateUser(user)

@@ -13,6 +13,8 @@ interface UserRepository {
 
     suspend fun getUser(id: String): User?
 
+    fun getUserFlow(id: String): Flow<Result<User>>
+
     suspend fun updateUser(user: User): Result<Unit>
 
     suspend fun resetPassword(email: String): Result<Unit>

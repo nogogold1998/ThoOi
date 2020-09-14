@@ -1,5 +1,6 @@
 package com.sunasterisk.thooi.data.source.remote
 
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.sunasterisk.thooi.data.Result
@@ -33,6 +34,8 @@ class PostRemoteDataSource(
         FirebaseFirestoreException(MSG_FIRESTORE_EXCEPTION, FirebaseFirestoreException.Code.ABORTED)
     }
 
+    private val cachedPostDocuments = hashMapOf<String, DocumentReference>()
+
     override fun getAllPosts(categories: List<Category>): Flow<Result<List<Post>>> =
         getPostsWithCriteria(
             null,
@@ -62,19 +65,26 @@ class PostRemoteDataSource(
     override fun getPostsByCustomer(userId: String): Flow<Result<List<Post>>> =
         getPostsWithCriteria(Pair(FIELD_CUSTOMER, userId))
 
-    override fun getPostById(id: String): Flow<Result<Post>> =
-        postCollection.document(id).getSnapshotFlow {
-            it.toObjectWithId(FirestorePost::class.java, Post::class)
-        }
+    override fun getPostById(id: String): Flow<Result<Post>> = synchronized(cachedPostDocuments) {
+        cachedPostDocuments.getOrPut(id) { postCollection.document(id) }
+    }.getSnapshotFlow { it.toObjectWithId(FirestorePost::class.java, Post::class) }
 
     override suspend fun addNewPost(post: Post) = getOneShotResult {
         postCollection.add(FirestorePost(post)).await() ?: throw firestoreException
     }
 
     override suspend fun updatePost(post: Post) = getOneShotResult {
-        postCollection.document(post.id).set(FirestorePost(post)).await()
-            ?: throw firestoreException
+        synchronized(cachedPostDocuments) {
+            cachedPostDocuments.getOrPut(post.id) { postCollection.document(post.id) }
+        }.set(FirestorePost(post)).await() ?: throw firestoreException
         Unit
+    }
+
+    override suspend fun changePostStatus(postId: String, postStatus: PostStatus) {
+        cachedPostDocuments
+            .getOrPut(postId) { postCollection.document(postId) }
+            .update(FIELD_STATUS, postStatus.toString())
+            .await()
     }
 
     private fun getPostsWithCriteria(

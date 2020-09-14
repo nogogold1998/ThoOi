@@ -42,18 +42,16 @@ data class User(
         firestoreUser.organization,
         firestoreUser.phone,
         firestoreUser.professions,
-        if (firestoreUser.type == COL_USER_TYPE_CUSTOMER) UserType.CUSTOMER else UserType.FIXER
+        UserType.valueOf(firestoreUser.type)
     )
 
     companion object {
         const val TABLE_NAME = "user"
-        const val COL_USER_TYPE_CUSTOMER = "customer"
-        const val COL_USER_TYPE_FIXER = "fixer"
         val defaultZoneOffset: ZoneOffset = ZoneOffset.UTC
     }
 }
 
-enum class UserType(val value: String) {
-    CUSTOMER(User.COL_USER_TYPE_CUSTOMER),
-    FIXER(User.COL_USER_TYPE_FIXER)
+enum class UserType {
+    CUSTOMER,
+    FIXER
 }

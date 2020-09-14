@@ -4,6 +4,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.sunasterisk.thooi.data.Result
 import com.sunasterisk.thooi.data.source.entity.Category
 import com.sunasterisk.thooi.data.source.entity.Post
+import com.sunasterisk.thooi.data.source.entity.PostStatus
 import kotlinx.coroutines.flow.Flow
 
 interface PostDataSource {
@@ -32,6 +33,8 @@ interface PostDataSource {
         suspend fun addNewPost(post: Post): Result<DocumentReference>
 
         suspend fun updatePost(post: Post): Result<Unit>
+
+        suspend fun changePostStatus(postId: String, postStatus: PostStatus)
     }
 }
 

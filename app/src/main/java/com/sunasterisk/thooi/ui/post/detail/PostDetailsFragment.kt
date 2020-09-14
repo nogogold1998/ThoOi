@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -14,6 +15,7 @@ import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.databinding.FragmentDetailPostBinding
 import com.sunasterisk.thooi.di.getViewModelFactory
+import com.sunasterisk.thooi.ui.main.MainVM
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.CustomerAction.*
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.FixerAction.ApplyJob
@@ -21,12 +23,15 @@ import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.FixerAction.
 import com.sunasterisk.thooi.util.MarginItemDecoration
 import com.sunasterisk.thooi.util.observeEvent
 import com.sunasterisk.thooi.util.toast
+import com.sunasterisk.thooi.util.verticalScrollProgress
 
 class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
 
     private val args: PostDetailsFragmentArgs by navArgs()
 
     private val viewModel by viewModels<PostDetailsVM> { getViewModelFactory() }
+
+    private val mainVM: MainVM by activityViewModels { getViewModelFactory() }
 
     override fun onCreateBinding(
         inflater: LayoutInflater,
@@ -44,6 +49,15 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
 
     override fun initListener() {
         binding.imageUpButton.setOnClickListener { findNavController().navigateUp() }
+        binding.scrollViewJobDetails.let {
+            it.setOnScrollChangeListener { _, _, _, _, _ ->
+                if (it.verticalScrollProgress == 1f) {
+                    mainVM.collapseToolbar()
+                } else {
+                    mainVM.showToolbar()
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

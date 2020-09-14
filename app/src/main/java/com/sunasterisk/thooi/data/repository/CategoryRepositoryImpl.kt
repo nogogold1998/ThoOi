@@ -8,8 +8,16 @@ import kotlinx.coroutines.flow.Flow
 class CategoryRepositoryImpl(
     private val remote: CategoryDataSource.Remote,
 ) : CategoryRepository {
-    override fun getAllCategories(): Flow<Result<List<Category>>> = remote.getCategories()
+    private val categoriesFlow by lazy { remote.getCategories() }
+
+    private val cachedCategoryFlows = hashMapOf<String, Flow<Result<Category>>>()
+
+    override fun getAllCategories(): Flow<Result<List<Category>>> = categoriesFlow
 
     override fun getCategoryByIdFlow(id: String): Flow<Result<Category>> =
-        remote.getCategoryById(id)
+        synchronized(cachedCategoryFlows) {
+            cachedCategoryFlows.getOrPut(id) {
+                remote.getCategoryById(id)
+            }
+        }
 }

@@ -63,6 +63,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             }
             it.addItemDecoration(MarginItemDecoration(resources, R.dimen.dp_8, R.dimen.dp_8))
             it.setOnScrollChangeListener { _, _, _, _, _ ->
+                if (it.adapter?.itemCount == 0) return@setOnScrollChangeListener
                 if (it.verticalScrollProgress == 1f) {
                     mainVM.collapseToolbar()
                 } else {
