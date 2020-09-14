@@ -13,6 +13,7 @@ import com.sunasterisk.thooi.databinding.ItemSummaryUserBinding
 import com.sunasterisk.thooi.ui.category.CategoryAdapterViewType.FIXER
 import com.sunasterisk.thooi.ui.category.CategoryAdapterViewType.POST
 import com.sunasterisk.thooi.util.inflater
+import com.sunasterisk.thooi.util.load
 
 class CategoryAdapter(
     private val itemClickListener: (CategoryAdapterItem<*>) -> Unit,
@@ -93,6 +94,7 @@ class PostCategoryVH(
     override fun onBind(item: CategoryAdapterItem.PostItem, binding: ItemCategoryJobBinding) =
         with(binding) {
             val post = item.data
+            imageCategoryPost.load(post.imagesRefs.random())
             textTitlePost.text = post.title
             textDescriptionPost.text = post.description
             textPostSummaryAddress.text = post.address

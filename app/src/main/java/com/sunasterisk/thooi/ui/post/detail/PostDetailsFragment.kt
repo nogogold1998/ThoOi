@@ -85,14 +85,17 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
             adapter = PostDetailsAdapter(viewModel.postDetail, viewLifecycleOwner) { action ->
                 when (action) {
                     is PostDetailsAction.CustomerAction -> {
-                        val viewModel = checkViewModelInstance<CustomerPostDetailsVM>()
-                        when (action) {
-                            is SelectFixer -> viewModel.selectFixer(action.summaryUser)
-                            AssignFixer -> viewModel.assignFixer()
-                            ReassignFixer -> viewModel.reassignFixer()
-                            CancelFixing -> viewModel.cancelFixing()
-                            FinishFixing -> viewModel.finishFixing()
-                            ClosePost -> viewModel.closePost()
+                        try {
+                            val viewModel = checkViewModelInstance<CustomerPostDetailsVM>()
+                            when (action) {
+                                is SelectFixer -> viewModel.selectFixer(action.summaryUser)
+                                AssignFixer -> viewModel.assignFixer()
+                                ReassignFixer -> viewModel.reassignFixer()
+                                CancelFixing -> viewModel.cancelFixing()
+                                FinishFixing -> viewModel.finishFixing()
+                                ClosePost -> viewModel.closePost()
+                            }
+                        } catch (_: IllegalStateException) {
                         }
                     }
                     is PostDetailsAction.FixerAction -> {

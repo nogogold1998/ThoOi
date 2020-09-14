@@ -179,14 +179,18 @@ class PostDetailsAdapter(
 
                 text = context.getString(
                     when {
-                        status in listOf(NEW, OPEN) -> R.string.action_apply_job
+                        status == NEW -> R.string.action_apply_job
+                        status == OPEN && postDetail.appliedFixers.any { it.id == postDetail.loggedInUserId } ->
+                            R.string.label_job_applied
+                        status == OPEN -> R.string.action_apply_job
                         assignedToYou -> R.string.label_job_assigned_to_you
                         else -> R.string.label_job_assigned_to_other
                     }
                 )
             }
             with(binding.buttonStartFixing) {
-                isGone = !(status == PENDING && assignedToYou)
+                isGone = !(status in arrayOf(PENDING, ON_PROGRESS, FINISHED) && assignedToYou)
+                isEnabled = !(status in arrayOf(ON_PROGRESS, FINISHED))
                 text = context.getString(
                     when (status) {
                         FINISHED -> R.string.label_job_finished

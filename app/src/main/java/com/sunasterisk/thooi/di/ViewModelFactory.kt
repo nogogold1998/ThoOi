@@ -7,7 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.savedstate.SavedStateRegistryOwner
-import com.google.firebase.auth.FirebaseAuth
 import com.sunasterisk.thooi.data.Result
 import com.sunasterisk.thooi.data.repository.UserRepository
 import com.sunasterisk.thooi.data.source.entity.UserType
@@ -21,12 +20,14 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.core.KoinComponent
 import org.koin.core.get
+import org.koin.core.inject
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory(
     owner: SavedStateRegistryOwner,
     defaultArgs: Bundle? = null,
 ) : AbstractSavedStateViewModelFactory(owner, defaultArgs), KoinComponent {
+    private val userRepo: UserRepository by inject()
     override fun <T : ViewModel?> create(
         key: String,
         modelClass: Class<T>,
@@ -36,13 +37,8 @@ class ViewModelFactory(
             isAssignableFrom(MainVM::class.java) -> get<MainVM>()
             isAssignableFrom(HomeVM::class.java) -> get<HomeVM>()
             isAssignableFrom(PostDetailsVM::class.java) -> runBlocking {
-                val firebaseAuth: FirebaseAuth = get()
-                val userRepo: UserRepository = get()
-                val userId = checkNotNull(firebaseAuth.currentUser?.uid)
-                val user = checkNotNull(userRepo.getUser(userId))
                 val user1 =
                     userRepo.getCurrentUser().first { it is Result.Success } as Result.Success
-                val user2 = user1.data
                 when (user1.data.userType) {
                     UserType.CUSTOMER -> get<CustomerPostDetailsVM>()
                     UserType.FIXER -> get<FixerPostDetailsVM>()

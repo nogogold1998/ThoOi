@@ -1,5 +1,6 @@
 package com.sunasterisk.thooi.data.repository
 
+import com.google.firebase.auth.FirebaseAuth
 import com.sunasterisk.thooi.data.Result
 import com.sunasterisk.thooi.data.model.PostDetail
 import com.sunasterisk.thooi.data.model.SummaryUser
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.transformLatest
 class PostDetailRepositoryImpl(
     private val postRepo: PostRepository,
     private val userRepository: UserRepository,
+    private val firebaseAuth: FirebaseAuth,
 ) : PostDetailRepository {
     override fun getPostDetailById(id: String): Flow<PostDetail> {
         return postRepo.getPostByIdFlow(id).flatMapLatest { post ->
@@ -43,6 +45,7 @@ class PostDetailRepositoryImpl(
                     users.drop(1).map(::SummaryUser),
                     post.status,
                     post.fixerId,
+                    firebaseAuth.currentUser?.uid!!
                 )
             }
         }
@@ -74,10 +77,13 @@ class PostDetailRepositoryImpl(
     }
 
     override suspend fun applyJob(postId: String) {
-        TODO("Not yet implemented")
+        postRepo.getPostById(postId)?.let {
+            val newList = it.appliedFixerIds.toSet() + firebaseAuth.currentUser?.uid
+            it.copy(appliedFixerIds = newList.filterNotNull(), status = PostStatus.OPEN)
+        }?.let { postRepo.updatePost(it) }
     }
 
     override suspend fun startFixing(postId: String) {
-        TODO("Not yet implemented")
+        postRepo.updatePostStatus(postId, PostStatus.ON_PROGRESS)
     }
 }

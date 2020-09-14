@@ -21,15 +21,6 @@ class UserRepositoryImpl(
     private val local: UserDataSource.Local,
 ) : UserRepository {
 
-    private val currentUserFlow by lazy {
-        merge(
-            remote.getCurrentUser().transform {
-                if (it is Result.Success) local.saveUser(it.data) else emit(it)
-            },
-            local.getCurrentUser()
-        )
-    }
-
     private val allUsersFlow by lazy {
         merge(
             remote.getAllUsers().transform {
@@ -42,7 +33,14 @@ class UserRepositoryImpl(
     private val cachedUserFlows = hashMapOf<String, Flow<Result<User>>>()
 
     @ExperimentalCoroutinesApi
-    override fun getCurrentUser(): Flow<Result<User>> = currentUserFlow
+    override fun getCurrentUser(): Flow<Result<User>> = channelFlow {
+        launch {
+            remote.getCurrentUser().collect {
+                if (it is Result.Success) local.saveUser(it.data) else offer(it)
+            }
+        }
+        launch { local.getCurrentUser().collect { offer(it) } }
+    }
 
     override fun getAllUsers(): Flow<List<User>> = allUsersFlow
 

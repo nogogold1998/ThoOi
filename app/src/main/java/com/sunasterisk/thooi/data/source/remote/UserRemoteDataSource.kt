@@ -3,6 +3,7 @@ package com.sunasterisk.thooi.data.source.remote
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthEmailException
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.internal.api.FirebaseNoSignedInUserException
@@ -37,11 +38,10 @@ class UserRemoteDataSource(
         FirebaseNoSignedInUserException(MSG_USER_NOT_FOUND)
     }
 
-    private val currentUserDocument by lazy {
-        firebaseAuth.currentUser?.run {
+    private val currentUserDocument: DocumentReference?
+        get() = firebaseAuth.currentUser?.run {
             firestore.collection(USERS_COLLECTION).document(uid)
         }
-    }
 
     private val userCollection by lazy {
         firestore.collection(USERS_COLLECTION)

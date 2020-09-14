@@ -3,6 +3,7 @@ package com.sunasterisk.thooi.ui.category
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.sunasterisk.thooi.R
@@ -21,7 +22,9 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
     private val categoryAdapter: CategoryAdapter by lazy {
         CategoryAdapter {
             when (it) {
-                is CategoryAdapterItem.PostItem -> requireContext().toast(it.data.toString())
+                is CategoryAdapterItem.PostItem -> findNavController().navigate(
+                    CategoryFragmentDirections.fixerCategoryToPostDetails(it.data.id)
+                )
                 is CategoryAdapterItem.FixerItem -> requireContext().toast(it.data.toString())
             }
         }

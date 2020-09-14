@@ -22,7 +22,7 @@ val viewModelModule = module {
     viewModel { NotificationViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get()) }
     viewModel { MainVM(get()) }
-    viewModel { HomeVM(get(), get()) }
+    viewModel { HomeVM(get(), get(), get()) }
     viewModel { CustomerPostDetailsVM(get()) }
     viewModel { FixerPostDetailsVM(get()) }
     viewModel { CategoryVM(get(), get(), get()) }

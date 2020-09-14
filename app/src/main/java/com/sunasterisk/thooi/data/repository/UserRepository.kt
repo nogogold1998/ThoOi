@@ -11,6 +11,9 @@ interface UserRepository {
 
     fun getAllUsers(): Flow<List<User>>
 
+    /**
+     * always return null when just logged in
+     */
     suspend fun getUser(id: String): User?
 
     fun getUserFlow(id: String): Flow<Result<User>>
