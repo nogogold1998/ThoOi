@@ -30,5 +30,7 @@ class UserLocalDataSource(
 
     override suspend fun getUser(id: String): User? = userDao.findUserById(id)//
 
+    override fun getUserFlow(id: String): Flow<User> = userDao.findUserByIdFlow(id)
+
     override fun getAllUser(): Flow<List<User>> = userDao.getAllUsersFlow() //
 }

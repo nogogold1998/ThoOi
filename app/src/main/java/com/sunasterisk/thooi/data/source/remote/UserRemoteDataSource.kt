@@ -37,10 +37,11 @@ class UserRemoteDataSource(
         FirebaseNoSignedInUserException(MSG_USER_NOT_FOUND)
     }
 
-    private val userDocument
-        get() = firebaseAuth.currentUser?.run {
+    private val currentUserDocument by lazy {
+        firebaseAuth.currentUser?.run {
             firestore.collection(USERS_COLLECTION).document(uid)
         }
+    }
 
     private val userCollection by lazy {
         firestore.collection(USERS_COLLECTION)
@@ -65,8 +66,29 @@ class UserRemoteDataSource(
         }
     }
 
+    override fun getUser(id: String): Flow<Result<User>> = callbackFlow {
+        val listener =
+            try {
+                firestore.collection(USERS_COLLECTION)
+                    .document(id)
+                    .addSnapshotListener { snapshot, error ->
+                        snapshot?.toObjectWithId(FirestoreUser::class.java, User::class)
+                            ?.let { offer(Result.success(it)) }
+                            ?: throw error!!
+                    }
+            } catch (e: Exception) {
+                offer(Result.failed(e))
+                null
+            }
+
+        awaitClose {
+            listener?.remove()
+            cancel()
+        }
+    }
+
     override suspend fun setToken(token: String) = getOneShotResult {
-        userDocument?.update(FIELD_TOKEN, FieldValue.arrayUnion(token))?.await()
+        currentUserDocument?.update(FIELD_TOKEN, FieldValue.arrayUnion(token))?.await()
             ?: throw authException
         Unit
     }
@@ -78,7 +100,7 @@ class UserRemoteDataSource(
     }
 
     override suspend fun updateUser(user: User) = getOneShotResult {
-        userDocument?.set(FirestoreUser(user))?.await() ?: throw authException
+        currentUserDocument?.set(FirestoreUser(user))?.await() ?: throw authException
         Unit
     }
 
@@ -88,7 +110,7 @@ class UserRemoteDataSource(
     }
 
     override fun getCurrentUser() = flow {
-        userDocument?.run {
+        currentUserDocument?.run {
             emitAll(getSnapshotFlow { it.toObjectWithId(FirestoreUser::class.java, User::class) })
         } ?: emit(Result.failed(authException))
     }
@@ -104,6 +126,9 @@ class UserRemoteDataSource(
     }
 
     override suspend fun signUp(user: User, password: String) = getOneShotResult {
+        firebaseAuth.createUserWithEmailAndPassword(user.email, password).await()
+            .user?.sendEmailVerification()
+        currentUserDocument?.set(FirestoreUser(user))?.await() ?: throw authException
         firebaseAuth.createUserWithEmailAndPassword(user.email, password).await().user?.run {
             sendEmailVerification()
             firestore.collection(USERS_COLLECTION).document(uid).set(FirestoreUser(user)).await()
@@ -114,7 +139,7 @@ class UserRemoteDataSource(
     override suspend fun signInWithCredential(user: User, credential: AuthCredential) =
         getOneShotResult {
             firebaseAuth.signInWithCredential(credential).await()
-            userDocument?.run {
+            currentUserDocument?.run {
                 if (get().await().exists().not()) set(FirestoreUser(user)).await()
                 Unit
             } ?: throw authException
@@ -123,7 +148,7 @@ class UserRemoteDataSource(
     override suspend fun checkGoogleAccount(credential: AuthCredential) =
         getOneShotResult {
             firebaseAuth.signInWithCredential(credential).await()
-            userDocument?.get()?.await()?.exists() ?: throw authException
+            currentUserDocument?.get()?.await()?.exists() ?: throw authException
         }
 
     override fun signOut() = firebaseAuth.signOut()

@@ -5,20 +5,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.google.firebase.auth.FirebaseAuth
-import com.sunasterisk.thooi.data.Result
-import com.sunasterisk.thooi.data.repository.UserRepository
 import com.sunasterisk.thooi.util.Event
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.transformLatest
+import kotlinx.coroutines.flow.map
 
 class MainVM(
     firebaseAuth: FirebaseAuth,
-    userRepository: UserRepository,
 ) : ViewModel() {
 
     init {
         firebaseAuth.addAuthStateListener {
             _loginStatus.postValue(it)
+            _loggedUserId.offer(it.currentUser?.uid)
         }
     }
 
@@ -29,8 +29,9 @@ class MainVM(
     private val _loginStatus = MutableLiveData<FirebaseAuth>()
     val loginStatus: LiveData<FirebaseAuth> get() = _loginStatus
 
-    val loginUserId: LiveData<Event<String?>> = userRepository.getCurrentUser()
-        .transformLatest { emit(Event((it as? Result.Success)?.data?.id)) }
+    private val _loggedUserId = ConflatedBroadcastChannel<String?>()
+    val loginUserId: LiveData<Event<String?>> = _loggedUserId.asFlow()
+        .map { Event(it) }
         .distinctUntilChanged()
         .asLiveData()
 

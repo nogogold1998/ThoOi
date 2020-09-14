@@ -3,18 +3,13 @@ package com.sunasterisk.thooi.ui.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.sunasterisk.thooi.NavGraphDirections
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseActivity
-import com.sunasterisk.thooi.data.repository.UserRepository
 import com.sunasterisk.thooi.databinding.ActivityMainBinding
 import com.sunasterisk.thooi.di.ViewModelFactory
-import com.sunasterisk.thooi.util.toast
-import kotlinx.coroutines.flow.collect
-import org.koin.android.ext.android.get
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 

@@ -14,14 +14,10 @@ class Converters {
     private val gson = Gson()
 
     @TypeConverter
-    fun userTypeToString(type: UserType?) = type?.value
+    fun userTypeToString(type: UserType?) = type?.name
 
     @TypeConverter
-    fun stringToUserType(value: String?) = when (value) {
-        User.COL_USER_TYPE_CUSTOMER -> UserType.CUSTOMER
-        User.COL_USER_TYPE_FIXER -> UserType.FIXER
-        else -> null
-    }
+    fun stringToUserType(value: String?) = value?.let(UserType::valueOf)
 
     @TypeConverter
     fun localDateTimeToLong(dateTime: LocalDateTime?) =

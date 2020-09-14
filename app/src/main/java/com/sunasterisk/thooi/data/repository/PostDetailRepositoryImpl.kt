@@ -1,63 +1,76 @@
 package com.sunasterisk.thooi.data.repository
 
+import com.sunasterisk.thooi.data.Result
 import com.sunasterisk.thooi.data.model.PostDetail
 import com.sunasterisk.thooi.data.model.SummaryUser
-import com.sunasterisk.thooi.data.source.UserDataSource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import com.sunasterisk.thooi.data.source.entity.PostStatus
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.transformLatest
-import kotlinx.coroutines.withContext
 
 class PostDetailRepositoryImpl(
-    private val postRepository: PostRepository,
-    private val userLocalDataSource: UserDataSource.Local,
+    private val postRepo: PostRepository,
     private val userRepository: UserRepository,
 ) : PostDetailRepository {
     override fun getPostDetailById(id: String): Flow<PostDetail> {
-        return postRepository.getPostById(id).transformLatest {
-            val result = withContext(Dispatchers.Main) {
-                val customer = async {
-                    userLocalDataSource.getUser(it.customerRef)?.let(::SummaryUser)
+        return postRepo.getPostByIdFlow(id).flatMapLatest { post ->
+            val customer = userRepository.getUserFlow(post.customerRef)
+                .transformLatest { result ->
+                    (result as? Result.Success)?.data?.let { user -> this.emit(user) }
                 }
-                // FIXME
-                val list = async { it.appliedFixerIds.map { } }
 
+            val list = Array(post.appliedFixerIds.size) { i ->
+                post.appliedFixerIds[i]
+                    .let { userRepository.getUserFlow(it) }
+                    .transformLatest { result ->
+                        (result as? Result.Success)?.data?.let { user -> emit(user) }
+                    }
+            }
+
+            combine(
+                customer,
+                *list
+            ) { users ->
                 PostDetail(
-                    it.id,
-                    it.imagesRefs,
-                    it.title,
-                    it.createdDateTime,
-                    customer.await() ?: SummaryUser(),
-                    it.description,
-                    it.address,
-                    emptyList(),
-                    it.status,
-                    it.fixerId,
+                    post.id,
+                    post.imagesRefs,
+                    post.title,
+                    post.createdDateTime,
+                    SummaryUser(users[0]),
+                    post.description,
+                    post.address,
+                    users.drop(1).map(::SummaryUser),
+                    post.status,
+                    post.fixerId,
                 )
             }
-            emit(result)
         }
     }
 
     override suspend fun assignPostToFixer(postId: String, fixerId: String) {
-        TODO("Not yet implemented")
+        postRepo.getPostById(postId)?.copy(fixerId = fixerId, status = PostStatus.PENDING)
+            ?.let { postRepo.updatePost(it) }
+            ?: throw NullPointerException(".data.repository.PostDetailRepositoryImpl.assignPostToFixer")
     }
 
     override suspend fun clearAssignedFixer(postId: String) {
-        TODO("Not yet implemented")
+        postRepo.getPostById(postId)
+            ?.copy(fixerId = "", status = PostStatus.OPEN)
+            ?.let { postRepo.updatePost(it) }
+            ?: throw NullPointerException(".data.repository.PostDetailRepositoryImpl.clearAssignedFixer")
     }
 
     override suspend fun cancelFixing(postId: String) {
-        TODO("Not yet implemented")
+        postRepo.updatePostStatus(postId, PostStatus.PENDING)
     }
 
     override suspend fun finishFixing(postId: String) {
-        TODO("Not yet implemented")
+        postRepo.updatePostStatus(postId, PostStatus.FINISHED)
     }
 
     override suspend fun closePost(postId: String) {
-        TODO("Not yet implemented")
+        postRepo.updatePostStatus(postId, PostStatus.FINISHED)
     }
 
     override suspend fun applyJob(postId: String) {
