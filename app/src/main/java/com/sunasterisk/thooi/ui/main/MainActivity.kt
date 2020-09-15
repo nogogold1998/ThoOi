@@ -25,6 +25,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun setupViews() {
         setupBottomNavView()
+
     }
 
     private fun setupBottomNavView() = binding.bottomNavView.let {
@@ -56,6 +57,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
         binding.floatingActionButton.setOnClickListener {
             navController.navigate(R.id.global_newPost)
+        }
+        mainVM.isFixer.observe(this) {
+            binding.floatingActionButton.isClickable = !it
         }
     }
 

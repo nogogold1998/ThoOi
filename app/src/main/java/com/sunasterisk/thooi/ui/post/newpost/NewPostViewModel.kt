@@ -1,7 +1,11 @@
 package com.sunasterisk.thooi.ui.post.newpost
 
 import android.net.Uri
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
@@ -47,6 +51,7 @@ class NewPostViewModel(
     fun onPostClick() {
         viewModelScope.launch {
 
+            loading.value = true
             val imageUrls = withContext(Dispatchers.IO) {
                 val results = mutableListOf<String>()
                 imageUri.value?.forEach {
