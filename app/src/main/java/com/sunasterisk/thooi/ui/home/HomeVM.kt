@@ -92,6 +92,8 @@ class HomeVM(
                     it.customerRef,
                     *it.appliedFixerIds.toTypedArray()
                 ) && it.status != PostStatus.FINISHED
-            }.map(::SummaryPost)
+            }
+                .sortedByDescending { it.createdDateTime }
+                .map(::SummaryPost)
         }
 }

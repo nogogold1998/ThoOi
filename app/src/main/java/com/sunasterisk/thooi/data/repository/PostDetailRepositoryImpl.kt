@@ -46,7 +46,8 @@ class PostDetailRepositoryImpl(
                     users.drop(1).map(::SummaryUser),
                     post.status,
                     post.fixerId,
-                    firebaseAuth.currentUser?.uid!!
+                    firebaseAuth.currentUser?.uid!!,
+                    post.suggestedPrice,
                 )
             }
         }

@@ -44,6 +44,7 @@
     <string name="label_job_assigned_to_you">Đã được giao cho bạn</string>
     <string name="label_job_on_progress">Đang tiến hành</string>
     <string name="label_profile">Hồ sơ</string>
+    <string name="label_suggested_price">Tiền công dự kiến</string>
 
     <string name="action_apply_job">Nhận việc</string>
     <string name="action_close_post">Đóng bài viết</string>
