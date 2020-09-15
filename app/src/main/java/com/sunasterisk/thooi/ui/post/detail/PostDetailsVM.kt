@@ -28,10 +28,10 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 
-private val TAG = "PostDetailVM"
+private const val TAG = "PostDetailVM"
 sealed class PostDetailsVM(
     postDetailRepo: PostDetailRepository,
-    protected val userType: UserType,
+    private val userType: UserType,
 ) : ViewModel() {
     protected val _requestedPostId = MutableLiveData<String>()
 

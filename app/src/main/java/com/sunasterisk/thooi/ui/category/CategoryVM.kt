@@ -23,8 +23,8 @@ import kotlinx.coroutines.withContext
 
 class CategoryVM(
     private val categoryRepository: CategoryRepository,
-    private val userRepository: UserRepository,
-    private val postRepository: PostRepository,
+    userRepository: UserRepository,
+    postRepository: PostRepository,
 ) : ViewModel() {
 
     private val a = userRepository.getAllUsers()

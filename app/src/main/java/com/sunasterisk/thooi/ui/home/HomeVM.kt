@@ -66,9 +66,6 @@ class HomeVM(
         _requestedUserId.postValue(id)
     }
 
-    fun navigateToCategory(categoryId: String) {
-    }
-
     fun navigateToPost(postId: String) {
         _navigationEvent.postValue(HomeNavigationEvent.ToPostDetailEvent(postId))
     }

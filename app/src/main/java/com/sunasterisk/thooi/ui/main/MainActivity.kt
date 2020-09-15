@@ -34,6 +34,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (navController.currentDestination?.id != item.itemId) {
                 NavigationUI.onNavDestinationSelected(item, navController)
             } else {
+                mainVM.scrollToTop()
                 true
             }
         }
@@ -64,14 +65,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun initListeners() {
-        with(binding.root) {
-            val fullScreenDestinations = setOf(R.id.signInFragment, R.id.signupFragment)
-            navController.addOnDestinationChangedListener { _, destination, _ ->
-                if (destination.id in fullScreenDestinations) {
-                    mainVM.hideToolbar()
-                } else {
-                    mainVM.showToolbar()
-                }
+        val fullScreenDestinations = setOf(R.id.signInFragment, R.id.signupFragment)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id in fullScreenDestinations) {
+                mainVM.hideToolbar()
+            } else {
+                mainVM.showToolbar()
             }
         }
     }

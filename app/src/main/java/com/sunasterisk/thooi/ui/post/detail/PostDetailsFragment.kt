@@ -63,12 +63,20 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.loadPost(args.postId)
+        savedInstanceState
+            ?.getInt(KEY_MOTION_STATE)
+            ?.let(binding.constraintLayout::transitionToState)
     }
 
     override fun onObserveLiveData() = with(viewModel) {
         toastStringRes.observeEvent(viewLifecycleOwner) {
             context?.toast(getString(it))
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(KEY_MOTION_STATE, binding.constraintLayout.currentState)
     }
 
     private fun setupSliderView() = with(binding.imageSliderJobThumbnails) {
@@ -120,3 +128,5 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
             "Wrong instance of PostDetailsVM, required $expectClassName but was $actualClassName"
         }
 }
+
+private const val KEY_MOTION_STATE = "motion_state"

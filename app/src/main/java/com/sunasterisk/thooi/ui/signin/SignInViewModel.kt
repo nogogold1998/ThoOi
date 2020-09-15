@@ -10,8 +10,12 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.iid.FirebaseInstanceId
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.data.repository.UserRepository
-import com.sunasterisk.thooi.util.*
-import kotlinx.coroutines.flow.firstOrNull
+import com.sunasterisk.thooi.util.Event
+import com.sunasterisk.thooi.util.check
+import com.sunasterisk.thooi.util.getOneShotResult
+import com.sunasterisk.thooi.util.isEmail
+import com.sunasterisk.thooi.util.isValidPassword
+import com.sunasterisk.thooi.util.transform
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 

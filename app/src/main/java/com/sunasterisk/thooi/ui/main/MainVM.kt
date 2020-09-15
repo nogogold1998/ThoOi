@@ -10,6 +10,7 @@ import com.sunasterisk.thooi.data.repository.UserRepository
 import com.sunasterisk.thooi.data.source.entity.UserType
 import com.sunasterisk.thooi.util.Event
 import com.sunasterisk.thooi.util.check
+import com.sunasterisk.thooi.util.postValue
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
@@ -56,11 +57,18 @@ class MainVM(
         .distinctUntilChanged()
         .asLiveData()
 
+    private val _scrollToTopEvent = MutableLiveData<Event<Unit>>()
+
+    val scrollToTopEvent: LiveData<Event<Unit>>
+        get() = _scrollToTopEvent
+
     fun collapseToolbar() = _toolbarState.postValue(ToolbarState.COLLAPSED)
 
     fun hideToolbar() = _toolbarState.postValue(ToolbarState.HIDDEN)
 
     fun showToolbar() = _toolbarState.postValue(ToolbarState.NORMAL)
+
+    fun scrollToTop() = _scrollToTopEvent.postValue(Unit)
 }
 
 enum class ToolbarState {

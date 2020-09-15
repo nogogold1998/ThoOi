@@ -17,7 +17,6 @@ import com.sunasterisk.thooi.ui.home.model.HomeNavigationEvent
 import com.sunasterisk.thooi.ui.main.MainVM
 import com.sunasterisk.thooi.util.MarginItemDecoration
 import com.sunasterisk.thooi.util.observeEvent
-import com.sunasterisk.thooi.util.submitListWithMotionLayoutAware
 import com.sunasterisk.thooi.util.verticalScrollProgress
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
@@ -34,8 +33,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private var categoryAdapter: CategoryAdapter? = null
 
     private var summaryAdapter: SummaryPostAdapter? = null
-
-    private var concatAdapter: ConcatAdapter? = null
 
     override fun setupView() {
         setupRecyclerView()
@@ -73,17 +70,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
         this.categoryAdapter = categoryAdapter
         this.summaryAdapter = summaryPostAdapter
-        this.concatAdapter = concatAdapter
     }
 
     override fun onObserveLiveData() {
         viewModel.categoryAdapterItems.observe(viewLifecycleOwner) {
             if (it == null) return@observe
-            categoryAdapter?.submitListWithMotionLayoutAware(binding.recyclerHome, it)
+            categoryAdapter?.submitList(it)
         }
         viewModel.summaryPostAdapterItems.observe(viewLifecycleOwner) {
             if (it == null) return@observe
-            summaryAdapter?.submitListWithMotionLayoutAware(binding.recyclerHome, it)
+            summaryAdapter?.submitList(it)
         }
         viewModel.navigationEvent.observe(viewLifecycleOwner) { event ->
             if (event == null) return@observe
@@ -94,6 +90,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                         ?.let(findNavController()::navigate)
                 }
             }
+        }
+        mainVM.scrollToTopEvent.observeEvent(viewLifecycleOwner) {
+            binding.recyclerHome.smoothScrollToPosition(0)
         }
     }
 
@@ -109,7 +108,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         super.onDestroyView()
         categoryAdapter = null
         summaryAdapter = null
-        concatAdapter = null
     }
 
     companion object {
