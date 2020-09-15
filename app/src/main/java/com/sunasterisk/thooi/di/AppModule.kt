@@ -41,7 +41,7 @@ val viewModelModule = module {
     viewModel { MainVM(get()) }
     viewModel { SettingsViewModel(get(), get(), get(), get()) }
     viewModel { AddressViewModel(get()) }
-    viewModel { NewPostViewModel(get(), get()) }
+    viewModel { NewPostViewModel(get(), get(), get()) }
     viewModel { HomeVM(get(), get()) }
     viewModel { CustomerPostDetailsVM(get()) }
     viewModel { FixerPostDetailsVM(get()) }

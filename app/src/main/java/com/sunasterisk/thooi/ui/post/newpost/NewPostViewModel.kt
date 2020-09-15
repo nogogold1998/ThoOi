@@ -48,18 +48,20 @@ class NewPostViewModel(
         viewModelScope.launch {
 
             val imageUrls = withContext(Dispatchers.IO) {
+                val results = mutableListOf<String>()
                 imageUri.value?.forEach {
                     val file = Uri.fromFile(File(it))
-                    val riversRef = fireStorage.reference.child("post/${file.lastPathSegment}")
+                    val ref = fireStorage.reference.child("post/${file.lastPathSegment}")
                     try {
-                        val uploadTask = riversRef.putFile(file).await()
+                        ref.putFile(file).await()
+                        val path = ref.downloadUrl.await()?.toString() ?: return@forEach
+                        results.add(path)
                     } catch (e: Exception) {
-
+                        _error.value = e
                     }
                 }
+                results
             }
-
-            fireStorage.reference.child("post/")
 
             val post = Post(
                 address = places.value?.address ?: "",
@@ -68,7 +70,8 @@ class NewPostViewModel(
                 customerRef = firebaseAuth.uid ?: "",
                 description = description.value ?: "",
                 suggestedPrice = suggestPrice.value ?: "Thoả thuận",
-                appointment = _workTime.value?.third ?: LocalDateTime.now()
+                appointment = _workTime.value?.third ?: LocalDateTime.now(),
+                imagesRefs = imageUrls
             )
             firestoreRepo.newPost(post).check({
                 _done.value = Event(Unit)
