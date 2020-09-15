@@ -106,6 +106,9 @@
         <action
             android:id="@+id/chat_to_profile"
             app:destination="@id/profileFragment" />
+        <argument
+            android:name="conversationId"
+            app:argType="string" />
     </fragment>
 
     <fragment

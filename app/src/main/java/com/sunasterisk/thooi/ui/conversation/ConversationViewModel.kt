@@ -60,12 +60,28 @@ class ConversationViewModel(
         }
     }
 
-    fun setImageProfile(url: String) {
-        _imageProfileUrl.postValue(url)
-    }
-
-    fun setTextProfile(name: String) {
-        _textProfileName.postValue(name)
+    fun setProfileInfo() {
+        viewModelScope.launch {
+            _currentUserId.value?.let { userId ->
+                _conversationId.value?.let { conversationId ->
+                    messageRepository.getConversationById(userId, conversationId)
+                        .collect { result ->
+                            result.check(
+                                {
+                                    if (it.members[0].id == userId) {
+                                        _imageProfileUrl.postValue(it.members[0].imageUrl)
+                                        _textProfileName.postValue(it.members[0].fullName)
+                                    } else {
+                                        _imageProfileUrl.postValue(it.members[1].imageUrl)
+                                        _textProfileName.postValue(it.members[1].fullName)
+                                    }
+                                },
+                                { _errorRes.postValue(R.string.error_unknown) }
+                            )
+                        }
+                }
+            }
+        }
     }
 
     fun sendMessage() {
@@ -91,7 +107,7 @@ class ConversationViewModel(
             textRule.value == null -> {
                 messageRepository.getConversationById(
                     currentUserIdValue ?: "",
-                    currentUserIdValue ?: ""
+                    conversationIdValue ?: ""
                 ).collect { result ->
                     result.check(
                         {

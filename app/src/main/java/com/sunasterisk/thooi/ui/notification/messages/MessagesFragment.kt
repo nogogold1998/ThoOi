@@ -2,9 +2,11 @@ package com.sunasterisk.thooi.ui.notification.messages
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.data.model.Conversation
 import com.sunasterisk.thooi.databinding.FragmentMessagesBinding
+import com.sunasterisk.thooi.ui.notification.NotificationFragmentDirections
 import org.koin.android.ext.android.inject
 
 class MessagesFragment : BaseFragment<FragmentMessagesBinding>() {
@@ -31,6 +33,6 @@ class MessagesFragment : BaseFragment<FragmentMessagesBinding>() {
     }
 
     private fun goToConversationDetail(conversation: Conversation) {
-       
+        findNavController().navigate(NotificationFragmentDirections.notificationToChat(conversation.id))
     }
 }
