@@ -1,11 +1,7 @@
 package com.sunasterisk.thooi.ui.post.newpost
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
@@ -55,16 +51,23 @@ class NewPostViewModel(
             val imageUrls = withContext(Dispatchers.IO) {
                 val results = mutableListOf<String>()
                 imageUri.value?.forEach {
-                    val file = Uri.fromFile(File(it))
-                    val ref = fireStorage.reference.child("post/${file.lastPathSegment}")
+                    val file = File(it)
+                    val fileUri = Uri.fromFile(file)
+                    val ref = fireStorage.reference.child("post/${fileUri.lastPathSegment}")
                     try {
-                        ref.putFile(file).await()
+                        ref.putFile(fileUri).await()
                         val path = ref.downloadUrl.await()?.toString() ?: return@forEach
                         results.add(path)
                     } catch (e: Exception) {
                         _error.value = e
                     }
+                    try {
+                        file.deleteOnExit()
+                    } catch (e: Exception) {
+                        _error.value = e
+                    }
                 }
+
                 results
             }
 

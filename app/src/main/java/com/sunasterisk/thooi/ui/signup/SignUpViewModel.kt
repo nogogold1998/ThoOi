@@ -61,6 +61,9 @@ class SignUpViewModel(
     private val _category = MutableLiveData<List<Category>>()
     val category: LiveData<List<Category>> get() = _category
 
+    private val _profession = MutableLiveData<List<String>>()
+    val profession: LiveData<List<String>> get() = _profession
+
     init {
         viewModelScope.launch {
             categoryRepo.getAllCategories().collect { result ->
@@ -109,9 +112,9 @@ class SignUpViewModel(
             credential = it.idToken?.run { GoogleAuthProvider.getCredential(this, null) }
             viewModelScope.launch {
                 credential?.let { value ->
-                    userRepo.checkGoogleAccount(value).check {
-                        _googleSignIn.value = Event(Unit)
-                    }
+                    userRepo.checkGoogleAccount(value).check({ done ->
+                        if (done) _googleSignIn.value = Event(Unit)
+                    })
                 }
             }
         }
@@ -133,9 +136,10 @@ class SignUpViewModel(
                 email = emailVal,
                 fullName = nameVal,
                 phone = phoneVal,
-                imageUrl = imageUrl ?: "",
+                imageUrl = imageUrl ?: "https://firebasestorage.googleapis.com/v0/b/tho-oi.appspot.com/o/avatar%2Favatar.png?alt=media&token=bc002db7-3c76-4509-b7c8-f41f9372ccc3",
                 dateOfBirth = birthday.value?.second ?: LocalDate.now(),
                 address = address.value?.address ?: "",
+                professions = profession.value ?: emptyList(),
                 bio = bio.value ?: "",
                 location = address.value?.location ?: LatLng(0.0, 0.0),
                 userType = if (fixer.value == true) FIXER else CUSTOMER
@@ -143,6 +147,10 @@ class SignUpViewModel(
         }
 
         return result
+    }
+
+    fun pickCategory(string: String) {
+        _profession.value = listOf(string)
     }
 
     @SuppressLint("NullSafeMutableLiveData")

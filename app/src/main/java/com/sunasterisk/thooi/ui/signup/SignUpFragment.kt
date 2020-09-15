@@ -20,6 +20,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.Timestamp
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseFragment
+import com.sunasterisk.thooi.data.source.entity.Category
 import com.sunasterisk.thooi.databinding.FragmentSignUpBinding
 import com.sunasterisk.thooi.ui.placespicker.AddressBottomSheet
 import com.sunasterisk.thooi.ui.placespicker.AddressBottomSheet.Companion.RESULT_PLACES
@@ -141,19 +142,20 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
 
         category.observe(viewLifecycleOwner) { list ->
             binding.chipGroupCategory.removeAllViews()
-            list.forEach { addChipView(it.title) }
+            list.forEach { addChipView(it) }
         }
 
         binding.chipGroupCategory.setOnCheckedChangeListener { group, checkedId ->
-            group.forEach { if (it is Chip && it.id == checkedId) viewModel.category }
+            group.forEach { if (it is Chip && it.id == checkedId) viewModel.pickCategory(it.tag.toString()) }
         }
     }
 
-    private fun addChipView(chipText: String) {
+    private fun addChipView(category: Category) {
         binding.chipGroupCategory.run {
             val chip = layoutInflater.inflate(R.layout.item_chip_choice, this, false) as Chip
             chip.run {
-                text = chipText
+                text = category.title
+                tag = category.id
             }
             addView(chip)
         }
