@@ -94,7 +94,7 @@ class PostCategoryVH(
     override fun onBind(item: CategoryAdapterItem.PostItem, binding: ItemCategoryJobBinding) =
         with(binding) {
             val post = item.data
-            imageCategoryPost.load(post.imagesRefs.random())
+            post.imagesRefs.randomOrNull()?.let(imageCategoryPost::load)
             textTitlePost.text = post.title
             textDescriptionPost.text = post.description
             textPostSummaryAddress.text = post.address

@@ -16,13 +16,21 @@ import com.sunasterisk.thooi.util.getOneShotResult
 import com.sunasterisk.thooi.util.isEmail
 import com.sunasterisk.thooi.util.isValidPassword
 import com.sunasterisk.thooi.util.transform
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class SignInViewModel(
     private val userRepo: UserRepository,
-    private val firebaseInstanceId: FirebaseInstanceId
+    private val firebaseInstanceId: FirebaseInstanceId,
 ) : ViewModel() {
+
+    init {
+        viewModelScope.launch {
+            userRepo.getAllUsers().filterNotNull().first { it.isNotEmpty() }
+        }
+    }
 
     val email = MutableLiveData<String>()
     val emailRule = email.transform { if (it.isEmail) null else R.string.msg_email_invalid }

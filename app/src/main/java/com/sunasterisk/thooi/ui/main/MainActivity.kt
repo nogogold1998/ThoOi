@@ -8,6 +8,7 @@ import androidx.navigation.ui.NavigationUI
 import com.sunasterisk.thooi.NavGraphDirections
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseActivity
+import com.sunasterisk.thooi.data.source.entity.UserType
 import com.sunasterisk.thooi.databinding.ActivityMainBinding
 import com.sunasterisk.thooi.di.ViewModelFactory
 
@@ -59,8 +60,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.floatingActionButton.setOnClickListener {
             navController.navigate(R.id.global_newPost)
         }
-        mainVM.isFixer.observe(this) {
-            binding.floatingActionButton.isClickable = !it
+        mainVM.currentUserType.observe(this) {
+            if (it == null) return@observe
+            binding.floatingActionButton.isClickable = it == UserType.CUSTOMER
         }
     }
 
