@@ -6,14 +6,13 @@ import com.sunasterisk.thooi.data.model.Conversation
 import com.sunasterisk.thooi.data.model.Message
 import com.sunasterisk.thooi.data.source.MessageDataSource
 import com.sunasterisk.thooi.data.source.UserDataSource
-import com.sunasterisk.thooi.util.mapResult
 import com.sunasterisk.thooi.util.mapResultList
 import kotlinx.coroutines.flow.flow
 
 class MessageRepositoryImpl(
     private val userLocalDataSource: UserDataSource.Local,
-    private val local: MessageDataSource.Local,
-    private val remote: MessageDataSource.Remote
+    // private val local: MessageDataSource.Local,
+    private val remote: MessageDataSource.Remote,
 ) : MessageRepository {
     override fun getAllConversations(currentUserId: String) = flow<Result<List<Conversation>>> {
         remote.getAllConversations().mapResultList { Conversation(currentUserId, it) }

@@ -37,8 +37,7 @@ class CategoryVM(
         withContext(Dispatchers.Main) {
             val a2 = async {
                 a1.filter { user ->
-                    user.professions.any { it == d1 }
-                    user.userType == UserType.FIXER
+                    user.professions.any { it == d1 } && user.userType == UserType.FIXER
                 }
                     .map { CategoryAdapterItem.FixerItem(SummaryUser(it)) }
             }

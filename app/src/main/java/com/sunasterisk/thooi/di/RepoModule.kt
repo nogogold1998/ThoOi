@@ -5,6 +5,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sunasterisk.thooi.data.repository.CategoryRepository
 import com.sunasterisk.thooi.data.repository.CategoryRepositoryImpl
+import com.sunasterisk.thooi.data.repository.MessageRepository
+import com.sunasterisk.thooi.data.repository.MessageRepositoryImpl
 import com.sunasterisk.thooi.data.repository.NotificationRepository
 import com.sunasterisk.thooi.data.repository.NotificationRepositoryImpl
 import com.sunasterisk.thooi.data.repository.PostDetailRepository
@@ -14,6 +16,7 @@ import com.sunasterisk.thooi.data.repository.PostRepositoryImpl
 import com.sunasterisk.thooi.data.repository.UserRepository
 import com.sunasterisk.thooi.data.repository.UserRepositoryImpl
 import com.sunasterisk.thooi.data.source.CategoryDataSource
+import com.sunasterisk.thooi.data.source.MessageDataSource
 import com.sunasterisk.thooi.data.source.NotificationDataSource
 import com.sunasterisk.thooi.data.source.PostDataSource
 import com.sunasterisk.thooi.data.source.UserDataSource
@@ -23,6 +26,7 @@ import com.sunasterisk.thooi.data.source.local.UserLocalDataSource
 import com.sunasterisk.thooi.data.source.local.database.AppDataBase
 import com.sunasterisk.thooi.data.source.local.database.DatabaseConstants
 import com.sunasterisk.thooi.data.source.remote.CategoryRemoteDataSource
+import com.sunasterisk.thooi.data.source.remote.MessageRemoteDataSource
 import com.sunasterisk.thooi.data.source.remote.NotificationRemoteDataSource
 import com.sunasterisk.thooi.data.source.remote.PostRemoteDataSource
 import com.sunasterisk.thooi.data.source.remote.UserRemoteDataSource
@@ -58,6 +62,8 @@ val repositoryModule = module {
     //Repository modules
     single<UserRepository> { UserRepositoryImpl(get(), get()) }
     single<NotificationRepository> { NotificationRepositoryImpl(get(), get(), get()) }
+    single<MessageDataSource.Remote> { MessageRemoteDataSource(get(), get()) }
+    single<MessageRepository> { MessageRepositoryImpl(get(), get()) }
 
     // CongVC
     single<PostDataSource.Remote> { PostRemoteDataSource(get()) }

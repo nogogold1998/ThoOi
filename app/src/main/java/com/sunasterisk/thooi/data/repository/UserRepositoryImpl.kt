@@ -65,8 +65,6 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun getUser(id: String): User? = null
-
     override suspend fun updateUser(user: User) = remote.updateUser(user)
 
     override suspend fun resetPassword(email: String) = remote.resetPassword(email)

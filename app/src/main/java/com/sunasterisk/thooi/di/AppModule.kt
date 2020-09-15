@@ -2,8 +2,10 @@ package com.sunasterisk.thooi.di
 
 import com.google.android.libraries.places.api.Places
 import com.sunasterisk.thooi.ui.category.CategoryVM
+import com.sunasterisk.thooi.ui.conversation.ConversationViewModel
 import com.sunasterisk.thooi.ui.home.HomeVM
 import com.sunasterisk.thooi.ui.main.MainVM
+import com.sunasterisk.thooi.ui.notification.messages.MessagesViewModel
 import com.sunasterisk.thooi.ui.notification.notifications.NotificationViewModel
 import com.sunasterisk.thooi.ui.post.detail.CustomerPostDetailsVM
 import com.sunasterisk.thooi.ui.post.detail.FixerPostDetailsVM
@@ -20,7 +22,7 @@ val appModule = module {
 
 val viewModelModule = module {
     viewModel { SignInViewModel(get()) }
-    viewModel { NotificationViewModel(get(), get()) }
+    viewModel { NotificationViewModel(get()) }
     viewModel { SignUpViewModel(get(), get()) }
     viewModel { MainVM(get()) }
     viewModel { HomeVM(get(), get(), get()) }
@@ -28,4 +30,6 @@ val viewModelModule = module {
     viewModel { FixerPostDetailsVM(get()) }
     viewModel { CategoryVM(get(), get(), get()) }
     viewModel { ProfileVM(get()) }
+    viewModel { MessagesViewModel(get()) }
+    viewModel { ConversationViewModel(get()) }
 }
