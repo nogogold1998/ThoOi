@@ -17,6 +17,8 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
     ) = FragmentNotificationBinding.inflate(inflater, container, attachToRoot)
 
     override fun setupView() = with(binding) {
+        toolbar.title = getString(R.string.app_name)
+        
         viewPagerNotification.adapter = ViewPagerAdapter(
             requireActivity().supportFragmentManager,
             lifecycle,
@@ -24,11 +26,11 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
             MessagesFragment()
         )
         buttonNotification.setOnClickListener {
-            toggleButtonGroup.check(R.id.buttonNotification)
+//            toggleButtonGroup.check(R.id.buttonNotification)
             viewPagerNotification.currentItem = POSITION_TAB_NOTIFICATION
         }
         buttonMessage.setOnClickListener {
-            toggleButtonGroup.check(R.id.buttonMessage)
+//            toggleButtonGroup.check(R.id.buttonMessage)
             viewPagerNotification.currentItem = POSITION_TAB_MESSAGE
         }
     }
