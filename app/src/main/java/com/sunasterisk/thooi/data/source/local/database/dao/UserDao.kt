@@ -25,6 +25,9 @@ interface UserDao {
 
     suspend fun findUserById(id: String) = findUserByIdFlow(id).firstOrNull()
 
+    @Query("select * from user where id = :id limit 1")
+    fun findUserByIdBlocking(id: String): User?
+
     @Delete
     suspend fun delete(vararg user: User)
 

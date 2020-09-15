@@ -1,16 +1,36 @@
 package com.sunasterisk.thooi.ui.notification.messages
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import com.sunasterisk.thooi.R
+import com.sunasterisk.thooi.base.BaseFragment
+import com.sunasterisk.thooi.data.model.Conversation
+import com.sunasterisk.thooi.databinding.FragmentMessagesBinding
+import org.koin.android.ext.android.inject
 
-class MessagesFragment : Fragment() {
+class MessagesFragment : BaseFragment<FragmentMessagesBinding>() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_messages, container, false)
+    private val viewModel by inject<MessagesViewModel>()
+
+    override fun onCreateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        attachToRoot: Boolean
+    ) = FragmentMessagesBinding.inflate(inflater, container, attachToRoot).also {
+        it.viewModel = viewModel
+        it.lifecycleOwner = viewLifecycleOwner
+    }
+
+    override fun setupView() {
+        setUpRecyclerView()
+    }
+
+    private fun setUpRecyclerView() = with(binding.recyclerConversations) {
+        adapter = ConversationAdapter().also {
+            it.onItemClick = { conversation -> goToConversationDetail(conversation) }
+        }
+    }
+
+    private fun goToConversationDetail(conversation: Conversation) {
+       
+    }
 }

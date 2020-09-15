@@ -11,6 +11,8 @@ interface UserDataSource {
         suspend fun setCurrentUser(user: User)
 
         fun getCurrentUser(): Flow<Result<User>>
+
+        fun getUserBlocking(id: String): User?
     }
 
     interface Remote {

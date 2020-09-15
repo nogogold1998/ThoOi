@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
     fun getCurrentUser(): Flow<Result<User>>
 
+    suspend fun getUser(id: String): User?
+
     suspend fun updateUser(user: User): Result<Unit>
 
     suspend fun resetPassword(email: String): Result<Unit>

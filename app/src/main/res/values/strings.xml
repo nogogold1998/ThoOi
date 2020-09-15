@@ -41,6 +41,8 @@
 
     <string name="error_unknown">Đã có lỗi xảy ra</string>
     <string name="type_your_message">Nhập tin nhắn…</string>
+    <string name="error_cant_send_message">Không gửi được tin nhắn</string>
+    <string name="error_user_not_found">Không tìm thấy người dùng</string>
     <string name="msg_email_invalid">Email không hợp lệ</string>
     <string name="msg_weak_password">Mật khẩu quá ngắn</string>
     <string name="msg_require_not_empty">Không được để trống</string>

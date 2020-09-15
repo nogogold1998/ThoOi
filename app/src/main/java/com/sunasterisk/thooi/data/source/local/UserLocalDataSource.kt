@@ -8,10 +8,7 @@ import com.sunasterisk.thooi.data.source.entity.User
 import com.sunasterisk.thooi.data.source.local.database.dao.UserDao
 import com.sunasterisk.thooi.data.source.remote.RemoteConstants.MSG_USER_NOT_FOUND
 import com.sunasterisk.thooi.data.source.remote.RemoteConstants.OBJECT_NOT_FOUND
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 
 class UserLocalDataSource(private val userDao: UserDao, private val firebaseAuth: FirebaseAuth) :
     UserDataSource.Local {
@@ -24,4 +21,6 @@ class UserLocalDataSource(private val userDao: UserDao, private val firebaseAuth
             })
         } ?: emit(Result.failed(FirebaseAuthException(OBJECT_NOT_FOUND, MSG_USER_NOT_FOUND)))
     }
+
+    override fun getUserBlocking(id: String): User? = userDao.findUserByIdBlocking(id)
 }
