@@ -51,10 +51,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     ToolbarState.NORMAL -> R.id.main_toolbar_normal
                     ToolbarState.COLLAPSED -> R.id.main_toolbar_collapsed
                     ToolbarState.HIDDEN -> R.id.main_toolbar_hidden
-                })
-        }
-        lifecycleScope.launchWhenResumed {
-            get<UserRepository>().getCurrentUser().collect { toast(it.toString()) }
+                }
+            )
         }
         binding.floatingActionButton.setOnClickListener {
             navController.navigate(R.id.global_newPost)

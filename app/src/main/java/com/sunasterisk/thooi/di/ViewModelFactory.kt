@@ -36,13 +36,9 @@ class ViewModelFactory(
             isAssignableFrom(MainVM::class.java) -> get<MainVM>()
             isAssignableFrom(HomeVM::class.java) -> get<HomeVM>()
             isAssignableFrom(PostDetailsVM::class.java) -> runBlocking {
-                val firebaseAuth: FirebaseAuth = get()
                 val userRepo: UserRepository = get()
-                val userId = checkNotNull(firebaseAuth.currentUser?.uid)
-                val user = checkNotNull(userRepo.getUser(userId))
                 val user1 =
                     userRepo.getCurrentUser().first { it is Result.Success } as Result.Success
-                val user2 = user1.data
                 when (user1.data.userType) {
                     UserType.CUSTOMER -> get<CustomerPostDetailsVM>()
                     UserType.FIXER -> get<FixerPostDetailsVM>()

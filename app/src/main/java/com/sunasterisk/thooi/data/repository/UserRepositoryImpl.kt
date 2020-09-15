@@ -4,16 +4,9 @@ import com.google.firebase.auth.AuthCredential
 import com.sunasterisk.thooi.data.Result
 import com.sunasterisk.thooi.data.source.UserDataSource
 import com.sunasterisk.thooi.data.source.entity.User
+import com.sunasterisk.thooi.util.getOneShotResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class UserRepositoryImpl(
@@ -43,6 +36,8 @@ class UserRepositoryImpl(
 
     @ExperimentalCoroutinesApi
     override fun getCurrentUser(): Flow<Result<User>> = currentUserFlow
+
+
 
     override fun getAllUsers(): Flow<List<User>> = allUsersFlow
 

@@ -1,15 +1,13 @@
 package com.sunasterisk.thooi.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
+import com.google.firebase.auth.FirebaseAuth
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.data.Result
 import com.sunasterisk.thooi.data.model.SummaryPost
 import com.sunasterisk.thooi.data.repository.CategoryRepository
 import com.sunasterisk.thooi.data.repository.PostRepository
+import com.sunasterisk.thooi.data.repository.UserRepository
 import com.sunasterisk.thooi.data.source.entity.Category
 import com.sunasterisk.thooi.data.source.entity.Post
 import com.sunasterisk.thooi.ui.home.model.CategoryAdapterItem
@@ -17,14 +15,16 @@ import com.sunasterisk.thooi.ui.home.model.HomeNavigationEvent
 import com.sunasterisk.thooi.ui.home.model.PostCategoryItem
 import com.sunasterisk.thooi.ui.home.model.TitleTextDividerItem
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.transformLatest
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class HomeVM(
     categoryRepo: CategoryRepository,
-    private val postRepo: PostRepository,
+    private val postRepo: PostRepository
 ) : ViewModel() {
 
     private val categoriesFlow = categoryRepo.getAllCategories()

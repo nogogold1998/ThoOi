@@ -11,13 +11,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.core.content.FileProvider
 import androidx.fragment.app.setFragmentResultListener
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.firebase.Timestamp
+import com.sunasterisk.thooi.NavGraphDirections
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.databinding.FragmentNewPostBinding
 import com.sunasterisk.thooi.ui.placespicker.AddressBottomSheet
+import com.sunasterisk.thooi.ui.placespicker.AddressBottomSheet.Companion.RESULT_PLACES
+import com.sunasterisk.thooi.ui.post.newpost.CategoryBottomSheet.Companion.RESULT_CATEGORY
+import com.sunasterisk.thooi.util.observeEvent
 import com.sunasterisk.thooi.util.toLocalDate
 import com.sunasterisk.thooi.util.toast
 import org.koin.android.ext.android.inject
@@ -67,9 +72,18 @@ class NewPostFragment : BaseFragment<FragmentNewPostBinding>() {
         imageUri.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
+        error.observe(viewLifecycleOwner) {
+            context?.toast(it.message.toString())
+        }
+        done.observeEvent(viewLifecycleOwner) {
+            findNavController().navigate(NavGraphDirections.globalHome())
+        }
     }
 
     override fun initListener() {
+        binding.buttonCategory.setOnClickListener {
+            CategoryBottomSheet().show(parentFragmentManager, CategoryBottomSheet::class.simpleName)
+        }
         binding.buttonWorkTime.setOnClickListener {
             datePicker.show(parentFragmentManager, datePicker::class.simpleName)
         }
@@ -110,8 +124,11 @@ class NewPostFragment : BaseFragment<FragmentNewPostBinding>() {
                 )
             )
         }
-        setFragmentResultListener(AddressBottomSheet.RESULT_PLACES) { _, bundle ->
-            viewModel.places.value = bundle.getParcelable(AddressBottomSheet.RESULT_PLACES)
+        setFragmentResultListener(RESULT_PLACES) { _, bundle ->
+            viewModel.places.value = bundle.getParcelable(RESULT_PLACES)
+        }
+        setFragmentResultListener(RESULT_CATEGORY) { _, bundle ->
+            viewModel.category.value = bundle.getParcelable(RESULT_CATEGORY)
         }
     }
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
@@ -26,12 +27,13 @@ import com.sunasterisk.thooi.util.beginTransition
 import com.sunasterisk.thooi.util.check
 import com.sunasterisk.thooi.util.getOneShotResult
 import com.sunasterisk.thooi.util.toLocalDate
-import kotlinx.android.synthetic.main.fragment_sign_up.*
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.koin.android.ext.android.inject
 import java.util.*
 
+@InternalCoroutinesApi
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
 
     private val navArgs: SignUpFragmentArgs by navArgs()
@@ -136,10 +138,19 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
         setFragmentResultListener(RESULT_PLACES) { _, bundle ->
             address.value = bundle.getParcelable(RESULT_PLACES)
         }
+
+        category.observe(viewLifecycleOwner) { list ->
+            binding.chipGroupCategory.removeAllViews()
+            list.forEach { addChipView(it.title) }
+        }
+
+        binding.chipGroupCategory.setOnCheckedChangeListener { group, checkedId ->
+            group.forEach { if (it is Chip && it.id == checkedId) viewModel.category }
+        }
     }
 
     private fun addChipView(chipText: String) {
-        chipGroupCategory?.run {
+        binding.chipGroupCategory.run {
             val chip = layoutInflater.inflate(R.layout.item_chip_choice, this, false) as Chip
             chip.run {
                 text = chipText

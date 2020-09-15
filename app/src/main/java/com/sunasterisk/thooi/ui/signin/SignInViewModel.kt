@@ -11,6 +11,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.data.repository.UserRepository
 import com.sunasterisk.thooi.util.*
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -34,7 +35,12 @@ class SignInViewModel(
             getValidValue()?.apply {
                 userRepo.signIn(first, second).check({
                     _signIn.value = Event(Unit)
-                    setToken()
+                    viewModelScope.launch {
+                        getOneShotResult {
+                            val token = firebaseInstanceId.instanceId.await().token
+                            userRepo.setToken(token)
+                        }
+                    }
                 }, {
                     when (it) {
                         is FirebaseAuthInvalidUserException -> {
@@ -68,14 +74,5 @@ class SignInViewModel(
             emailRule.value == null || passwordRule.value == null -> return emailValue to passwordValue
         }
         return null
-    }
-
-    private fun setToken() {
-        viewModelScope.launch {
-            getOneShotResult {
-                val token = firebaseInstanceId.instanceId.await().token
-                userRepo.setToken(token)
-            }
-        }
     }
 }

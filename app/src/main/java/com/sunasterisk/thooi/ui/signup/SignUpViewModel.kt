@@ -7,13 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.data.model.UserAddress
+import com.sunasterisk.thooi.data.repository.CategoryRepository
 import com.sunasterisk.thooi.data.repository.UserRepository
+import com.sunasterisk.thooi.data.source.entity.Category
 import com.sunasterisk.thooi.data.source.entity.User
 import com.sunasterisk.thooi.data.source.entity.UserType.CUSTOMER
 import com.sunasterisk.thooi.data.source.entity.UserType.FIXER
@@ -21,12 +22,15 @@ import com.sunasterisk.thooi.util.Event
 import com.sunasterisk.thooi.util.check
 import com.sunasterisk.thooi.util.isEmail
 import com.sunasterisk.thooi.util.isValidPassword
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 
+@InternalCoroutinesApi
 class SignUpViewModel(
     private val userRepo: UserRepository,
-    private val placesClient: PlacesClient
+    private val categoryRepo: CategoryRepository
 ) : ViewModel() {
 
     val isGoogle = MutableLiveData(false)
@@ -53,6 +57,21 @@ class SignUpViewModel(
 
     private val _googleSignIn = MutableLiveData<Event<Unit>>()
     val googleSignIn: LiveData<Event<Unit>> get() = _googleSignIn
+
+    private val _category = MutableLiveData<List<Category>>()
+    val category: LiveData<List<Category>> get() = _category
+
+    init {
+        viewModelScope.launch {
+            categoryRepo.getAllCategories().collect { result ->
+                result.check({
+                    _category.value = it
+                }, {
+                    nameRule.value = R.string.msg_unknown_error
+                })
+            }
+        }
+    }
 
     fun signUp() {
         viewModelScope.launch {
