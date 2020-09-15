@@ -104,6 +104,9 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
                             StartFixing -> viewModel.startFixing()
                         }
                     }
+                    is PostDetailsAction.ShowCustomer -> findNavController().navigate(
+                        PostDetailsFragmentDirections.postDetailsToProfile(action.customerId)
+                    )
                 }
             }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

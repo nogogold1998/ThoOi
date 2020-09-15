@@ -7,6 +7,7 @@ import com.sunasterisk.thooi.data.model.SummaryUser
 import com.sunasterisk.thooi.data.source.entity.PostStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.transformLatest
 
@@ -16,7 +17,7 @@ class PostDetailRepositoryImpl(
     private val firebaseAuth: FirebaseAuth,
 ) : PostDetailRepository {
     override fun getPostDetailById(id: String): Flow<PostDetail> {
-        return postRepo.getPostByIdFlow(id).flatMapLatest { post ->
+        return postRepo.getPostByIdFlow(id).filterNotNull().flatMapLatest { post ->
             val customer = userRepository.getUserFlow(post.customerRef)
                 .transformLatest { result ->
                     (result as? Result.Success)?.data?.let { user -> this.emit(user) }

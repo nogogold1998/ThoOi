@@ -78,11 +78,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun onObserveLiveData() {
         viewModel.categoryAdapterItems.observe(viewLifecycleOwner) {
             if (it == null) return@observe
-            categoryAdapter?.submitList(it)
+            categoryAdapter?.submitList(it) { binding.recyclerHome.invalidate() }
         }
         viewModel.summaryPostAdapterItems.observe(viewLifecycleOwner) {
             if (it == null) return@observe
-            summaryAdapter?.submitList(it)
+            summaryAdapter?.submitList(it) { binding.recyclerHome.invalidate() }
         }
         viewModel.navigationEvent.observe(this) { event ->
             if (event == null) return@observe
