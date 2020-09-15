@@ -1,4 +1,4 @@
-package com.sunasterisk.thooi.ui.signup
+package com.sunasterisk.thooi.ui.placespicker
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

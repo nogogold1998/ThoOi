@@ -1,15 +1,12 @@
 package com.sunasterisk.thooi.ui.signup
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
@@ -24,17 +21,19 @@ import com.google.firebase.Timestamp
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.databinding.FragmentSignUpBinding
-import com.sunasterisk.thooi.ui.signup.AddressBottomSheet.Companion.RESULT_PLACES
+import com.sunasterisk.thooi.ui.placespicker.AddressBottomSheet
+import com.sunasterisk.thooi.ui.placespicker.AddressBottomSheet.Companion.RESULT_PLACES
 import com.sunasterisk.thooi.util.beginTransition
 import com.sunasterisk.thooi.util.check
 import com.sunasterisk.thooi.util.getOneShotResult
 import com.sunasterisk.thooi.util.toLocalDate
-import kotlinx.android.synthetic.main.fragment_sign_up.*
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.koin.android.ext.android.inject
-import java.util.Date
+import java.util.*
 
+@InternalCoroutinesApi
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
 
     private val navArgs: SignUpFragmentArgs by navArgs()
@@ -64,20 +63,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                 }
             } else {
                 activity?.onBackPressed()
-            }
-        }
-    }
-
-    private val permissionResult: ActivityResultLauncher<String> by lazy {
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            @SuppressLint("MissingPermission")
-            if (it) {
-                AddressBottomSheet().show(
-                    parentFragmentManager,
-                    AddressBottomSheet::class.simpleName
-                )
-            } else {
-                viewModel.nameRule.value = R.string.msg_missing_permission
             }
         }
     }
@@ -136,18 +121,10 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
         }
 
         binding.editTextAddress.setOnClickListener {
-            if (ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                permissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-            } else {
-                AddressBottomSheet().show(
-                    parentFragmentManager,
-                    AddressBottomSheet::class.simpleName
-                )
-            }
+            AddressBottomSheet().show(
+                parentFragmentManager,
+                AddressBottomSheet::class.simpleName
+            )
         }
 
         binding.editTextBirthday.setOnClickListener {
@@ -161,10 +138,19 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
         setFragmentResultListener(RESULT_PLACES) { _, bundle ->
             address.value = bundle.getParcelable(RESULT_PLACES)
         }
+
+        category.observe(viewLifecycleOwner) { list ->
+            binding.chipGroupCategory.removeAllViews()
+            list.forEach { addChipView(it.title) }
+        }
+
+        binding.chipGroupCategory.setOnCheckedChangeListener { group, checkedId ->
+            group.forEach { if (it is Chip && it.id == checkedId) viewModel.category }
+        }
     }
 
     private fun addChipView(chipText: String) {
-        chipGroupCategory?.run {
+        binding.chipGroupCategory.run {
             val chip = layoutInflater.inflate(R.layout.item_chip_choice, this, false) as Chip
             chip.run {
                 text = chipText

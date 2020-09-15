@@ -1,31 +1,36 @@
 package com.sunasterisk.thooi.ui.signup
 
-import android.Manifest
 import android.annotation.SuppressLint
-import androidx.annotation.RequiresPermission
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.data.model.UserAddress
+import com.sunasterisk.thooi.data.repository.CategoryRepository
 import com.sunasterisk.thooi.data.repository.UserRepository
+import com.sunasterisk.thooi.data.source.entity.Category
 import com.sunasterisk.thooi.data.source.entity.User
 import com.sunasterisk.thooi.data.source.entity.UserType.CUSTOMER
 import com.sunasterisk.thooi.data.source.entity.UserType.FIXER
-import com.sunasterisk.thooi.util.*
+import com.sunasterisk.thooi.util.Event
+import com.sunasterisk.thooi.util.check
+import com.sunasterisk.thooi.util.isEmail
+import com.sunasterisk.thooi.util.isValidPassword
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 
+@InternalCoroutinesApi
 class SignUpViewModel(
     private val userRepo: UserRepository,
-    private val placesClient: PlacesClient
+    private val categoryRepo: CategoryRepository
 ) : ViewModel() {
 
     val isGoogle = MutableLiveData(false)
@@ -53,8 +58,20 @@ class SignUpViewModel(
     private val _googleSignIn = MutableLiveData<Event<Unit>>()
     val googleSignIn: LiveData<Event<Unit>> get() = _googleSignIn
 
-    private val _places = MutableLiveData<List<UserAddress>>()
-    val places: LiveData<List<UserAddress>> get() = _places
+    private val _category = MutableLiveData<List<Category>>()
+    val category: LiveData<List<Category>> get() = _category
+
+    init {
+        viewModelScope.launch {
+            categoryRepo.getAllCategories().collect { result ->
+                result.check({
+                    _category.value = it
+                }, {
+                    nameRule.value = R.string.msg_unknown_error
+                })
+            }
+        }
+    }
 
     fun signUp() {
         viewModelScope.launch {
@@ -119,21 +136,13 @@ class SignUpViewModel(
                 imageUrl = imageUrl ?: "",
                 dateOfBirth = birthday.value?.second ?: LocalDate.now(),
                 address = address.value?.address ?: "",
+                bio = bio.value ?: "",
                 location = address.value?.location ?: LatLng(0.0, 0.0),
                 userType = if (fixer.value == true) FIXER else CUSTOMER
             )
         }
 
         return result
-    }
-
-    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE])
-    fun findAddress() {
-        viewModelScope.launch {
-            placesClient.getCurrentPlaces().run {
-                _places.value = map { it.place.run { UserAddress(id, name, address, latLng) } }
-            }
-        }
     }
 
     @SuppressLint("NullSafeMutableLiveData")

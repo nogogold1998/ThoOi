@@ -30,6 +30,8 @@ interface UserDataSource {
 
         suspend fun setToken(token: String): Result<Unit>
 
+        suspend fun deleteToken(token: String): Result<Unit>
+
         suspend fun updateUser(user: User): Result<Unit>
 
         suspend fun resetPassword(email: String): Result<Unit>

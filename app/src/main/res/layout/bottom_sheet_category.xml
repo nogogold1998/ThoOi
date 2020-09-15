@@ -4,13 +4,15 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="adapter"
-            type="com.sunasterisk.thooi.ui.placespicker.AddressAdapter" />
+            type="com.sunasterisk.thooi.ui.post.newpost.CategoryAdapter" />
 
         <variable
             name="viewModel"
-            type="com.sunasterisk.thooi.ui.placespicker.AddressViewModel" />
+            type="com.sunasterisk.thooi.ui.post.newpost.CategoryViewModel" />
     </data>
 
     <FrameLayout
@@ -22,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             android:gravity="center"
-            android:text="@string/label_choose_location" />
+            android:text="@string/hint_category" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -32,7 +34,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="?android:attr/actionBarSize"
             android:background="@drawable/bg_circle"
-            android:padding="@dimen/dp_32" />
+            android:padding="@dimen/dp_32"
+            android:visibility="@{viewModel.loading ? View.VISIBLE : View.GONE}" />
 
         <androidx.recyclerview.widget.RecyclerView
             setAdapter="@{adapter}"

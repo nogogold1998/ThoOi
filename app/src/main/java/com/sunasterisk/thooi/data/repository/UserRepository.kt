@@ -24,6 +24,8 @@ interface UserRepository {
 
     suspend fun setToken(token: String): Result<Unit>
 
+    suspend fun deleteToken(token: String): Result<Unit>
+
     suspend fun signIn(username: String, password: String): Result<AuthResult>
 
     suspend fun signUp(user: User, password: String): Result<Unit>

@@ -3,6 +3,8 @@ package com.sunasterisk.thooi.di
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.storage.FirebaseStorage
 import com.sunasterisk.thooi.data.repository.CategoryRepository
 import com.sunasterisk.thooi.data.repository.CategoryRepositoryImpl
 import com.sunasterisk.thooi.data.repository.MessageRepository
@@ -40,6 +42,8 @@ val repositoryModule = module {
     //Firebase modules
     single { FirebaseAuth.getInstance() }
     single { FirebaseFirestore.getInstance() }
+    single { FirebaseInstanceId.getInstance() }
+    single { FirebaseStorage.getInstance() }
 
     //Room database modules
     single {
@@ -64,6 +68,8 @@ val repositoryModule = module {
     single<NotificationRepository> { NotificationRepositoryImpl(get(), get(), get()) }
     single<MessageDataSource.Remote> { MessageRemoteDataSource(get(), get()) }
     single<MessageRepository> { MessageRepositoryImpl(get(), get()) }
+
+    single<FirestoreRepository> { FirestoreRepositoryImpl(get()) }
 
     // CongVC
     single<PostDataSource.Remote> { PostRemoteDataSource(get()) }

@@ -93,6 +93,12 @@ class UserRemoteDataSource(
         Unit
     }
 
+    override suspend fun deleteToken(token: String) = getOneShotResult {
+        currentUserDocument?.update(FIELD_TOKEN, FieldValue.arrayRemove(token))?.await()
+            ?: throw authException
+        Unit
+    }
+
     override suspend fun updateUser(user: User) = getOneShotResult {
         currentUserDocument?.set(FirestoreUser(user))?.await() ?: throw authException
         Unit
@@ -120,9 +126,10 @@ class UserRemoteDataSource(
     }
 
     override suspend fun signUp(user: User, password: String) = getOneShotResult {
-        firebaseAuth.createUserWithEmailAndPassword(user.email, password).await()
-            .user?.sendEmailVerification()
-        currentUserDocument?.set(FirestoreUser(user))?.await() ?: throw authException
+        firebaseAuth.createUserWithEmailAndPassword(user.email, password).await().user?.run {
+            sendEmailVerification()
+            firestore.collection(USERS_COLLECTION).document(uid).set(FirestoreUser(user)).await()
+        } ?: throw authException
         Unit
     }
 
