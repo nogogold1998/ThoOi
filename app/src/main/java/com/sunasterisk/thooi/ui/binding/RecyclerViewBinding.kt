@@ -10,14 +10,14 @@ import com.sunasterisk.thooi.ui.notification.messages.ConversationAdapter
 import com.sunasterisk.thooi.ui.notification.notifications.NotificationAdapter
 import com.sunasterisk.thooi.ui.post.detail.PostDetailsAdapter
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAdapterItem
+import com.sunasterisk.thooi.util.submitListWithMotionLayoutAware
 
 /**
  * Created by Cong Vu Chi on 06/09/20 23:38.
  */
 @BindingAdapter("listPostDetailsAdapterItem")
 fun RecyclerView.bindSummaryUser(items: List<PostDetailsAdapterItem<*>>?) {
-    (adapter as? PostDetailsAdapter)?.submitList(items)
-    invalidate()
+    (adapter as? PostDetailsAdapter)?.submitListWithMotionLayoutAware(this, items)
 }
 
 @BindingAdapter("setAdapter")

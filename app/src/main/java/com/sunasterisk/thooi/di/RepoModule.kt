@@ -7,6 +7,8 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.sunasterisk.thooi.data.repository.CategoryRepository
 import com.sunasterisk.thooi.data.repository.CategoryRepositoryImpl
+import com.sunasterisk.thooi.data.repository.FirestoreRepository
+import com.sunasterisk.thooi.data.repository.FirestoreRepositoryImpl
 import com.sunasterisk.thooi.data.repository.MessageRepository
 import com.sunasterisk.thooi.data.repository.MessageRepositoryImpl
 import com.sunasterisk.thooi.data.repository.NotificationRepository

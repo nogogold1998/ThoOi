@@ -32,8 +32,8 @@ class HomeVM(
 
     private val categoriesFlow = categoryRepo.getAllCategories()
 
-    val categoryAdapterItems: LiveData<List<CategoryAdapterItem<*>>>
-        get() = categoriesFlow.transformLatest {
+    val categoryAdapterItems: LiveData<List<CategoryAdapterItem<*>>> =
+        categoriesFlow.transformLatest {
             when (it) {
                 is Result.Success -> emit(generateCategoryAdapterItems(it.data))
                 is Result.Failed -> {
@@ -45,20 +45,19 @@ class HomeVM(
 
     private val _requestedUserId = MutableLiveData<String>()
 
-    val summaryPostAdapterItems: LiveData<List<SummaryPost>>
-        get() = _requestedUserId.asFlow()
-            .flatMapConcat { postRepo.getPostsByUserId(it) }
-            .transformLatest {
-                when (it) {
-                    is Result.Success -> emit(this@HomeVM.generateSummaryPosts(it.data))
-                    is Result.Failed -> {
-                    }
-                    Result.Loading -> {
-                    }
+    val summaryPostAdapterItems: LiveData<List<SummaryPost>> = _requestedUserId.asFlow()
+        .flatMapConcat { postRepo.getPostsByUserId(it) }
+        .transformLatest {
+            when (it) {
+                is Result.Success -> emit(this@HomeVM.generateSummaryPosts(it.data))
+                is Result.Failed -> {
+                }
+                Result.Loading -> {
                 }
             }
-            .distinctUntilChanged()
-            .asLiveData()
+        }
+        .distinctUntilChanged()
+        .asLiveData()
 
     private val _navigationEvent = MutableLiveData<HomeNavigationEvent<*>>()
     val navigationEvent: LiveData<HomeNavigationEvent<*>> get() = _navigationEvent

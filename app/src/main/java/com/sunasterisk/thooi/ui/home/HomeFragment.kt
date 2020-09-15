@@ -17,6 +17,7 @@ import com.sunasterisk.thooi.ui.home.model.HomeNavigationEvent
 import com.sunasterisk.thooi.ui.main.MainVM
 import com.sunasterisk.thooi.util.MarginItemDecoration
 import com.sunasterisk.thooi.util.observeEvent
+import com.sunasterisk.thooi.util.submitListWithMotionLayoutAware
 import com.sunasterisk.thooi.util.verticalScrollProgress
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
@@ -78,13 +79,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun onObserveLiveData() {
         viewModel.categoryAdapterItems.observe(viewLifecycleOwner) {
             if (it == null) return@observe
-            categoryAdapter?.submitList(it) { binding.recyclerHome.invalidate() }
+            categoryAdapter?.submitListWithMotionLayoutAware(binding.recyclerHome, it)
         }
         viewModel.summaryPostAdapterItems.observe(viewLifecycleOwner) {
             if (it == null) return@observe
-            summaryAdapter?.submitList(it) { binding.recyclerHome.invalidate() }
+            summaryAdapter?.submitListWithMotionLayoutAware(binding.recyclerHome, it)
         }
-        viewModel.navigationEvent.observe(this) { event ->
+        viewModel.navigationEvent.observe(viewLifecycleOwner) { event ->
             if (event == null) return@observe
             when (event) {
                 is HomeNavigationEvent.ToPostDetailEvent -> {
