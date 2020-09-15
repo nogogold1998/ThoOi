@@ -17,7 +17,6 @@ import com.sunasterisk.thooi.data.source.CategoryDataSource
 import com.sunasterisk.thooi.data.source.NotificationDataSource
 import com.sunasterisk.thooi.data.source.PostDataSource
 import com.sunasterisk.thooi.data.source.UserDataSource
-import com.sunasterisk.thooi.data.source.entity.UserType
 import com.sunasterisk.thooi.data.source.local.LocalPostDataSource
 import com.sunasterisk.thooi.data.source.local.NotificationLocalDataSource
 import com.sunasterisk.thooi.data.source.local.UserLocalDataSource
@@ -67,5 +66,4 @@ val repositoryModule = module {
     single<PostDetailRepository> { PostDetailRepositoryImpl(get(), get(), get()) }
     single<CategoryDataSource.Remote> { CategoryRemoteDataSource(get()) }
     single<CategoryRepository> { CategoryRepositoryImpl(get()) }
-    single { UserType.CUSTOMER }
 }

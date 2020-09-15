@@ -7,6 +7,7 @@ import com.sunasterisk.thooi.ui.main.MainVM
 import com.sunasterisk.thooi.ui.notification.notifications.NotificationViewModel
 import com.sunasterisk.thooi.ui.post.detail.CustomerPostDetailsVM
 import com.sunasterisk.thooi.ui.post.detail.FixerPostDetailsVM
+import com.sunasterisk.thooi.ui.profile.ProfileVM
 import com.sunasterisk.thooi.ui.signin.SignInViewModel
 import com.sunasterisk.thooi.ui.signup.SignUpViewModel
 import org.koin.android.ext.koin.androidContext
@@ -26,4 +27,5 @@ val viewModelModule = module {
     viewModel { CustomerPostDetailsVM(get()) }
     viewModel { FixerPostDetailsVM(get()) }
     viewModel { CategoryVM(get(), get(), get()) }
+    viewModel { ProfileVM(get()) }
 }

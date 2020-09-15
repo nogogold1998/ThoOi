@@ -11,7 +11,6 @@ import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.databinding.FragmentCategoryBinding
 import com.sunasterisk.thooi.di.getViewModelFactory
 import com.sunasterisk.thooi.util.MarginItemDecoration
-import com.sunasterisk.thooi.util.toast
 
 class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
 
@@ -25,7 +24,9 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
                 is CategoryAdapterItem.PostItem -> findNavController().navigate(
                     CategoryFragmentDirections.fixerCategoryToPostDetails(it.data.id)
                 )
-                is CategoryAdapterItem.FixerItem -> requireContext().toast(it.data.toString())
+                is CategoryAdapterItem.FixerItem -> findNavController().navigate(
+                    CategoryFragmentDirections.customerCategoryToProfile(it.data.id)
+                )
             }
         }
     }

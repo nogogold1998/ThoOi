@@ -128,11 +128,17 @@
             app:popUpToInclusive="true" />
     </fragment>
 
-    <fragment android:id="@+id/profileFragment">
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.sunasterisk.thooi.ui.profile.ProfileFragment"
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/profile_to_chat"
             app:destination="@id/chatFragment"
             app:popUpTo="@id/chatFragment" />
+        <argument
+            android:name="userId"
+            app:argType="string" />
     </fragment>
 
     <fragment android:id="@+id/editProfileFragment">

@@ -11,7 +11,7 @@ data class SummaryUser(
 ) {
     constructor(user: User) : this(
         user.id,
-        "https://www.w3schools.com/w3images/avatar2.png",
+        user.imageUrl,
         user.fullName,
         user.createdDateTime
     )

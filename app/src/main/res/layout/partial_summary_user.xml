@@ -16,7 +16,7 @@
 
         <ImageView
             android:id="@+id/imageFixerAvatar"
-            imageUrl="@{user.avatarUrl}"
+            roundImageUrl="@{user.avatarUrl}"
             android:layout_width="@dimen/dp_64"
             android:layout_height="0dp"
             android:contentDescription="@null"

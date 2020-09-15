@@ -16,6 +16,7 @@ import com.sunasterisk.thooi.ui.main.MainVM
 import com.sunasterisk.thooi.ui.post.detail.CustomerPostDetailsVM
 import com.sunasterisk.thooi.ui.post.detail.FixerPostDetailsVM
 import com.sunasterisk.thooi.ui.post.detail.PostDetailsVM
+import com.sunasterisk.thooi.ui.profile.ProfileVM
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.core.KoinComponent
@@ -45,6 +46,7 @@ class ViewModelFactory(
                 }
             }
             isAssignableFrom(CategoryVM::class.java) -> get<CategoryVM>()
+            isAssignableFrom(ProfileVM::class.java) -> get<ProfileVM>()
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
     } as T

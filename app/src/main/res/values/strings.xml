@@ -43,6 +43,7 @@
     <string name="label_job_assigned_to_other">Đã được giao cho người khác</string>
     <string name="label_job_assigned_to_you">Đã được giao cho bạn</string>
     <string name="label_job_on_progress">Đang tiến hành</string>
+    <string name="label_profile">Hồ sơ</string>
 
     <string name="action_apply_job">Nhận việc</string>
     <string name="action_close_post">Đóng bài viết</string>
@@ -81,4 +82,10 @@
     <string name="msg_missing_permission">Bạn chưa cấp quyền vị trí</string>
     <string name="msg_missing_location_setting">Bạn chưa bật vị trí</string>
     <string name="label_choose_location">Chọn vị trí của bạn</string>
+    <string name="format_label_created_date">Ngày tham gia: %s</string>
+    <string name="format_label_email">Email: %s</string>
+    <string name="format_label_address">Địa chỉ: %s</string>
+    <string name="format_label_birth_day">Ngày sinh: %s</string>
+    <string name="action_call">Gọi</string>
+    <string name="action_chat">Nhắn tin</string>
 </resources>

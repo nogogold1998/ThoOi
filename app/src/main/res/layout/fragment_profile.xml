@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.sunasterisk.thooi.ui.profile.ProfileVM" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.profile.ProfileFragment">
+
+        <include
+            android:id="@+id/layoutToolbarProfile"
+            layout="@layout/tool_bar_layout"
+            app:navigationIcon="@{@drawable/ic_arrow_back_24}"
+            app:title="@{@string/label_profile}" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollviewProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?actionBarSize">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="@dimen/dp_16">
+
+                <androidx.constraintlayout.helper.widget.Flow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_24"
+                    app:constraint_referenced_ids="imageProfileAvatar, textProfileName, textProfileBio,
+                textProfileAddress, textProfileCreatedDate, textProfileEmail, flowButtons"
+                    app:flow_maxElementsWrap="1"
+                    app:flow_verticalGap="@dimen/dp_8"
+                    app:flow_wrapMode="chain"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageProfileAvatar"
+                    roundImageUrl="@{viewModel.user.imageUrl}"
+                    android:layout_width="@dimen/dp_180"
+                    android:layout_height="@dimen/dp_180"
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    tools:ignore="MissingConstraints"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+
+                <TextView
+                    android:id="@+id/textProfileName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.user.fullName}"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp_20"
+                    android:textStyle="bold"
+                    tools:ignore="MissingConstraints"
+                    tools:text="@tools:sample/full_names" />
+
+                <TextView
+                    android:id="@+id/textProfileBio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.user.bio}"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/sp_15"
+                    tools:ignore="MissingConstraints"
+                    tools:maxLength="500"
+                    tools:text="@tools:sample/lorem/random" />
+
+                <TextView
+                    android:id="@+id/textProfileAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/format_label_address(viewModel.user.address)}"
+                    android:textSize="@dimen/sp_15"
+                    app:drawableStartCompat="@drawable/ic_location_24"
+                    tools:ignore="MissingConstraints" />
+
+
+                <TextView
+                    android:id="@+id/textProfileCreatedDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/format_label_created_date(viewModel.createdDateTime)}"
+                    app:drawableStartCompat="@drawable/ic_round_calendar_24"
+                    tools:ignore="MissingConstraints" />
+
+
+                <TextView
+                    android:id="@+id/textProfileEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/format_label_email(viewModel.user.email)}"
+                    app:drawableStartCompat="@drawable/ic_round_email_24"
+                    tools:ignore="MissingConstraints" />
+
+                <androidx.constraintlayout.helper.widget.Flow
+                    android:id="@+id/flowButtons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="buttonProfileCall, buttonProfileChat"
+                    app:flow_horizontalGap="@dimen/dp_16"
+                    app:flow_wrapMode="chain"
+                    tools:ignore="MissingConstraints" />
+
+                <Button
+                    android:id="@+id/buttonProfileCall"
+                    style="@style/StyleButtonOutline"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_call"
+                    app:icon="@drawable/ic_round_phone_24"
+                    app:iconGravity="textStart"
+                    app:iconPadding="@dimen/dp_8"
+                    tools:ignore="MissingConstraints" />
+
+                <Button
+                    android:id="@+id/buttonProfileChat"
+                    style="@style/StyleButtonOutline"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_chat"
+                    app:icon="@drawable/ic_round_chat_24"
+                    app:iconGravity="textStart"
+                    app:iconPadding="@dimen/dp_8"
+                    tools:ignore="MissingConstraints" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
+</layout>

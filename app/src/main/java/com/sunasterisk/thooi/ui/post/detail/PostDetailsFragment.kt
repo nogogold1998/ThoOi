@@ -51,10 +51,9 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
         binding.imageUpButton.setOnClickListener { findNavController().navigateUp() }
         binding.scrollViewJobDetails.let {
             it.setOnScrollChangeListener { _, _, _, _, _ ->
-                if (it.verticalScrollProgress == 1f) {
-                    mainVM.collapseToolbar()
-                } else {
-                    mainVM.showToolbar()
+                when (it.verticalScrollProgress) {
+                    1f -> mainVM.collapseToolbar()
+                    in 0f..0.8f -> mainVM.showToolbar()
                 }
             }
         }

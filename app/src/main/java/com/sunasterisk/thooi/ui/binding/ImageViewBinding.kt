@@ -25,6 +25,15 @@ fun ImageView.loadImage(url: String?) {
     }
 }
 
+@BindingAdapter("roundImageUrl")
+fun ImageView.loadRoundImage(url: String?) {
+    if (url != null) {
+        this.load(url) {
+            circleCrop()
+        }
+    }
+}
+
 @BindingAdapter("slideImages")
 fun loadImage(sliderView: SliderView, urls: List<String>?) {
     if (urls != null) {
