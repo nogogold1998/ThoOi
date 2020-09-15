@@ -8,6 +8,7 @@ import com.sunasterisk.thooi.data.source.remote.RemoteConstants.USERS_COLLECTION
 import com.sunasterisk.thooi.util.toTimeStamp
 
 class FirestoreMessage(
+    val conversationId: String = "",
     val created_at: Timestamp = Timestamp.now(),
     val sender: DocumentReference?,
     val receiver: DocumentReference?,
@@ -16,6 +17,7 @@ class FirestoreMessage(
     val is_read: Boolean = false
 ) {
     constructor() : this(
+        "",
         Timestamp.now(),
         null,
         null,
@@ -25,6 +27,7 @@ class FirestoreMessage(
     )
 
     constructor(database: FirebaseFirestore, message: Message) : this(
+        message.conversationId,
         message.createdAt.toTimeStamp(),
         database.collection(USERS_COLLECTION).document(message.senderRef),
         database.collection(USERS_COLLECTION).document(message.receiverRef),

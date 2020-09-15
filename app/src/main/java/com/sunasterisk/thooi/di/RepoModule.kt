@@ -57,7 +57,7 @@ val repositoryModule = module {
 
     //Repository modules
     single<UserRepository> { UserRepositoryImpl(get(), get()) }
-    single<NotificationRepository> { NotificationRepositoryImpl(get(), get()) }
+    single<NotificationRepository> { NotificationRepositoryImpl(get(), get(), get()) }
 
     // CongVC
     single<PostDataSource.Remote> { PostRemoteDataSource(get()) }

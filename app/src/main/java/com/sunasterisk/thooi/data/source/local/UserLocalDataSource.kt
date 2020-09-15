@@ -28,6 +28,8 @@ class UserLocalDataSource(
         } ?: emit(Result.failed(FirebaseAuthException(OBJECT_NOT_FOUND, MSG_USER_NOT_FOUND)))
     }
 
+    override fun getUserBlocking(id: String): User? = userDao.findUserByIdBlocking(id)
+
     override suspend fun getUser(id: String): User? = userDao.findUserById(id)//
 
     override fun getUserFlow(id: String): Flow<User> = userDao.findUserByIdFlow(id)

@@ -12,6 +12,8 @@ interface UserDataSource {
 
         fun getCurrentUser(): Flow<Result<User>>
 
+        fun getUserBlocking(id: String): User?
+
         suspend fun getUser(id: String): User?
 
         fun getUserFlow(id: String): Flow<User>

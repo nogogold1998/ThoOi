@@ -9,9 +9,20 @@ data class Notification(
     val content: String = "",
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val isRead: Boolean = false,
-    val senderProfileImageUrl: String = "",
+    var senderProfileImageUrl: String = "",
     val type: NotificationType = NotificationType.Notification,
 ) {
+    constructor(
+        entityNotification: com.sunasterisk.thooi.data.source.entity.Notification
+    ) : this(
+        entityNotification.id,
+        entityNotification.content,
+        entityNotification.createdAt,
+        entityNotification.isRead,
+        entityNotification.senderRef,
+        entityNotification.type
+    )
+
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<Notification>() {
             override fun areItemsTheSame(oldItem: Notification, newItem: Notification) =
