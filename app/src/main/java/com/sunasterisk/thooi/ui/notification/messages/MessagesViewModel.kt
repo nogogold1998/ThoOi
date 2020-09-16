@@ -44,7 +44,6 @@ class MessagesViewModel(
                         { _errorRes.postValue(R.string.error_unknown) }
                     )
                 }
-
         }
     }
 }

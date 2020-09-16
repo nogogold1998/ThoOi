@@ -1,5 +1,6 @@
 package com.sunasterisk.thooi.ui.notification.notifications
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +12,7 @@ import com.sunasterisk.thooi.data.repository.NotificationRepository
 import com.sunasterisk.thooi.util.Event
 import com.sunasterisk.thooi.util.check
 import com.sunasterisk.thooi.util.postValue
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -32,9 +34,21 @@ class NotificationViewModel(
         viewModelScope.launch {
             notificationRepo.getAllNotifications().collect { result ->
                 result.check(
-                    { _notifications.postValue(it) },
-                    { _errorRes.postValue(R.string.error_unknown) }
+                    {
+                        it.map { noti ->
+                            
+                            notificationRepo.getUserImgUrl(noti.senderId) { url ->
+                                noti.imageUrl = url
+                            }
+                            Log.d("AAAA", it.toString())
+                            _notifications.postValue(it)
+                        }
+                    },
+                    {
+                        _errorRes.postValue(R.string.error_unknown)
+                    }
                 )
+                delay(1000)
             }
         }
     }

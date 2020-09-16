@@ -25,7 +25,9 @@ class NotificationAdapter :
         val onItemClick: (Notification, NotificationType) -> Unit
     ) :
         BaseViewHolder<Notification, ItemNotificationBinding>(
-            ItemNotificationBinding.inflate(container.inflater, container, false)
+            ItemNotificationBinding.inflate(container.inflater, container, false).also {
+                it.textContent.isSelected = true
+            }
         ) {
 
         override fun onBind(item: Notification, binding: ItemNotificationBinding) =

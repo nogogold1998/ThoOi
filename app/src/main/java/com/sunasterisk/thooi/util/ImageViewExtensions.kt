@@ -17,8 +17,10 @@ fun ImageView.load(
     },
 ) = post {
     if (context == null) return@post
+    val loadUrl = if (url.contains("https://")) url else "https://$url"
+
     Glide.with(context)
-        .load(Uri.parse(url))
+        .load(Uri.parse(loadUrl))
         .apply { requestBuilder.invoke(this) }
         .error(R.drawable.ic_broken_image_24)
         .transition(DrawableTransitionOptions.withCrossFade())

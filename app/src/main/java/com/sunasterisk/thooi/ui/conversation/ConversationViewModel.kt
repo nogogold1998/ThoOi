@@ -35,8 +35,6 @@ class ConversationViewModel(
     val errorRes: LiveData<Event<Int>> get() = _errorRes
 
     val text = MutableLiveData<String>()
-    val textRule =
-        text.transform { if (it.isNullOrBlank()) null else R.string.msg_require_not_empty }
 
     fun setCurrentUser(userId: String) = _currentUserId.postValue(userId)
 
@@ -46,10 +44,7 @@ class ConversationViewModel(
         viewModelScope.launch {
             _currentUserId.asFlow()
                 .flatMapLatest { userId ->
-                    _conversationId.asFlow()
-                        .flatMapLatest { conversationId ->
-                            messageRepository.getMessagesByConversationId(userId, conversationId)
-                        }
+                    messageRepository.getMessagesByConversationId(userId, conversationId)
                 }
                 .collect { result ->
                     result.check(
@@ -102,33 +97,30 @@ class ConversationViewModel(
 
         var senderId = ""
         var receivedId = ""
-        when {
-            textValue.isNullOrBlank() -> textRule.value = R.string.msg_require_not_empty
-            textRule.value == null -> {
-                messageRepository.getConversationById(
-                    currentUserIdValue ?: "",
-                    conversationIdValue ?: ""
-                ).collect { result ->
-                    result.check(
-                        {
-                            if (it.members[0].id == currentUserIdValue) {
-                                senderId = it.members[0].id
-                                receivedId = it.members[1].id
-                            } else {
-                                receivedId = it.members[0].id
-                                senderId = it.members[1].id
-                            }
-                        },
-                        { _errorRes.postValue(R.string.error_unknown) }
-                    )
-                }
-                return com.sunasterisk.thooi.data.source.entity.Message(
-                    conversationId = conversationIdValue ?: "",
-                    senderRef = senderId,
-                    receiverRef = receivedId,
-                    text = textValue
+        textValue?.isNotBlank()?.let {
+            messageRepository.getConversationById(
+                currentUserIdValue ?: "",
+                conversationIdValue ?: ""
+            ).collect { result ->
+                result.check(
+                    {
+                        if (it.members[0].id == currentUserIdValue) {
+                            senderId = it.members[0].id
+                            receivedId = it.members[1].id
+                        } else {
+                            receivedId = it.members[0].id
+                            senderId = it.members[1].id
+                        }
+                    },
+                    { _errorRes.postValue(R.string.error_unknown) }
                 )
             }
+            return com.sunasterisk.thooi.data.source.entity.Message(
+                conversationId = conversationIdValue ?: "",
+                senderRef = senderId,
+                receiverRef = receivedId,
+                text = textValue
+            )
         }
         return null
     }

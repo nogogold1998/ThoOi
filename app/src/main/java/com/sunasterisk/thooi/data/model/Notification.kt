@@ -6,11 +6,12 @@ import org.threeten.bp.LocalDateTime
 
 data class Notification(
     val id: String = "",
-    val content: String = "",
+    val content: String,
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val isRead: Boolean = false,
-    var senderProfileImageUrl: String = "",
+    var senderId: String = "",
     val type: NotificationType = NotificationType.Notification,
+    var imageUrl: String = ""
 ) {
     constructor(
         entityNotification: com.sunasterisk.thooi.data.source.entity.Notification
@@ -20,7 +21,8 @@ data class Notification(
         entityNotification.createdAt,
         entityNotification.isRead,
         entityNotification.senderRef,
-        entityNotification.type
+        entityNotification.type,
+        entityNotification.imageUrl
     )
 
     companion object {
