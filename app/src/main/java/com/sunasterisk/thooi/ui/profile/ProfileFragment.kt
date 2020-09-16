@@ -35,11 +35,14 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
             findNavController().navigateUp()
         }
         binding.buttonProfileCall.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_CALL,
-                Uri.fromParts("tel", viewModel.user.value?.phone, null)))
-        }
-        binding.buttonProfileChat.setOnClickListener {
-            context?.toast(R.string.msg_missing_feature)
+            val intent = Intent(Intent.ACTION_CALL,
+                Uri.fromParts("tel", viewModel.user.value?.phone, null))
+            intent.resolveActivity(requireContext().packageManager)
+                ?.let { startActivity(intent) }
+                ?: requireContext().toast(R.string.error_no_phone_app)
+            binding.buttonProfileChat.setOnClickListener {
+                context?.toast(R.string.msg_missing_feature)
+            }
         }
     }
 
