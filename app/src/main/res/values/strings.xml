@@ -105,4 +105,5 @@
     <string name="label_find_a_fixer">Tìm thợ</string>
     <string name="msg_permission_denied">Yêu cầu cấp quyền bị từ chối</string>
     <string name="msg_missing_feature">Chức năng đang phát triển</string>
+    <string name="hint_title">Tiêu đề</string>
 </resources>

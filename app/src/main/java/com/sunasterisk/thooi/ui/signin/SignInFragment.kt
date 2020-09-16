@@ -7,6 +7,7 @@ import androidx.navigation.fragment.findNavController
 import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.databinding.FragmentSignInBinding
 import com.sunasterisk.thooi.ui.signin.ConfirmDialog.Companion.KEY_CONFIRM_RESULT
+import com.sunasterisk.thooi.util.livedata.NetworkStateLiveData
 import org.koin.android.ext.android.inject
 
 class SignInFragment : BaseFragment<FragmentSignInBinding>() {

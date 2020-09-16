@@ -19,12 +19,14 @@ import com.sunasterisk.thooi.ui.profile.ProfileVM
 import com.sunasterisk.thooi.ui.settings.SettingsViewModel
 import com.sunasterisk.thooi.ui.signin.SignInViewModel
 import com.sunasterisk.thooi.ui.signup.SignUpViewModel
+import com.sunasterisk.thooi.util.livedata.NetworkStateLiveData
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
+    single { NetworkStateLiveData(androidContext()) }
     factory { Places.createClient(androidContext()) }
     factory {
         GoogleSignIn.getClient(
@@ -38,13 +40,13 @@ val appModule = module {
 
 @InternalCoroutinesApi
 val viewModelModule = module {
-    viewModel { SignInViewModel(get(), get()) }
+    viewModel { SignInViewModel(get(), get(), get()) }
     viewModel { NotificationViewModel(get()) }
-    viewModel { SignUpViewModel(get(), get()) }
-    viewModel { MainVM(get(), get()) }
+    viewModel { SignUpViewModel(get(), get(), get()) }
+    viewModel { MainVM(get(), get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get(), get()) }
     viewModel { AddressViewModel(get()) }
-    viewModel { NewPostViewModel(get(), get(), get(), get(), get()) }
+    viewModel { NewPostViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { HomeVM(get(), get(), get()) }
     viewModel { CustomerPostDetailsVM(get()) }
     viewModel { FixerPostDetailsVM(get()) }

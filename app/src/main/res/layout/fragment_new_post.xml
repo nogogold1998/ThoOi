@@ -33,11 +33,34 @@
                 app:navigationIcon="@{null}"
                 app:title="@{@string/title_new_post}" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputLayoutTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_16"
+                android:paddingStart="@dimen/dp_8"
+                app:boxBackgroundColor="@color/colorZircon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutAppbar"
+                app:startIconDrawable="@drawable/ic_round_title_24"
+                app:startIconTint="@color/colorAccent"
+                tools:ignore="RtlSymmetry">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_title"
+                    android:text="@={viewModel.title}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <Button
                 android:id="@+id/buttonAddress"
                 style="@style/StyleButtonOutline"
                 android:layout_margin="@dimen/dp_16"
                 android:backgroundTint="@color/colorZircon"
+                android:clickable="@{viewModel.isNetworkConnected}"
                 android:elevation="@dimen/dp_8"
                 android:hint="@string/hint_address"
                 android:text="@{viewModel.places.address}"
@@ -48,7 +71,7 @@
                 app:iconPadding="@dimen/dp_8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutAppbar"
+                app:layout_constraintTop_toBottomOf="@+id/inputLayoutTitle"
                 app:strokeWidth="0dp" />
 
             <Button
@@ -56,6 +79,7 @@
                 style="@style/StyleButtonOutline"
                 android:layout_margin="@dimen/dp_16"
                 android:backgroundTint="@color/colorZircon"
+                android:clickable="@{viewModel.isNetworkConnected}"
                 android:elevation="@dimen/dp_8"
                 android:hint="@string/hint_category"
                 android:text="@{viewModel.category.title}"
@@ -92,13 +116,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_28"
-                android:elevation="@dimen/dp_8"
                 android:background="?attr/selectableItemBackground"
+                android:elevation="@dimen/dp_8"
                 android:padding="@dimen/dp_8"
-                app:layout_constraintBottom_toBottomOf="@+id/recyclerImage"
+                app:layout_constraintBottom_toTopOf="@+id/buttonTakeImage"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/recyclerImage"
+                app:layout_constraintTop_toBottomOf="@+id/buttonCategory"
                 app:srcCompat="@drawable/ic_round_add_photo_alternate_24"
+                app:tint="@color/colorAccent"
+                tools:ignore="ContentDescription" />
+
+            <ImageButton
+                android:id="@+id/buttonTakeImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_28"
+                android:background="?attr/selectableItemBackground"
+                android:elevation="@dimen/dp_8"
+                android:padding="@dimen/dp_8"
+                app:layout_constraintBottom_toTopOf="@+id/buttonWorkTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonAddImage"
+                app:srcCompat="@drawable/ic_round_photo_camera_24"
                 app:tint="@color/colorAccent"
                 tools:ignore="ContentDescription" />
 
@@ -125,12 +164,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_16"
+                android:paddingStart="@dimen/dp_8"
                 app:boxBackgroundColor="@color/colorZircon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/buttonWorkTime"
                 app:startIconDrawable="@drawable/ic_round_money_24"
-                app:startIconTint="@color/colorAccent">
+                app:startIconTint="@color/colorAccent"
+                tools:ignore="RtlSymmetry">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextPrice"
@@ -145,12 +186,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_16"
+                android:paddingStart="@dimen/dp_8"
                 app:boxBackgroundColor="@color/colorZircon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/inputLayoutPrice"
                 app:startIconDrawable="@drawable/ic_round_description_24"
-                app:startIconTint="@color/colorAccent">
+                app:startIconTint="@color/colorAccent"
+                tools:ignore="RtlSymmetry">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextDescription"
@@ -166,6 +209,7 @@
                 style="@style/StyleButton"
                 android:layout_marginHorizontal="@dimen/dp_16"
                 android:layout_marginTop="@dimen/dp_32"
+                android:clickable="@{viewModel.isNetworkConnected}"
                 android:onClick="@{()->viewModel.onPostClick()}"
                 android:text="@string/label_find_a_fixer"
                 android:visibility="@{viewModel.loading? View.INVISIBLE : View.VISIBLE}"
