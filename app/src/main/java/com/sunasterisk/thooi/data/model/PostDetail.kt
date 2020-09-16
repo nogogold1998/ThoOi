@@ -20,5 +20,6 @@ data class PostDetail(
     val loggedInUserId: String = "",
     val suggestedPrice: String = "",
     val appointment: LocalDateTime = LocalDateTime.now(),
+    val category: String = "",
 )
 

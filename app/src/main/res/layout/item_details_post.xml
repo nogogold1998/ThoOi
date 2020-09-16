@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="textJobTitle, textPostedDate, dividerJobTitle,
             layoutSummaryCustomer, dividerSummaryCustomer,
+            textLabelPostCategory, textPostCategory, dividerPostCategory,
             textLabelJobDescription, textJobDescription, dividerJobDescription,
             textLabelJobLocation, textJobLocation, dividerJobLocation,
             textLabelSuggestedPrice, textSuggestedPrice, dividerSuggestedPrice,
@@ -153,6 +154,28 @@
 
         <View
             android:id="@+id/dividerAppointment"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_1"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/textLabelPostCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_category"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/textPostCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dp_8"
+            android:text="@{postDetail.category}"
+            app:drawableStartCompat="@drawable/ic_round_category_24"
+            tools:text="@tools:sample/us_zipcodes" />
+
+        <View
+            android:id="@+id/dividerPostCategory"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_1"
             android:background="?android:attr/listDivider" />

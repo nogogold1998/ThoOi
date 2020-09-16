@@ -12,15 +12,16 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 
 fun ImageView.load(
     url: String,
-    requestBuilder: (RequestBuilder<Drawable>.() -> Unit)? = null,
+    requestBuilder: (RequestBuilder<Drawable>.() -> Unit) = {
+        centerCrop()
+    },
 ) = post {
     if (context == null) return@post
     Glide.with(context)
         .load(Uri.parse(url))
-        .centerCrop()
+        .apply { requestBuilder.invoke(this) }
         .error(R.drawable.ic_broken_image_24)
         .transition(DrawableTransitionOptions.withCrossFade())
-        .apply { requestBuilder?.invoke(this) }
         .into(this)
 }
 

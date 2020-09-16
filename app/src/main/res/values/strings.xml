@@ -17,7 +17,7 @@
     <string name="hint_full_name">Họ tên</string>
     <string name="hint_phone">Số điện thoại</string>
     <string name="hint_address">Địa chỉ</string>
-    <string name="label_category">Chuyên nghành:</string>
+    <string name="label_category">Chuyên nghành</string>
     <string name="hint_birthday">Ngày sinh</string>
     <string name="hint_description">Mô tả</string>
     <string name="hint_change_password">Đổi mật khẩu</string>
@@ -104,4 +104,5 @@
     <string name="hint_suggest_price">Giá đề xuất</string>
     <string name="label_find_a_fixer">Tìm thợ</string>
     <string name="msg_permission_denied">Yêu cầu cấp quyền bị từ chối</string>
+    <string name="msg_missing_feature">Chức năng đang phát triển</string>
 </resources>

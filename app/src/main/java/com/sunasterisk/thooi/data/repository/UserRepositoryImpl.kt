@@ -4,12 +4,15 @@ import com.google.firebase.auth.AuthCredential
 import com.sunasterisk.thooi.data.Result
 import com.sunasterisk.thooi.data.source.UserDataSource
 import com.sunasterisk.thooi.data.source.entity.User
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
@@ -19,6 +22,7 @@ import kotlinx.coroutines.launch
 class UserRepositoryImpl(
     private val remote: UserDataSource.Remote,
     private val local: UserDataSource.Local,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : UserRepository {
 
     private val allUsersFlow by lazy {
@@ -27,7 +31,7 @@ class UserRepositoryImpl(
                 if (it is Result.Success) local.saveUser(*it.data.toTypedArray())
             },
             local.getAllUser()
-        )
+        ).flowOn(dispatcher)
     }
 
     private val cachedUserFlows = hashMapOf<String, Flow<Result<User>>>()
@@ -40,7 +44,7 @@ class UserRepositoryImpl(
             }
         }
         launch { local.getCurrentUser().collect { offer(it) } }
-    }
+    }.flowOn(dispatcher)
 
 
 

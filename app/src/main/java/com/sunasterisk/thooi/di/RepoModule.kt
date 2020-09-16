@@ -77,7 +77,7 @@ val repositoryModule = module {
     single<PostDataSource.Remote> { PostRemoteDataSource(get()) }
     single<PostDataSource.Local> { LocalPostDataSource(get()) }
     single<PostRepository> { PostRepositoryImpl(get(), get()) }
-    single<PostDetailRepository> { PostDetailRepositoryImpl(get(), get(), get()) }
+    single<PostDetailRepository> { PostDetailRepositoryImpl(get(), get(), get(), get()) }
     single<CategoryDataSource.Remote> { CategoryRemoteDataSource(get()) }
     single<CategoryRepository> { CategoryRepositoryImpl(get()) }
 }

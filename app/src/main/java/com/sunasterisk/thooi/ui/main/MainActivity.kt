@@ -11,6 +11,7 @@ import com.sunasterisk.thooi.base.BaseActivity
 import com.sunasterisk.thooi.data.source.entity.UserType
 import com.sunasterisk.thooi.databinding.ActivityMainBinding
 import com.sunasterisk.thooi.di.ViewModelFactory
+import com.sunasterisk.thooi.util.toast
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
@@ -26,17 +27,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun setupViews() {
         setupBottomNavView()
-
     }
 
     private fun setupBottomNavView() = binding.bottomNavView.let {
         NavigationUI.setupWithNavController(it, navController)
         it.setOnNavigationItemSelectedListener { item ->
-            if (navController.currentDestination?.id != item.itemId) {
-                NavigationUI.onNavDestinationSelected(item, navController)
-            } else {
-                mainVM.scrollToTop()
-                true
+            when (item.itemId) {
+                R.id.scheduleFragment -> {
+                    toast(R.string.msg_missing_feature)
+                    true
+                }
+                navController.currentDestination?.id -> {
+                    mainVM.scrollToTop()
+                    true
+                }
+                else -> NavigationUI.onNavDestinationSelected(item, navController)
             }
         }
     }
@@ -57,12 +62,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 }
             )
         }
-        binding.floatingActionButton.setOnClickListener {
-            navController.navigate(R.id.global_newPost)
-        }
-        mainVM.currentUserType.observe(this) {
-            if (it == null) return@observe
-            binding.floatingActionButton.isClickable = it == UserType.CUSTOMER
+        mainVM.currentUserType.observe(this) { type ->
+            if (type == null) return@observe
+            binding.floatingActionButton.setOnClickListener {
+                when (type) {
+                    UserType.CUSTOMER -> navController.navigate(R.id.global_newPost)
+                    UserType.FIXER -> toast(R.string.msg_missing_feature)
+                }
+            }
         }
     }
 

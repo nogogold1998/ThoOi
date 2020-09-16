@@ -5,30 +5,41 @@ import com.sunasterisk.thooi.data.Result
 import com.sunasterisk.thooi.data.model.PostDetail
 import com.sunasterisk.thooi.data.model.SummaryUser
 import com.sunasterisk.thooi.data.source.entity.PostStatus
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.transformLatest
 
 class PostDetailRepositoryImpl(
     private val postRepo: PostRepository,
+    private val categoryRepo: CategoryRepository,
     private val userRepository: UserRepository,
     private val firebaseAuth: FirebaseAuth,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PostDetailRepository {
-    override fun getPostDetailById(id: String): Flow<PostDetail> {
-        return postRepo.getPostByIdFlow(id).filterNotNull().flatMapLatest { post ->
+
+    override fun getPostDetailById(id: String): Flow<PostDetail> =
+        postRepo.getPostByIdFlow(id).filterNotNull().flatMapLatest { post ->
             val customer = userRepository.getUserFlow(post.customerRef)
                 .transformLatest { result ->
                     (result as? Result.Success)?.data?.let { user -> this.emit(user) }
-                }
+                }.flowOn(dispatcher)
+            val category = categoryRepo.getCategoryByIdFlow(post.categoryRef)
+                .transformLatest { result ->
+                    (result as? Result.Success)?.data?.title?.let { emit(it) }
+                }.flowOn(dispatcher)
 
             val list = Array(post.appliedFixerIds.size) { i ->
                 post.appliedFixerIds[i]
                     .let { userRepository.getUserFlow(it) }
                     .transformLatest { result ->
-                        (result as? Result.Success)?.data?.let { user -> emit(user) }
-                    }
+                        (result as? Result.Success)?.data?.let { emit(it) }
+                    }.flowOn(dispatcher)
             }
 
             combine(
@@ -50,9 +61,11 @@ class PostDetailRepositoryImpl(
                     post.suggestedPrice,
                     post.appointment,
                 )
+            }.combine(category) { postDetail: PostDetail, s: String ->
+                postDetail.copy(category = s)
             }
         }
-    }
+            .distinctUntilChanged()
 
     override suspend fun assignPostToFixer(postId: String, fixerId: String) {
         postRepo.getPostById(postId)?.copy(fixerId = fixerId, status = PostStatus.PENDING)
