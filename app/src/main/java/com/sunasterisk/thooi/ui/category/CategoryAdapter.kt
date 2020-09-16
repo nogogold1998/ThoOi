@@ -94,7 +94,10 @@ class PostCategoryVH(
     override fun onBind(item: CategoryAdapterItem.PostItem, binding: ItemCategoryJobBinding) =
         with(binding) {
             val post = item.data
-            imageCategoryPost.load(post.imagesRefs.random())
+            post.imagesRefs.let {
+                if (!it.isNullOrEmpty()) imageCategoryPost.load(it.random())
+                else "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg"
+            }
             textTitlePost.text = post.title
             textDescriptionPost.text = post.description
             textPostSummaryAddress.text = post.address

@@ -4,14 +4,17 @@ import android.net.Uri
 import androidx.lifecycle.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.sunasterisk.thooi.data.model.UserAddress
 import com.sunasterisk.thooi.data.repository.FirestoreRepository
+import com.sunasterisk.thooi.data.repository.UserRepository
 import com.sunasterisk.thooi.data.source.entity.Category
 import com.sunasterisk.thooi.data.source.entity.Post
 import com.sunasterisk.thooi.util.Event
 import com.sunasterisk.thooi.util.check
 import com.sunasterisk.thooi.util.format
+import com.sunasterisk.thooi.util.getOneShotResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -24,8 +27,20 @@ import java.io.File
 class NewPostViewModel(
     private val firestoreRepo: FirestoreRepository,
     private val firebaseAuth: FirebaseAuth,
-    private val fireStorage: FirebaseStorage
+    private val fireStorage: FirebaseStorage,
+    private val firebaseInstanceId: FirebaseInstanceId,
+    private val userRepo: UserRepository
 ) : ViewModel() {
+
+    init {
+        viewModelScope.launch {
+            getOneShotResult {
+                val token = firebaseInstanceId.instanceId.await().token
+                userRepo.setToken(token)
+            }
+        }
+    }
+
     val places = MutableLiveData<UserAddress>()
     val category = MutableLiveData<Category>()
     val suggestPrice = MutableLiveData<String>()
