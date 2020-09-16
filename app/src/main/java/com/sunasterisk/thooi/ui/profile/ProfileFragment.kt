@@ -33,7 +33,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
     }
 
     override fun initListener() {
-        binding.layoutToolbarProfile.toolbar.setNavigationOnClickListener {
+        binding.toolbarProfile.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
         binding.scrollviewProfile.setOnScrollChangeListener { _, _, _, _, _ ->

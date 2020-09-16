@@ -17,7 +17,6 @@ import com.sunasterisk.thooi.ui.home.model.HomeNavigationEvent
 import com.sunasterisk.thooi.ui.main.MainVM
 import com.sunasterisk.thooi.util.MarginItemDecoration
 import com.sunasterisk.thooi.util.observeEvent
-import com.sunasterisk.thooi.util.verticalScrollProgress
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun onCreateBinding(
@@ -60,13 +59,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 }
             }
             it.addItemDecoration(MarginItemDecoration(resources, R.dimen.dp_8, R.dimen.dp_8))
-            it.setOnScrollChangeListener { _, _, _, _, _ ->
-                if (it.adapter?.itemCount == 0) return@setOnScrollChangeListener
-                when (it.verticalScrollProgress) {
-                    1f -> mainVM.collapseToolbar()
-                    in 0f..0.8f -> mainVM.showToolbar()
-                }
-            }
         }
         this.categoryAdapter = categoryAdapter
         this.summaryAdapter = summaryPostAdapter

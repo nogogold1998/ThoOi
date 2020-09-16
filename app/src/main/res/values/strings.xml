@@ -23,7 +23,7 @@
     <string name="hint_change_password">Đổi mật khẩu</string>
     <string name="label_sign_up">Đăng ký</string>
 
-    <string name="label_detail">Chi tiết</string>
+    <string name="label_post_detail">Bài viết</string>
     <string name="label_description">Mô tả</string>
     <string name="label_location">Địa điểm</string>
     <string name="label_fixers_applied">Thợ đã ứng tuyển</string>
@@ -46,6 +46,7 @@
     <string name="label_job_on_progress">Đang tiến hành</string>
     <string name="label_profile">Hồ sơ</string>
     <string name="label_suggested_price">Tiền công dự kiến</string>
+    <string name="label_appointment">Lịch hẹn dự kiến</string>
 
     <string name="action_apply_job">Nhận việc</string>
     <string name="action_close_post">Đóng bài viết</string>

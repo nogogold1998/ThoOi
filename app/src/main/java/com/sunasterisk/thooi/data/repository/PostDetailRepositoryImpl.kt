@@ -48,6 +48,7 @@ class PostDetailRepositoryImpl(
                     post.fixerId,
                     firebaseAuth.currentUser?.uid!!,
                     post.suggestedPrice,
+                    post.appointment,
                 )
             }
         }

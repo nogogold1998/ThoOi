@@ -13,6 +13,7 @@
         app:navigationIcon="@drawable/ic_arrow_back_24"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:titleTextColor="?android:attr/textColorSecondary"
         app:title="@string/label_category" />
 
     <androidx.recyclerview.widget.RecyclerView

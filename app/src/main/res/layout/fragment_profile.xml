@@ -15,11 +15,14 @@
         android:layout_height="match_parent"
         tools:context=".ui.profile.ProfileFragment">
 
-        <include
-            android:id="@+id/layoutToolbarProfile"
-            layout="@layout/tool_bar_layout"
-            app:navigationIcon="@{@drawable/ic_arrow_back_24}"
-            app:title="@{@string/label_profile}" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_arrow_back_24"
+            app:title="@string/label_profile"
+            app:titleTextColor="?android:attr/textColorSecondary" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/scrollviewProfile"

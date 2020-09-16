@@ -21,12 +21,13 @@
             android:id="@+id/flowJobDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="textJobTitle, textPostedDate,
-            dividerJobTitle, layoutSummaryCustomer,
-            dividerSummaryCustomer, textLabelJobDescription, textJobDescription,
-            dividerJobDescription, textLabelJobLocation, textJobLocation,
-            dividerJobLocation, textLabelSuggestedPrice, textSuggestedPrice,
-            dividerSuggestedPrice, textLabelAppliedFixers"
+            app:constraint_referenced_ids="textJobTitle, textPostedDate, dividerJobTitle,
+            layoutSummaryCustomer, dividerSummaryCustomer,
+            textLabelJobDescription, textJobDescription, dividerJobDescription,
+            textLabelJobLocation, textJobLocation, dividerJobLocation,
+            textLabelSuggestedPrice, textSuggestedPrice, dividerSuggestedPrice,
+            textLabelAppointment, textAppointment, dividerAppointment,
+            textLabelAppliedFixers"
             app:flow_horizontalAlign="start"
             app:flow_horizontalBias="0"
             app:flow_maxElementsWrap="1"
@@ -102,6 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{postDetail.address}"
+            android:drawablePadding="@dimen/dp_8"
             app:drawableStartCompat="@drawable/ic_location_24"
             tools:text="@tools:sample/cities" />
 
@@ -122,12 +124,35 @@
             android:id="@+id/textSuggestedPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dp_8"
             android:text="@{postDetail.suggestedPrice}"
             app:drawableStartCompat="@drawable/ic_round_money_coin_24"
             tools:text="@tools:sample/us_zipcodes" />
 
         <View
             android:id="@+id/dividerJobLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_1"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/textLabelAppointment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_appointment"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/textAppointment"
+            localDateTime="@{postDetail.appointment}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dp_8"
+            app:drawableStartCompat="@drawable/ic_round_calendar_24"
+            tools:text="@tools:sample/us_zipcodes" />
+
+        <View
+            android:id="@+id/dividerAppointment"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_1"
             android:background="?android:attr/listDivider" />

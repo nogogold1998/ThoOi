@@ -26,15 +26,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imageSliderJobThumbnails"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/dp_28"
             tools:listitem="@layout/item_details_post" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineBottomToolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="?android:attr/actionBarSize"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <com.smarteist.autoimageslider.SliderView
             android:id="@+id/imageSliderJobThumbnails"
@@ -56,16 +50,26 @@
             app:sliderScrollTimeInSec="3"
             app:sliderStartAutoCycle="true" />
 
+        <View
+            android:id="@+id/viewAppbarBackground"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white"
+            android:elevation="@dimen/dp_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/imageUpButton"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="@dimen/dp_8"
             android:contentDescription="@null"
-            android:elevation="@dimen/dp_1"
-            android:padding="@dimen/dp_4"
+            android:elevation="@dimen/dp_2"
+            android:padding="@dimen/dp_8"
             android:src="@drawable/ic_arrow_back_24"
-            app:layout_constraintBottom_toTopOf="@id/guidelineBottomToolbar"
+            app:layout_constraintBottom_toBottomOf="@id/viewAppbarBackground"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -76,8 +80,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_24"
+            android:elevation="@dimen/dp_2"
             android:gravity="center_vertical"
-            android:text="@string/label_detail"
+            android:text="@string/label_post_detail"
+            android:textColor="?android:attr/textColorSecondary"
             app:layout_constraintBottom_toBottomOf="@id/imageUpButton"
             app:layout_constraintStart_toEndOf="@id/imageUpButton"
             app:layout_constraintTop_toTopOf="@id/imageUpButton" />
