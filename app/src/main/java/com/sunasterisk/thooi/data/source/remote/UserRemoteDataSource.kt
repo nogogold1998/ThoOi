@@ -100,7 +100,7 @@ class UserRemoteDataSource(
     }
 
     override suspend fun updateUser(user: User) = getOneShotResult {
-        currentUserDocument?.set(FirestoreUser(user))?.await() ?: throw authException
+        currentUserDocument?.set(FirestoreUser(user))?.await()
         Unit
     }
 

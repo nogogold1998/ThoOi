@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.sunasterisk.thooi.ui.settings.editprofile.EditProfileViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+
+        <include
+            android:id="@+id/layoutAppbar"
+            layout="@layout/tool_bar_layout"
+            app:navigationIcon="@{@drawable/ic_arrow_back_24}"
+            app:title="@{@string/label_sign_up}" />
+
+        <ProgressBar
+            style="?attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dp_8"
+            android:background="@drawable/bg_circle"
+            android:visibility="@{viewModel.progress ? View.VISIBLE : View.GONE}" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:padding="@dimen/dp_16"
+            android:scrollbars="none">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutName"
+                    style="@style/StyleTextInputLayout"
+                    errorText="@{viewModel.nameRule}"
+                    app:startIconDrawable="@drawable/ic_outline_account_circle_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_full_name"
+                        android:inputType="textPersonName"
+                        android:text="@={viewModel.name}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutPhone"
+                    style="@style/StyleTextInputLayout"
+                    errorText="@{viewModel.phoneRule}"
+                    app:startIconDrawable="@drawable/ic_round_phone_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_phone"
+                        android:inputType="phone"
+                        android:text="@={viewModel.phone}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutAddress"
+                    style="@style/StyleTextInputLayout"
+                    android:clickable="@{viewModel.isNetworkConnected}"
+                    app:startIconDrawable="@drawable/ic_round_not_listed_location_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="@{viewModel.isNetworkConnected}"
+                        android:focusable="false"
+                        android:hint="@string/hint_address"
+                        android:longClickable="false"
+                        android:text="@{viewModel.address.address}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutBirthday"
+                    style="@style/StyleTextInputLayout"
+                    app:startIconDrawable="@drawable/ic_round_cake_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextBirthday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:hint="@string/hint_birthday"
+                        android:inputType="date"
+                        android:longClickable="false"
+                        android:text="@{viewModel.birthday.first}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutDescription"
+                    style="@style/StyleTextInputLayout"
+                    app:startIconDrawable="@drawable/ic_round_description_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_description"
+                        android:inputType="textMultiLine"
+                        android:text="@={viewModel.bio}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutPassword"
+                    style="@style/StyleTextInputLayout"
+                    errorText="@{viewModel.passwordRule}"
+                    app:passwordToggleEnabled="true"
+                    app:startIconDrawable="@drawable/ic_round_lock_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:hint="@string/hint_password"
+                        android:inputType="textPassword"
+                        android:text="@={viewModel.password}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/buttonSave"
+                    style="@style/StyleButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="@{viewModel.isNetworkConnected}"
+                    android:onClick="@{()->viewModel.save()}"
+                    android:text="Cập nhật" />
+
+                <androidx.constraintlayout.helper.widget.Flow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:constraint_referenced_ids="inputLayoutName,
+                inputLayoutPhone,inputLayoutAddress,inputLayoutBirthday
+                ,inputLayoutDescription,inputLayoutPassword,buttonSave"
+                    app:flow_verticalGap="@dimen/dp_16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+    </LinearLayout>
+</layout>
