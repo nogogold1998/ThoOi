@@ -100,6 +100,7 @@
 
     <fragment
         android:id="@+id/chatFragment"
+        android:name="com.sunasterisk.thooi.ui.conversation.ConversationFragment"
         tools:layout="@layout/fragment_conversation">
         <action
             android:id="@+id/chat_to_profile"

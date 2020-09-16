@@ -8,4 +8,6 @@ interface NotificationRepository {
     fun getAllNotifications(): Flow<Result<List<Notification>>>
 
     fun getNotificationById(id: String): Flow<Result<Notification>>
+
+    fun getUserImgUrl(id: String, function: (String) -> Unit)
 }

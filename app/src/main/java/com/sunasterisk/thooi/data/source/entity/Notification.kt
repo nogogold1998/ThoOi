@@ -9,21 +9,22 @@ import org.threeten.bp.LocalDateTime
 @Entity
 data class Notification(
     @PrimaryKey
-    val id: String,
-    val content: String,
-    val createdAt: LocalDateTime,
-    val isRead: Boolean,
-    val receiverRef: String,
-    val senderRef: String,
-    val type: NotificationType,
+    val id: String = "",
+    val content: String = "",
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+    val isRead: Boolean = false,
+    val receiverRef: String = "",
+    val senderRef: String = "",
+    val type: NotificationType = NotificationType.Notification,
+    var imageUrl: String = ""
 ) {
     constructor(id: String, firestoreNotification: FirestoreNotification) : this(
         id,
         firestoreNotification.content,
         firestoreNotification.created_at.toLocalDateTime(),
         firestoreNotification.is_read,
-        firestoreNotification.receiver.id,
-        firestoreNotification.sender.id,
+        firestoreNotification.receiver!!.id,
+        firestoreNotification.sender!!.id,
         NotificationType.valueOf(firestoreNotification.type)
     )
 }

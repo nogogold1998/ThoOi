@@ -31,13 +31,14 @@
 
         <TextView
             android:id="@+id/textTitle"
-            style="@style/TextAppearance.Compat.Notification.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_8"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@{conversation.otherName}"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/textLastMessage"
             app:layout_constraintStart_toEndOf="@+id/imageNotification"
             app:layout_constraintTop_toTopOf="@+id/imageNotification"
@@ -45,7 +46,6 @@
 
         <TextView
             android:id="@+id/textLastMessage"
-            style="@style/TextAppearance.Compat.Notification.Time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"

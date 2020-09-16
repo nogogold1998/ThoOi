@@ -61,7 +61,7 @@ val repositoryModule = module {
 
     //Repository modules
     single<UserRepository> { UserRepositoryImpl(get(), get()) }
-    single<NotificationRepository> { NotificationRepositoryImpl(get(), get(), get()) }
+    single<NotificationRepository> { NotificationRepositoryImpl(get(), get()) }
     single<MessageDataSource.Remote> { MessageRemoteDataSource(get(), get()) }
     single<MessageRepository> { MessageRepositoryImpl(get(), get()) }
 

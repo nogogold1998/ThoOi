@@ -16,8 +16,8 @@ data class Conversation(
         entityConversation.id,
         entityConversation.lastMessage,
         entityConversation.lastTime,
-        if (currentUserId == entityConversation.members[0].id) entityConversation.members[0].fullName else entityConversation.members[1].fullName,
-        if (currentUserId == entityConversation.members[0].id) entityConversation.members[0].imageUrl else entityConversation.members[1].imageUrl
+        if (currentUserId == entityConversation.members[0].id) entityConversation.members[1].fullName else entityConversation.members[0].fullName,
+        if (currentUserId == entityConversation.members[0].id) entityConversation.members[1].imageUrl else entityConversation.members[0].imageUrl
     ) {
     }
 

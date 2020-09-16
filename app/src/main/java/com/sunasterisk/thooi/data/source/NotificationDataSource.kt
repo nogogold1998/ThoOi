@@ -11,7 +11,9 @@ interface NotificationDataSource {
 
     interface Remote {
         fun getAllNotification(): Flow<Result<List<Notification>>>
+        
+        fun getUserImgUrl(id: String, function: (String) -> Unit)
 
-        fun getNotificationById(id: String): Flow<Result<Notification>>
+        fun getNotificationById(id: String,): Flow<Result<Notification>>
     }
 }

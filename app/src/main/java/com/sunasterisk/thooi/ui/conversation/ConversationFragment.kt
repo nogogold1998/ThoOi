@@ -4,15 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import com.google.firebase.auth.FirebaseAuth
-import com.sunasterisk.thooi.ChatFragmentArgs
 import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.databinding.FragmentConversationBinding
-import com.sunasterisk.thooi.ui.post.detail.PostDetailsFragmentArgs
 import org.koin.android.ext.android.inject
 
 class ConversationFragment : BaseFragment<FragmentConversationBinding>() {
 
-    private val args: ChatFragmentArgs by navArgs()
+    private val args: ConversationFragmentArgs by navArgs()
     private val viewModel by inject<ConversationViewModel>()
 
     override fun onCreateBinding(

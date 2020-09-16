@@ -16,7 +16,7 @@ data class Message(
     val senderRef: String = "",
     val receiverRef: String = "",
     val text: String = "",
-    val imageUrl: String = "",
+    var imageUrl: String = "",
     val isRead: Boolean = false
 ) {
     constructor(id: String, firestoreMessage: FirestoreMessage) : this(

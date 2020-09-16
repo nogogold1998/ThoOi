@@ -30,26 +30,32 @@ class MessageRemoteDataSource(
 ) : MessageDataSource.Remote {
 
     private val userDocument = auth.uid?.let { database.collection(USERS_COLLECTION).document(it) }
+    private val userCollection = database.collection(USERS_COLLECTION)
 
     private val conversationCollection = database.collection(CONVERSATIONS_COLLECTION)
 
     override fun getAllConversations(): Flow<Result<List<Conversation>>> = callbackFlow {
         offer(Result.loading())
 
-        userDocument?.addSnapshotListener { snapshot, exception ->
-            snapshot?.toObject(FirestoreUser::class.java)?.let { user ->
-                try {
-                    offer(Result.success(getConversations(user)))
-                } catch (e: CancellationException) {
-                    offer(Result.failed(e))
+        val listener =
+            userDocument?.addSnapshotListener { snapshot, exception ->
+                snapshot?.toObject(FirestoreUser::class.java)?.let { user ->
+                    try {
+                        offer(Result.success(getConversations(user)))
+                    } catch (e: CancellationException) {
+                        offer(Result.failed(e))
+                    }
+                }
+
+                exception?.let {
+                    offer(Result.failed(it))
+                    cancel(it.toString(), it)
                 }
             }
-
-            exception?.let {
-                offer(Result.failed(it))
-                cancel(it.toString(), it)
-            }
-        }.let { awaitClose { it?.remove() } }
+        awaitClose {
+            listener?.remove()
+            cancel()
+        }
     }.flatMapLatest { result ->
         when (result) {
             is Result.Success -> result.data.map { Result.success(it) }
@@ -66,6 +72,17 @@ class MessageRemoteDataSource(
                 }
             }
         }
+        awaitClose {
+            cancel()
+        }
+    }
+
+    override fun getUserImgUrl(id: String, function: (String) -> Unit) {
+        userCollection.document(id).get()
+            .addOnSuccessListener {
+                val url = it?.getString("image_url")
+                url?.let { it1 -> function.invoke(it1) }
+            }
     }
 
     override suspend fun createNewConversation(conversation: Conversation) =
@@ -109,34 +126,37 @@ class MessageRemoteDataSource(
                 .add(FirestoreMessage(database, message)).await()
         }
 
-    private fun getConversations(user: FirestoreUser): Flow<List<Conversation>> = callbackFlow {
+    private fun getConversations(user: FirestoreUser): Flow<List<Conversation>> =
         user.conversations.map { conversationDocument ->
-            getConversationFromConversationDocument(conversationDocument).map { conversation ->
-                getUsersFromConversationDocument(conversationDocument).map { users ->
-                    Conversation(
-                        conversationDocument.id,
-                        conversation.lastMessage,
-                        conversation.lastTime,
-                        users
-                    )
-                }
+            getConversationFromConversationDocument(conversationDocument).combine(
+                getUsersFromConversationDocument(conversationDocument)
+            ) { conversation, users ->
+                Conversation(
+                    conversationDocument.id,
+                    conversation.lastMessage,
+                    conversation.lastTime,
+                    users
+                )
             }
         }
+
             .toTypedArray()
             .let { arrayOfFlows ->
-                combine(*arrayOfFlows) { it.toList() }
+                combine(*arrayOfFlows) { (it.toList()) }
             }
-    }
 
     private fun getConversationFromConversationDocument(
         conversationDocument: DocumentReference,
     ): Flow<FirestoreConversation> = callbackFlow {
-        conversationDocument.addSnapshotListener { snapshot, exception ->
+        val listener = conversationDocument.addSnapshotListener { snapshot, exception ->
             snapshot?.toObject(FirestoreConversation::class.java)
                 ?.let { offer(it) }
 
             exception?.let { cancel(it.toString(), it) }
-        }.let { awaitClose { it.remove() } }
+        }
+        awaitClose {
+            listener.remove()
+        }
     }
 
     private fun getUsersFromConversationDocument(

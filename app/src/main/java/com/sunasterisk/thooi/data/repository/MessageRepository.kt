@@ -19,4 +19,6 @@ interface MessageRepository {
     fun getMessagesByConversationId(currentUserId: String, id: String): Flow<Result<List<Message>>>
 
     suspend fun sendMessage(message: com.sunasterisk.thooi.data.source.entity.Message): Result<DocumentReference>
+
+    fun getUserImgUrl(id: String, function: (String) -> Unit)
 }

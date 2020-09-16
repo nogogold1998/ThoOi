@@ -16,6 +16,8 @@ interface MessageDataSource {
 
         fun getConversationById(id: String): Flow<Result<Conversation>>
 
+        fun getUserImgUrl(id: String, function: (String) -> Unit)
+
         suspend fun createNewConversation(conversation: Conversation): Result<DocumentReference>
 
         fun getMessagesByConversationId(id: String): Flow<Result<List<Message>>>
