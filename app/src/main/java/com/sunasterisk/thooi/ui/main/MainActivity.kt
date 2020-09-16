@@ -11,6 +11,8 @@ import com.sunasterisk.thooi.base.BaseActivity
 import com.sunasterisk.thooi.data.source.entity.UserType
 import com.sunasterisk.thooi.databinding.ActivityMainBinding
 import com.sunasterisk.thooi.di.ViewModelFactory
+import com.sunasterisk.thooi.util.livedata.NetworkState
+import com.sunasterisk.thooi.util.toast
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
@@ -63,6 +65,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         mainVM.currentUserType.observe(this) {
             if (it == null) return@observe
             binding.floatingActionButton.isClickable = it == UserType.CUSTOMER
+        }
+        mainVM.isNetworkConnected.observe(this) {
+            if (it == NetworkState.NO_NETWORK) {
+                toast("Không có internet")
+            } else {
+                toast("Đã kết nối internet")
+            }
         }
     }
 

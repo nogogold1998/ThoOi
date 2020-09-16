@@ -1,10 +1,7 @@
 package com.sunasterisk.thooi.ui.signup
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.AuthCredential
@@ -22,6 +19,8 @@ import com.sunasterisk.thooi.util.Event
 import com.sunasterisk.thooi.util.check
 import com.sunasterisk.thooi.util.isEmail
 import com.sunasterisk.thooi.util.isValidPassword
+import com.sunasterisk.thooi.util.livedata.NetworkState
+import com.sunasterisk.thooi.util.livedata.NetworkStateLiveData
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -30,9 +29,11 @@ import org.threeten.bp.LocalDate
 @InternalCoroutinesApi
 class SignUpViewModel(
     private val userRepo: UserRepository,
-    private val categoryRepo: CategoryRepository
+    private val categoryRepo: CategoryRepository,
+    network: NetworkStateLiveData
 ) : ViewModel() {
 
+    val isNetworkConnected = network.map { it != NetworkState.NO_NETWORK }
     val isGoogle = MutableLiveData(false)
     val fixer = MutableLiveData(false)
     val name = MutableLiveData<String>()
@@ -136,7 +137,8 @@ class SignUpViewModel(
                 email = emailVal,
                 fullName = nameVal,
                 phone = phoneVal,
-                imageUrl = imageUrl ?: "https://firebasestorage.googleapis.com/v0/b/tho-oi.appspot.com/o/avatar%2Favatar.png?alt=media&token=bc002db7-3c76-4509-b7c8-f41f9372ccc3",
+                imageUrl = imageUrl
+                    ?: "https://firebasestorage.googleapis.com/v0/b/tho-oi.appspot.com/o/avatar%2Favatar.png?alt=media&token=bc002db7-3c76-4509-b7c8-f41f9372ccc3",
                 dateOfBirth = birthday.value?.second ?: LocalDate.now(),
                 address = address.value?.address ?: "",
                 professions = profession.value ?: emptyList(),

@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.core.content.FileProvider
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -22,9 +23,14 @@ import com.sunasterisk.thooi.databinding.FragmentNewPostBinding
 import com.sunasterisk.thooi.ui.placespicker.AddressBottomSheet
 import com.sunasterisk.thooi.ui.placespicker.AddressBottomSheet.Companion.RESULT_PLACES
 import com.sunasterisk.thooi.ui.post.newpost.CategoryBottomSheet.Companion.RESULT_CATEGORY
+import com.sunasterisk.thooi.util.RealPathUtil
 import com.sunasterisk.thooi.util.observeEvent
 import com.sunasterisk.thooi.util.toLocalDate
 import com.sunasterisk.thooi.util.toast
+import id.zelory.compressor.Compressor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
@@ -40,7 +46,26 @@ class NewPostFragment : BaseFragment<FragmentNewPostBinding>() {
     private lateinit var currentPhotoPath: String
 
     private val takePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) {
-        if (it) viewModel.addImage(currentPhotoPath)
+        if (it) {
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    val oldFile = File(currentPhotoPath)
+                    val compressed = Compressor.compress(requireContext(), oldFile)
+                    compressed.copyTo(oldFile, true)
+                }
+                viewModel.addImage(currentPhotoPath)
+                adapter.notifyItemInserted(adapter.currentList.lastIndex)
+            }
+        }
+    }
+
+    private val pickPicture = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        it?.let { uri ->
+            RealPathUtil.getRealPath(requireContext(), uri)?.let { path ->
+                viewModel.addImage(path)
+                adapter.notifyItemInserted(adapter.currentList.lastIndex)
+            }
+        }
     }
 
     private val permissionResult =
@@ -90,7 +115,7 @@ class NewPostFragment : BaseFragment<FragmentNewPostBinding>() {
         binding.buttonAddress.setOnClickListener {
             AddressBottomSheet().show(parentFragmentManager, AddressBottomSheet::class.simpleName)
         }
-        binding.buttonAddImage.setOnClickListener {
+        binding.buttonTakeImage.setOnClickListener {
             if (checkSelfPermission(requireContext(), WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED
                 || checkSelfPermission(requireContext(), CAMERA) == PERMISSION_GRANTED
             ) {
@@ -101,10 +126,15 @@ class NewPostFragment : BaseFragment<FragmentNewPostBinding>() {
                 )
             }
         }
+        binding.buttonAddImage.setOnClickListener {
+            pickPicture.launch("image/*")
+        }
         adapter.setOnclickListener { position ->
             try {
-                val file = File(currentPhotoPath)
-                if (file.exists()) file.delete()
+                viewModel.imageUri.value?.get(position)?.run {
+                    val file = File(this)
+                    if (file.exists()) file.delete()
+                }
             } catch (e: IOException) {
                 context?.toast(e.message.toString())
             }

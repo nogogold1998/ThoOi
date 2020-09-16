@@ -1,21 +1,15 @@
 package com.sunasterisk.thooi.ui.signin
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuthEmailException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.iid.FirebaseInstanceId
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.data.repository.UserRepository
-import com.sunasterisk.thooi.util.Event
-import com.sunasterisk.thooi.util.check
-import com.sunasterisk.thooi.util.getOneShotResult
-import com.sunasterisk.thooi.util.isEmail
-import com.sunasterisk.thooi.util.isValidPassword
-import com.sunasterisk.thooi.util.transform
+import com.sunasterisk.thooi.util.*
+import com.sunasterisk.thooi.util.livedata.NetworkState
+import com.sunasterisk.thooi.util.livedata.NetworkStateLiveData
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -24,6 +18,7 @@ import kotlinx.coroutines.tasks.await
 class SignInViewModel(
     private val userRepo: UserRepository,
     private val firebaseInstanceId: FirebaseInstanceId,
+    private val network: NetworkStateLiveData
 ) : ViewModel() {
 
     init {
@@ -32,6 +27,7 @@ class SignInViewModel(
         }
     }
 
+    val isNetworkConnected = network.map { it != NetworkState.NO_NETWORK }
     val email = MutableLiveData<String>()
     val emailRule = email.transform { if (it.isEmail) null else R.string.msg_email_invalid }
 

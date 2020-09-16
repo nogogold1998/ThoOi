@@ -128,12 +128,14 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutAddress"
                     style="@style/StyleTextInputLayout"
+                    android:clickable="@{viewModel.isNetworkConnected}"
                     app:startIconDrawable="@drawable/ic_round_not_listed_location_24">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:clickable="@{viewModel.isNetworkConnected}"
                         android:focusable="false"
                         android:hint="@string/hint_address"
                         android:longClickable="false"
@@ -210,6 +212,7 @@
                     style="@style/StyleButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="@{viewModel.isNetworkConnected}"
                     android:onClick="@{()->viewModel.signUp()}"
                     android:text="@string/label_sign_up" />
 

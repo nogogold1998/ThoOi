@@ -68,7 +68,7 @@ function sendNotification(type, senderRef, receiverRef, text) {
         })
         .then(() => {
             const notification = {
-                created_at: Date.now(),
+                created_at: admin.firestore.Timestamp.now(),
                 content: text,
                 is_read: false,
                 sender: senderRef,

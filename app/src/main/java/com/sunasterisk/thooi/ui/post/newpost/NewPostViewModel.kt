@@ -15,6 +15,8 @@ import com.sunasterisk.thooi.util.Event
 import com.sunasterisk.thooi.util.check
 import com.sunasterisk.thooi.util.format
 import com.sunasterisk.thooi.util.getOneShotResult
+import com.sunasterisk.thooi.util.livedata.NetworkState
+import com.sunasterisk.thooi.util.livedata.NetworkStateLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -29,7 +31,8 @@ class NewPostViewModel(
     private val firebaseAuth: FirebaseAuth,
     private val fireStorage: FirebaseStorage,
     private val firebaseInstanceId: FirebaseInstanceId,
-    private val userRepo: UserRepository
+    private val userRepo: UserRepository,
+    network: NetworkStateLiveData
 ) : ViewModel() {
 
     init {
@@ -41,9 +44,11 @@ class NewPostViewModel(
         }
     }
 
+    val isNetworkConnected = network.map { it != NetworkState.NO_NETWORK }
     val places = MutableLiveData<UserAddress>()
     val category = MutableLiveData<Category>()
     val suggestPrice = MutableLiveData<String>()
+    val title = MutableLiveData<String>()
     val description = MutableLiveData<String>()
     val workTime get() = _workTime.map { it.first }
     val loading = MutableLiveData(false)
@@ -77,7 +82,7 @@ class NewPostViewModel(
                         _error.value = e
                     }
                     try {
-                        file.deleteOnExit()
+                        file.delete()
                     } catch (e: Exception) {
                         _error.value = e
                     }
@@ -87,6 +92,7 @@ class NewPostViewModel(
             }
 
             val post = Post(
+                title = title.value ?: "",
                 address = places.value?.address ?: "",
                 location = places.value?.location ?: LatLng(0.0, 0.0),
                 categoryRef = category.value?.id ?: "",

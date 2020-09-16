@@ -9,18 +9,15 @@ import com.sunasterisk.thooi.data.Result
 import com.sunasterisk.thooi.data.repository.UserRepository
 import com.sunasterisk.thooi.data.source.entity.User
 import com.sunasterisk.thooi.util.Event
+import com.sunasterisk.thooi.util.livedata.NetworkStateLiveData
 import com.sunasterisk.thooi.util.postValue
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 
 class MainVM(
     firebaseAuth: FirebaseAuth,
     userRepository: UserRepository,
+    network: NetworkStateLiveData
 ) : ViewModel() {
 
     init {
@@ -30,6 +27,7 @@ class MainVM(
         }
     }
 
+    val isNetworkConnected = network
     private val _toolbarState = MutableLiveData<ToolbarState>()
     val toolbarState: LiveData<ToolbarState>
         get() = _toolbarState
