@@ -1,6 +1,8 @@
 package com.sunasterisk.thooi.ui.signin
 
 import androidx.lifecycle.*
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthEmailException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -18,11 +20,16 @@ import kotlinx.coroutines.tasks.await
 class SignInViewModel(
     private val userRepo: UserRepository,
     private val firebaseInstanceId: FirebaseInstanceId,
-    private val network: NetworkStateLiveData
+    network: NetworkStateLiveData,
+    private val googleClient: GoogleSignInClient,
+    private val firebaseAuth: FirebaseAuth,
 ) : ViewModel() {
 
     init {
         viewModelScope.launch {
+            if (firebaseAuth.currentUser == null) {
+                googleClient.signOut()
+            }
             userRepo.getAllUsers().filterNotNull().first { it.isNotEmpty() }
         }
     }

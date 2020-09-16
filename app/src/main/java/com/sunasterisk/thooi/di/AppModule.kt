@@ -40,7 +40,7 @@ val appModule = module {
 
 @InternalCoroutinesApi
 val viewModelModule = module {
-    viewModel { SignInViewModel(get(), get(), get()) }
+    viewModel { SignInViewModel(get(), get(), get(), get(), get()) }
     viewModel { NotificationViewModel(get()) }
     viewModel { SignUpViewModel(get(), get(), get()) }
     viewModel { MainVM(get(), get(), get()) }

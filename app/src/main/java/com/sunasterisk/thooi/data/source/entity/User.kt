@@ -22,7 +22,7 @@ data class User(
     val dateOfBirth: LocalDate = LocalDate.now(),
     val email: String,
     val fullName: String,
-    val imageUrl: String = "",
+    val imageUrl: String = "https://firebasestorage.googleapis.com/v0/b/tho-oi.appspot.com/o/avatar%2Favatar.png?alt=media&token=bc002db7-3c76-4509-b7c8-f41f9372ccc3",
     val location: LatLng = LatLng(0.0, 0.0),
     val organization: String = "",
     val phone: String,
