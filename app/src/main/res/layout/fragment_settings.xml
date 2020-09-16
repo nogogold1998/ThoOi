@@ -26,9 +26,9 @@
 
         <ImageView
             android:id="@+id/imageAvatar"
-            imageUrl="@{viewModel.imageUrl}"
+            roundImageUrl="@{viewModel.imageUrl}"
             android:layout_width="@dimen/dp_128"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp_128"
             android:layout_marginTop="@dimen/dp_16"
             android:adjustViewBounds="true"
             app:layout_constraintEnd_toEndOf="parent"

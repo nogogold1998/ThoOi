@@ -45,8 +45,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun onObserveLiveData() {
         mainVM.loginStatus.observe(this) {
-            if (it == null) return@observe
-            if (it.currentUser == null) navController.navigate(NavGraphDirections.globalSignIn())
+            if (it?.currentUser == null) navController.navigate(NavGraphDirections.globalSignIn())
         }
         mainVM.toolbarState.observe(this) {
             if (it == null) return@observe

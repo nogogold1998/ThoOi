@@ -109,7 +109,7 @@ class SignUpViewModel(
             isGoogle.value = true
             name.value = it.displayName
             email.value = it.email
-            imageUrl = it.photoUrl?.path
+            imageUrl = it.photoUrl?.toString()
             credential = it.idToken?.run { GoogleAuthProvider.getCredential(this, null) }
             viewModelScope.launch {
                 credential?.let { value ->
