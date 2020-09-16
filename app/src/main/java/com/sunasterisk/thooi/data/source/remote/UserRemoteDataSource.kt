@@ -129,7 +129,7 @@ class UserRemoteDataSource(
         firebaseAuth.createUserWithEmailAndPassword(user.email, password).await().user?.run {
             sendEmailVerification()
             firestore.collection(USERS_COLLECTION).document(uid).set(FirestoreUser(user)).await()
-        } ?: throw authException
+        }
         Unit
     }
 

@@ -19,7 +19,7 @@ const MSG_FIXER = 'Đã yêu cầu nhận công việc'
 const db = admin.firestore()
 
 exports.onCreateMessage = functions.firestore
-    .document("/messages/{messageId}")
+    .document("/conversations/{conversationId}/messages/{messageId}")
     .onCreate(snapshot => {
         const text = snapshot.get(TEXT)
         return sendNotification(TYPE_MSG, snapshot.get(SENDER), snapshot.get(RECEIVER), text)
@@ -34,14 +34,15 @@ exports.onUpdatePost = functions.firestore
         let notifications = []
         if (fixersId && fixersId.length) {
             const users = db.collection('users')
+            const customerRef = users.doc(`${customer}`)
             if (fixerId) {
                 fixersId.forEach(id => {
                     const fixerRef = users.doc(`${id}`)
-                    notifications.push(sendNotification(NOTIFICATION, customer, fixerRef, fixerId === id ? MSG_ACCEPT : MSG_REJECT))
+                    notifications.push(sendNotification(NOTIFICATION, customerRef, fixerRef, fixerId === id ? MSG_ACCEPT : MSG_REJECT))
                 })
             } else {
                 const lastFixerRef = users.doc(`${fixersId[fixersId.length - 1]}`)
-                notifications.push(sendNotification(NOTIFICATION, lastFixerRef, customer, MSG_FIXER))
+                notifications.push(sendNotification(NOTIFICATION, lastFixerRef, customerRef, MSG_FIXER))
             }
         }
         return Promise.all(notifications)

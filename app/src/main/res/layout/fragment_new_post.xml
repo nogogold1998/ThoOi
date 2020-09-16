@@ -38,6 +38,7 @@
                 style="@style/StyleButtonOutline"
                 android:layout_margin="@dimen/dp_16"
                 android:backgroundTint="@color/colorZircon"
+                android:elevation="@dimen/dp_8"
                 android:hint="@string/hint_address"
                 android:text="@{viewModel.places.address}"
                 android:textAlignment="textStart"
@@ -47,13 +48,15 @@
                 app:iconPadding="@dimen/dp_8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutAppbar" />
+                app:layout_constraintTop_toBottomOf="@+id/layoutAppbar"
+                app:strokeWidth="0dp" />
 
             <Button
                 android:id="@+id/buttonCategory"
                 style="@style/StyleButtonOutline"
                 android:layout_margin="@dimen/dp_16"
                 android:backgroundTint="@color/colorZircon"
+                android:elevation="@dimen/dp_8"
                 android:hint="@string/hint_category"
                 android:text="@{viewModel.category.title}"
                 android:textAlignment="textStart"
@@ -63,7 +66,8 @@
                 app:iconPadding="@dimen/dp_8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/buttonAddress" />
+                app:layout_constraintTop_toBottomOf="@+id/buttonAddress"
+                app:strokeWidth="0dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerImage"
@@ -74,6 +78,7 @@
                 android:layout_marginTop="@dimen/dp_16"
                 android:layout_marginEnd="@dimen/dp_16"
                 android:background="@drawable/bg_round"
+                android:elevation="@dimen/dp_8"
                 android:orientation="horizontal"
                 android:paddingStart="@dimen/dp_64"
                 android:paddingEnd="@dimen/dp_8"
@@ -87,6 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_28"
+                android:elevation="@dimen/dp_8"
                 android:background="?attr/selectableItemBackground"
                 android:padding="@dimen/dp_8"
                 app:layout_constraintBottom_toBottomOf="@+id/recyclerImage"
@@ -101,6 +107,7 @@
                 style="@style/StyleButtonOutline"
                 android:layout_margin="@dimen/dp_16"
                 android:backgroundTint="@color/colorZircon"
+                android:elevation="@dimen/dp_8"
                 android:hint="@string/hint_work_time"
                 android:text="@{viewModel.workTime}"
                 android:textAlignment="textStart"
@@ -110,7 +117,8 @@
                 app:iconPadding="@dimen/dp_8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerImage" />
+                app:layout_constraintTop_toBottomOf="@+id/recyclerImage"
+                app:strokeWidth="0dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputLayoutPrice"
