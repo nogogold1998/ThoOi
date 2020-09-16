@@ -54,7 +54,7 @@ class UserRemoteDataSource(
                 snapshot?.documents
                     ?.mapNotNull { it.toObjectWithId(FirestoreUser::class.java, User::class) }
                     ?.let { offer(Result.success(it)) }
-                    ?: throw error!!
+                error?.let { throw it }
             } catch (e: Exception) {
                 offer(Result.failed(e))
             }
@@ -74,7 +74,7 @@ class UserRemoteDataSource(
                     .addSnapshotListener { snapshot, error ->
                         snapshot?.toObjectWithId(FirestoreUser::class.java, User::class)
                             ?.let { offer(Result.success(it)) }
-                            ?: throw error!!
+                        error?.let { throw it }
                     }
             } catch (e: Exception) {
                 offer(Result.failed(e))
