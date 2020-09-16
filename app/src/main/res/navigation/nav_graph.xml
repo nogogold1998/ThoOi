@@ -136,7 +136,8 @@
             app:destination="@id/profileFragment" />
     </fragment>
 
-    <fragment android:id="@+id/newPostFragment"
+    <fragment
+        android:id="@+id/newPostFragment"
         android:name="com.sunasterisk.thooi.ui.post.newpost.NewPostFragment">
         <action
             android:id="@+id/newPost_to_home"
@@ -158,7 +159,9 @@
             app:argType="string" />
     </fragment>
 
-    <fragment android:id="@+id/editProfileFragment">
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.sunasterisk.thooi.ui.settings.editprofile.EditProfileFragment">
         <action
             android:id="@+id/editProfile_to_setting"
             app:destination="@id/settingFragment"

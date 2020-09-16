@@ -17,6 +17,7 @@ import com.sunasterisk.thooi.ui.post.newpost.CategoryViewModel
 import com.sunasterisk.thooi.ui.post.newpost.NewPostViewModel
 import com.sunasterisk.thooi.ui.profile.ProfileVM
 import com.sunasterisk.thooi.ui.settings.SettingsViewModel
+import com.sunasterisk.thooi.ui.settings.editprofile.EditProfileViewModel
 import com.sunasterisk.thooi.ui.signin.SignInViewModel
 import com.sunasterisk.thooi.ui.signup.SignUpViewModel
 import com.sunasterisk.thooi.util.livedata.NetworkStateLiveData
@@ -55,4 +56,5 @@ val viewModelModule = module {
     viewModel { ProfileVM(get()) }
     viewModel { MessagesViewModel(get()) }
     viewModel { ConversationViewModel(get()) }
+    viewModel { EditProfileViewModel(get(), get(), get()) }
 }
