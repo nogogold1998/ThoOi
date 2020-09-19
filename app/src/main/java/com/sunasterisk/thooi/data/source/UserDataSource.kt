@@ -8,15 +8,27 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserDataSource {
     interface Local {
-        suspend fun setCurrentUser(user: User)
+        suspend fun saveUser(vararg user: User)
 
         fun getCurrentUser(): Flow<Result<User>>
+
+        suspend fun getUser(id: String): User?
+
+        fun getUserFlow(id: String): Flow<User>
+
+        fun getAllUser(): Flow<List<User>>
     }
 
     interface Remote {
         fun getCurrentUser(): Flow<Result<User>>
 
+        fun getUser(id: String): Flow<Result<User>>
+
+        fun getAllUsers(): Flow<Result<List<User>>>
+
         suspend fun setToken(token: String): Result<Unit>
+
+        suspend fun deleteToken(token: String): Result<Unit>
 
         suspend fun updateUser(user: User): Result<Unit>
 

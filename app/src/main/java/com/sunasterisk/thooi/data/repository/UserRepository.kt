@@ -9,11 +9,22 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
     fun getCurrentUser(): Flow<Result<User>>
 
+    fun getAllUsers(): Flow<List<User>>
+
+    /**
+     * always return null when just logged in
+     */
+    suspend fun getUser(id: String): User?
+
+    fun getUserFlow(id: String): Flow<Result<User>>
+
     suspend fun updateUser(user: User): Result<Unit>
 
     suspend fun resetPassword(email: String): Result<Unit>
 
     suspend fun setToken(token: String): Result<Unit>
+
+    suspend fun deleteToken(token: String): Result<Unit>
 
     suspend fun signIn(username: String, password: String): Result<AuthResult>
 

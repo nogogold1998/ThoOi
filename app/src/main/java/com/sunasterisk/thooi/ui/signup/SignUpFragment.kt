@@ -1,17 +1,17 @@
 package com.sunasterisk.thooi.ui.signup
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.pm.PackageManager
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.transition.Fade
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -20,19 +20,24 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.Timestamp
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseFragment
+import com.sunasterisk.thooi.data.source.entity.Category
 import com.sunasterisk.thooi.databinding.FragmentSignUpBinding
-import com.sunasterisk.thooi.ui.signup.AddressBottomSheet.Companion.RESULT_PLACES
+import com.sunasterisk.thooi.ui.placespicker.AddressBottomSheet
+import com.sunasterisk.thooi.ui.placespicker.AddressBottomSheet.Companion.RESULT_PLACES
 import com.sunasterisk.thooi.util.beginTransition
 import com.sunasterisk.thooi.util.check
 import com.sunasterisk.thooi.util.getOneShotResult
 import com.sunasterisk.thooi.util.toLocalDate
-import kotlinx.android.synthetic.main.fragment_sign_up.*
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.koin.android.ext.android.inject
 import java.util.*
 
+@InternalCoroutinesApi
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
+
+    private val navArgs: SignUpFragmentArgs by navArgs()
 
     private val viewModel by inject<SignUpViewModel>()
     private val navController by lazy { findNavController() }
@@ -46,7 +51,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
         )
     }
 
-    private val resultLauncher =
+    private val resultLauncher: ActivityResultLauncher<Intent> by lazy {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
                 lifecycleScope.launch {
@@ -61,19 +66,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                 activity?.onBackPressed()
             }
         }
-
-    private val permissionResult =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            @SuppressLint("MissingPermission")
-            if (it) {
-                AddressBottomSheet().show(
-                    parentFragmentManager,
-                    AddressBottomSheet::class.simpleName
-                )
-            } else {
-                viewModel.nameRule.value = R.string.msg_missing_permission
-            }
-        }
+    }
 
     private val picker by lazy {
         MaterialDatePicker.Builder.datePicker().setSelection(System.currentTimeMillis()).build()
@@ -89,7 +82,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
     }
 
     override fun setupView() {
-        if (arguments?.getBoolean(ACTION_GOOGLE_SIGN_IN) == true) {
+        if (navArgs.isGoogleSignUp) {
             resultLauncher.launch(googleSignInClient.signInIntent)
         }
     }
@@ -103,7 +96,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
 
         googleSignIn.observe(viewLifecycleOwner) {
             if (it.getContentIfNotHandled() != null) {
-                navController.navigate(R.id.sign_up_to_home)
+                navController.navigate(SignUpFragmentDirections.signUpToHome())
             }
         }
 
@@ -120,8 +113,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                 textLabelCategory.isVisible = it
                 chipGroupCategory.isVisible = it
                 inputLayoutDescription.isVisible = it
-                inputLayoutPassword.isVisible =
-                    arguments?.getBoolean(ACTION_GOOGLE_SIGN_IN) != true
+                inputLayoutPassword.isVisible = !navArgs.isGoogleSignUp
             }
         }
 
@@ -130,18 +122,10 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
         }
 
         binding.editTextAddress.setOnClickListener {
-            if (ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                permissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-            } else {
-                AddressBottomSheet().show(
-                    parentFragmentManager,
-                    AddressBottomSheet::class.simpleName
-                )
-            }
+            AddressBottomSheet().show(
+                parentFragmentManager,
+                AddressBottomSheet::class.simpleName
+            )
         }
 
         binding.editTextBirthday.setOnClickListener {
@@ -155,19 +139,25 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
         setFragmentResultListener(RESULT_PLACES) { _, bundle ->
             address.value = bundle.getParcelable(RESULT_PLACES)
         }
-    }
 
-    private fun addChipView(chipText: String) {
-        chipGroupCategory?.run {
-            val chip = layoutInflater.inflate(R.layout.item_chip_choice, this, false) as Chip
-            chip.run {
-                text = chipText
-            }
-            addView(chip)
+        category.observe(viewLifecycleOwner) { list ->
+            binding.chipGroupCategory.removeAllViews()
+            list.forEach { addChipView(it) }
+        }
+
+        binding.chipGroupCategory.setOnCheckedChangeListener { group, checkedId ->
+            group.forEach { if (it is Chip && it.id == checkedId) viewModel.pickCategory(it.tag.toString()) }
         }
     }
 
-    companion object {
-        const val ACTION_GOOGLE_SIGN_IN = "google_sign_in"
+    private fun addChipView(category: Category) {
+        binding.chipGroupCategory.run {
+            val chip = layoutInflater.inflate(R.layout.item_chip_choice, this, false) as Chip
+            chip.run {
+                text = category.title
+                tag = category.id
+            }
+            addView(chip)
+        }
     }
 }

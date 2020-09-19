@@ -34,7 +34,7 @@ class ImageSliderAdapter : SliderViewAdapter<ImageSliderAdapter.SlideAdapterVH>(
         )
 
         fun bind(url: String) {
-            binding.imageSliderBackground.load(url)
+            binding.imageSliderBackground.load(url) {}
         }
     }
 }

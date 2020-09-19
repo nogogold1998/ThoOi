@@ -3,57 +3,67 @@ package com.sunasterisk.thooi.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.asLiveData
+import com.google.firebase.auth.FirebaseAuth
 import com.sunasterisk.thooi.R
+import com.sunasterisk.thooi.data.Result
 import com.sunasterisk.thooi.data.model.SummaryPost
 import com.sunasterisk.thooi.data.repository.CategoryRepository
 import com.sunasterisk.thooi.data.repository.PostRepository
 import com.sunasterisk.thooi.data.source.entity.Category
 import com.sunasterisk.thooi.data.source.entity.Post
+import com.sunasterisk.thooi.data.source.entity.PostStatus
 import com.sunasterisk.thooi.ui.home.model.CategoryAdapterItem
 import com.sunasterisk.thooi.ui.home.model.HomeNavigationEvent
 import com.sunasterisk.thooi.ui.home.model.PostCategoryItem
 import com.sunasterisk.thooi.ui.home.model.TitleTextDividerItem
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.conflate
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.withContext
 
 class HomeVM(
-    private val categoryRepo: CategoryRepository,
+    categoryRepo: CategoryRepository,
     private val postRepo: PostRepository,
+    private val firebaseAuth: FirebaseAuth,
 ) : ViewModel() {
 
-    private val _categoryAdapterItems = MutableLiveData<List<CategoryAdapterItem<*>>>()
-    val categoryAdapterItems: LiveData<List<CategoryAdapterItem<*>>> get() = _categoryAdapterItems
+    private val categoriesFlow = categoryRepo.getAllCategories()
 
-    private val _summaryPostAdapterItems = MutableLiveData<List<SummaryPost>>()
-    val summaryPostAdapterItems: LiveData<List<SummaryPost>> get() = _summaryPostAdapterItems
+    val categoryAdapterItems: LiveData<List<CategoryAdapterItem<*>>> =
+        categoriesFlow.transformLatest {
+            when (it) {
+                is Result.Success -> emit(generateCategoryAdapterItems(it.data))
+                is Result.Failed -> {
+                }
+                Result.Loading -> {
+                }
+            }
+        }.asLiveData()
+
+    private val _requestedUserId = MutableLiveData<String>()
+
+    val summaryPostAdapterItems: LiveData<List<SummaryPost>> = _requestedUserId.asFlow()
+        .flatMapConcat { postRepo.getPostsByUserId(it) }
+        .transformLatest {
+            when (it) {
+                is Result.Success -> emit(this@HomeVM.generateSummaryPosts(it.data))
+                is Result.Failed -> {
+                }
+                Result.Loading -> {
+                }
+            }
+        }
+        .distinctUntilChanged()
+        .asLiveData()
 
     private val _navigationEvent = MutableLiveData<HomeNavigationEvent<*>>()
     val navigationEvent: LiveData<HomeNavigationEvent<*>> get() = _navigationEvent
 
     fun loadDataByUserId(id: String) {
-        viewModelScope.launch {
-            categoryRepo.getAllCategories()
-                .map(this@HomeVM::generateCategoryAdapterItems)
-                .conflate()
-                .collect {
-                    _categoryAdapterItems.postValue(it)
-                }
-
-            postRepo.getPostsByUserId(id)
-                .map(this@HomeVM::generateSummaryPosts)
-                .conflate()
-                .collect {
-                    _summaryPostAdapterItems.postValue(it)
-                }
-        }
-    }
-
-    fun navigateToCategory(categoryId: String) {
+        _requestedUserId.postValue(id)
     }
 
     fun navigateToPost(postId: String) {
@@ -71,5 +81,15 @@ class HomeVM(
     }
 
     private suspend fun generateSummaryPosts(posts: List<Post>): List<SummaryPost> =
-        withContext(Dispatchers.Default) { posts.map(::SummaryPost) }
+        withContext(Dispatchers.Default) {
+            posts.filter {
+                firebaseAuth.currentUser?.uid in setOf(
+                    it.fixerId ?: "null",
+                    it.customerRef,
+                    *it.appliedFixerIds.toTypedArray()
+                ) && it.status != PostStatus.FINISHED
+            }
+                .sortedByDescending { it.createdDateTime }
+                .map(::SummaryPost)
+        }
 }

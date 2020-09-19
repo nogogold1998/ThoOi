@@ -21,4 +21,6 @@
     <dimen name="dp_256">256dp</dimen>
     <dimen name="dp_300">300dp</dimen>
     <dimen name="dp_64">64dp</dimen>
+    <dimen name="dp_180">180dp</dimen>
+    <dimen name="dp_90">90dp</dimen>
 </resources>

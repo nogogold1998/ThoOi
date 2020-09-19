@@ -12,15 +12,18 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 
 fun ImageView.load(
     url: String,
-    requestBuilder: (RequestBuilder<Drawable>.() -> Unit)? = null,
+    requestBuilder: (RequestBuilder<Drawable>.() -> Unit) = {
+        centerCrop()
+    },
 ) = post {
     if (context == null) return@post
+    val loadUrl = if (url.contains("https://")) url else "https://$url"
+
     Glide.with(context)
-        .load(Uri.parse(url))
-        .centerCrop()
+        .load(Uri.parse(loadUrl))
+        .apply { requestBuilder.invoke(this) }
         .error(R.drawable.ic_broken_image_24)
         .transition(DrawableTransitionOptions.withCrossFade())
-        .apply { requestBuilder?.invoke(this) }
         .into(this)
 }
 

@@ -15,19 +15,19 @@ import org.threeten.bp.ZoneOffset
 @Entity(tableName = TABLE_NAME)
 data class User(
     @PrimaryKey
-    val id: String = "",
-    val address: String = "",
-    val bio: String = "",
-    val createdDateTime: LocalDateTime = LocalDateTime.now(),
-    val dateOfBirth: LocalDate = LocalDate.now(),
-    val email: String,
-    val fullName: String,
-    val imageUrl: String = "",
-    val location: LatLng = LatLng(0.0, 0.0),
-    val organization: String = "",
-    val phone: String,
-    val professions: List<String> = emptyList(),
-    val userType: UserType,
+    var id: String = "",
+    var address: String = "",
+    var bio: String = "",
+    var createdDateTime: LocalDateTime = LocalDateTime.now(),
+    var dateOfBirth: LocalDate = LocalDate.now(),
+    var email: String,
+    var fullName: String,
+    var imageUrl: String = "https://firebasestorage.googleapis.com/v0/b/tho-oi.appspot.com/o/avatar%2Favatar.png?alt=media&token=bc002db7-3c76-4509-b7c8-f41f9372ccc3",
+    var location: LatLng = LatLng(0.0, 0.0),
+    var organization: String = "",
+    var phone: String,
+    var professions: List<String> = emptyList(),
+    var userType: UserType,
 ) {
     constructor(id: String, firestoreUser: FirestoreUser) : this(
         id,
@@ -42,18 +42,16 @@ data class User(
         firestoreUser.organization,
         firestoreUser.phone,
         firestoreUser.professions,
-        if (firestoreUser.type == COL_USER_TYPE_CUSTOMER) UserType.CUSTOMER else UserType.FIXER
+        UserType.valueOf(firestoreUser.type)
     )
 
     companion object {
         const val TABLE_NAME = "user"
-        const val COL_USER_TYPE_CUSTOMER = "customer"
-        const val COL_USER_TYPE_FIXER = "fixer"
         val defaultZoneOffset: ZoneOffset = ZoneOffset.UTC
     }
 }
 
-enum class UserType(val value: String) {
-    CUSTOMER(User.COL_USER_TYPE_CUSTOMER),
-    FIXER(User.COL_USER_TYPE_FIXER)
+enum class UserType {
+    CUSTOMER,
+    FIXER
 }

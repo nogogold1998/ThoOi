@@ -7,7 +7,16 @@ data class FirestoreNotification(
     val content: String,
     val created_at: Timestamp,
     val is_read: Boolean,
-    val receiver: DocumentReference,
-    val sender: DocumentReference,
+    val receiver: DocumentReference?,
+    val sender: DocumentReference?,
     val type: String,
-)
+) {
+    constructor() : this(
+        "",
+        Timestamp.now(),
+        false,
+        null,
+        null,
+        ""
+    )
+}

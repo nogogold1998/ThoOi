@@ -1,19 +1,40 @@
 package com.sunasterisk.thooi.ui.signin
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthEmailException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.iid.FirebaseInstanceId
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.data.repository.UserRepository
 import com.sunasterisk.thooi.util.*
+import com.sunasterisk.thooi.util.livedata.NetworkState
+import com.sunasterisk.thooi.util.livedata.NetworkStateLiveData
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
-class SignInViewModel(private val userRepo: UserRepository) : ViewModel() {
+class SignInViewModel(
+    private val userRepo: UserRepository,
+    private val firebaseInstanceId: FirebaseInstanceId,
+    network: NetworkStateLiveData,
+    private val googleClient: GoogleSignInClient,
+    private val firebaseAuth: FirebaseAuth,
+) : ViewModel() {
 
+    init {
+        viewModelScope.launch {
+            if (firebaseAuth.currentUser == null) {
+                googleClient.signOut()
+            }
+            userRepo.getAllUsers().filterNotNull().first { it.isNotEmpty() }
+        }
+    }
+
+    val isNetworkConnected = network.map { it != NetworkState.NO_NETWORK }
     val email = MutableLiveData<String>()
     val emailRule = email.transform { if (it.isEmail) null else R.string.msg_email_invalid }
 
@@ -29,6 +50,12 @@ class SignInViewModel(private val userRepo: UserRepository) : ViewModel() {
             getValidValue()?.apply {
                 userRepo.signIn(first, second).check({
                     _signIn.value = Event(Unit)
+                    viewModelScope.launch {
+                        getOneShotResult {
+                            val token = firebaseInstanceId.instanceId.await().token
+                            userRepo.setToken(token)
+                        }
+                    }
                 }, {
                     when (it) {
                         is FirebaseAuthInvalidUserException -> {

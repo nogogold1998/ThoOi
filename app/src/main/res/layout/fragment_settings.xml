@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.sunasterisk.thooi.ui.settings.SettingsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/dp_16">
+
+        <include
+            android:id="@+id/layoutAppbar"
+            layout="@layout/tool_bar_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@{null}"
+            app:title="@{@string/title_settings}" />
+
+        <ImageView
+            android:id="@+id/imageAvatar"
+            roundImageUrl="@{viewModel.imageUrl}"
+            android:layout_width="@dimen/dp_128"
+            android:layout_height="@dimen/dp_128"
+            android:layout_marginTop="@dimen/dp_16"
+            android:adjustViewBounds="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutAppbar"
+            app:srcCompat="@drawable/ic_outline_account_circle_24"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/textDisplayName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_16"
+            android:text="@{viewModel.name}"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="@dimen/sp_15"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageAvatar" />
+
+        <TextView
+            android:id="@+id/textEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:text="@{viewModel.email}"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textDisplayName" />
+
+        <Button
+            android:id="@+id/buttonSignOut"
+            style="@style/StyleButton"
+            android:layout_margin="@dimen/dp_32"
+            android:onClick="@{()-> viewModel.signOutClick()}"
+            android:text="@string/label_logout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonAbout" />
+
+        <Button
+            android:id="@+id/buttonEditProfile"
+            style="@style/StyleButtonOutline"
+            android:layout_marginStart="@dimen/dp_32"
+            android:layout_marginTop="@dimen/dp_32"
+            android:layout_marginEnd="@dimen/dp_32"
+            android:text="@string/label_edit_profile"
+            android:textAlignment="textStart"
+            android:textColor="?android:attr/textColorSecondary"
+            app:icon="@drawable/ic_round_edit_24"
+            app:iconPadding="@dimen/dp_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textEmail" />
+
+        <Button
+            android:id="@+id/buttonAbout"
+            style="@style/StyleButtonOutline"
+            android:layout_marginStart="@dimen/dp_32"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_32"
+            android:text="@string/label_about"
+            android:textAlignment="textStart"
+            android:textColor="?android:attr/textColorSecondary"
+            app:icon="@drawable/ic_round_info_24"
+            app:iconPadding="@dimen/dp_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEditProfile" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

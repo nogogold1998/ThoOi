@@ -7,11 +7,13 @@ import com.sunasterisk.thooi.di.appModule
 import com.sunasterisk.thooi.di.repositoryModule
 import com.sunasterisk.thooi.di.viewModelModule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class App : Application() {
 
+    @InternalCoroutinesApi
     @ExperimentalCoroutinesApi
     override fun onCreate() {
         super.onCreate()

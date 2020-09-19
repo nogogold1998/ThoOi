@@ -1,42 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dp_4"
-    android:padding="@dimen/dp_4">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <data>
+
+        <variable
+            name="message"
+            type="com.sunasterisk.thooi.data.model.Message" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_received_message"
-        android:maxWidth="@dimen/dp_256"
-        android:padding="@dimen/dp_16"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/imageNotification"
-        app:layout_constraintStart_toEndOf="@+id/imageNotification"
-        tools:maxLength="100"
-        tools:text="@tools:sample/lorem/random" />
+        android:layout_margin="@dimen/dp_4"
+        android:padding="@dimen/dp_4">
 
-    <TextView
-        android:id="@+id/textTimeSent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_8"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/textView"
-        tools:text="@tools:sample/date/hhmm" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_received_message"
+            android:maxWidth="@dimen/dp_256"
+            android:padding="@dimen/dp_16"
+            android:text="@{message.text}"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/imageNotification"
+            app:layout_constraintStart_toEndOf="@+id/imageNotification"
+            tools:maxLength="100"
+            tools:text="@tools:sample/lorem/random" />
 
-    <ImageView
-        android:id="@+id/imageNotification"
-        android:layout_width="@dimen/dp_42"
-        android:layout_height="@dimen/dp_42"
-        android:padding="@dimen/dp_16"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:srcCompat="@drawable/ic_outline_account_circle_24" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textTimeSent"
+            localDateTime="@{message.createdAt}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="@+id/textView"
+            tools:text="@tools:sample/date/hhmm" />
+
+        <ImageView
+            android:id="@+id/imageNotification"
+            imageUrl="@{message.senderImageUrl}"
+            android:layout_width="@dimen/dp_42"
+            android:layout_height="@dimen/dp_42"
+            android:padding="@dimen/dp_16"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:srcCompat="@drawable/ic_outline_account_circle_24" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

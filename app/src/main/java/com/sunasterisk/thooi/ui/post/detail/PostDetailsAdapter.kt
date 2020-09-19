@@ -48,7 +48,7 @@ class PostDetailsAdapter(
                     .let(::IllegalArgumentException)
 
         return when (type) {
-            PostDetailsAdapterViewType.POST_DETAILS -> PostDetailsVH(parent)
+            PostDetailsAdapterViewType.POST_DETAILS -> PostDetailsVH(parent, clickListener)
             PostDetailsAdapterViewType.SUMMARY_USER -> SummaryUserVH(parent, clickListener)
             PostDetailsAdapterViewType.CUSTOMER_ACTION_BOTTOM -> {
                 CustomerActionBottomVH(parent, postDetailLive, lifecycleOwner, clickListener)
@@ -68,13 +68,19 @@ class PostDetailsAdapter(
         fun onClick(action: PostDetailsAction)
     }
 
-    class PostDetailsVH(container: ViewGroup) :
-        BaseViewHolder<PostDetailsAdapterItem.PostDetailsItem, ItemDetailsPostBinding>(
-            ItemDetailsPostBinding.inflate(container.inflater, container, false)
-        ) {
+    class PostDetailsVH(
+        container: ViewGroup,
+        clickListener: ClickListener,
+    ) : BaseViewHolder<PostDetailsAdapterItem.PostDetailsItem, ItemDetailsPostBinding>(
+        ItemDetailsPostBinding.inflate(container.inflater, container, false)
+    ) {
 
         init {
             binding.layoutSummaryCustomer.textUserFullName.isSelected = true
+            binding.layoutSummaryCustomer.root.setOnClickListener {
+                cachedValue?.data?.customer?.id
+                    ?.let { clickListener.onClick(PostDetailsAction.ShowCustomer(it)) }
+            }
         }
 
         override fun onBind(
@@ -106,7 +112,10 @@ class PostDetailsAdapter(
             item: PostDetailsAdapterItem.SummaryUserItem,
             binding: ItemSummaryUserBinding,
         ) = with(binding.layoutSummaryUser) {
-            imageSelectedTick.isVisible = item.isSelected
+            imageSelectedTick.run {
+                isVisible = item.isSelected
+                invalidate()
+            }
             user = item.data
             executePendingBindings()
         }
@@ -147,6 +156,7 @@ class PostDetailsAdapter(
                     ON_PROGRESS,
                     FINISHED,
                 )
+                invalidateAll()
             }
         }
     }
@@ -179,14 +189,18 @@ class PostDetailsAdapter(
 
                 text = context.getString(
                     when {
-                        status in listOf(NEW, OPEN) -> R.string.action_apply_job
+                        status == NEW -> R.string.action_apply_job
+                        status == OPEN && postDetail.appliedFixers.any { it.id == postDetail.loggedInUserId } ->
+                            R.string.label_job_applied
+                        status == OPEN -> R.string.action_apply_job
                         assignedToYou -> R.string.label_job_assigned_to_you
                         else -> R.string.label_job_assigned_to_other
                     }
                 )
             }
             with(binding.buttonStartFixing) {
-                isGone = !(status == PENDING && assignedToYou)
+                isGone = !(status in arrayOf(PENDING, ON_PROGRESS, FINISHED) && assignedToYou)
+                isEnabled = status !in arrayOf(ON_PROGRESS, FINISHED)
                 text = context.getString(
                     when (status) {
                         FINISHED -> R.string.label_job_finished
@@ -195,6 +209,7 @@ class PostDetailsAdapter(
                     }
                 )
             }
+            binding.invalidateAll()
         }
     }
 }

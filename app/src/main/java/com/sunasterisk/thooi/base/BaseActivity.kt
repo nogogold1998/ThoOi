@@ -19,6 +19,7 @@ abstract class BaseActivity<out B : ViewBinding> : AppCompatActivity(),
         setContentView(binding.root)
         setupViews()
         initListeners()
+        onObserveLiveData()
     }
 
     open fun setupViews() = Unit

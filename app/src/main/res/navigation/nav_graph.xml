@@ -36,10 +36,20 @@
         tools:layout="@layout/fragment_sign_in">
         <action
             android:id="@+id/signIn_to_signUp"
-            app:destination="@id/signupFragment" />
+            app:destination="@id/signupFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/signIn_to_home"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/signInFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -48,13 +58,18 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/home_to_postDetails"
-            app:destination="@id/postDetailsFragment" />
+            app:destination="@id/postDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
-            android:id="@+id/home_to_fixerCategory"
-            app:destination="@id/fixerCategoryFragment" />
-        <action
-            android:id="@+id/home_to_customerCategory"
-            app:destination="@id/customerCategoryFragment" />
+            android:id="@+id/home_to_category"
+            app:destination="@id/categoryFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/home_to_ranking"
             app:destination="@id/rankingFragment" />
@@ -68,17 +83,25 @@
         android:name="com.sunasterisk.thooi.ui.signup.SignUpFragment"
         tools:layout="@layout/fragment_sign_up">
         <action
-            android:id="@+id/action_signupFragment_to_signInFragment"
+            android:id="@+id/signup_to_signIn"
             app:destination="@id/signInFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
             app:popUpTo="@id/signInFragment" />
 
         <action
             android:id="@+id/sign_up_to_home"
             app:destination="@id/homeFragment"
             app:popUpTo="@id/homeFragment" />
+        <argument
+            android:name="isGoogleSignUp"
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
 
-    <fragment android:id="@+id/settingFragment">
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.sunasterisk.thooi.ui.settings.SettingsFragment">
         <action
             android:id="@+id/setting_to_editProfile"
             app:destination="@id/editProfileFragment" />
@@ -89,10 +112,14 @@
 
     <fragment
         android:id="@+id/chatFragment"
+        android:name="com.sunasterisk.thooi.ui.conversation.ConversationFragment"
         tools:layout="@layout/fragment_conversation">
         <action
             android:id="@+id/chat_to_profile"
             app:destination="@id/profileFragment" />
+        <argument
+            android:name="conversationId"
+            app:argType="string" />
     </fragment>
 
     <fragment
@@ -109,7 +136,9 @@
             app:destination="@id/profileFragment" />
     </fragment>
 
-    <fragment android:id="@+id/newPostFragment">
+    <fragment
+        android:id="@+id/newPostFragment"
+        android:name="com.sunasterisk.thooi.ui.post.newpost.NewPostFragment">
         <action
             android:id="@+id/newPost_to_home"
             app:destination="@id/homeFragment"
@@ -117,40 +146,62 @@
             app:popUpToInclusive="true" />
     </fragment>
 
-    <fragment android:id="@+id/profileFragment">
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.sunasterisk.thooi.ui.profile.ProfileFragment"
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/profile_to_chat"
             app:destination="@id/chatFragment"
             app:popUpTo="@id/chatFragment" />
+        <argument
+            android:name="userId"
+            app:argType="string" />
     </fragment>
 
-    <fragment android:id="@+id/editProfileFragment">
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.sunasterisk.thooi.ui.settings.editprofile.EditProfileFragment">
         <action
-            android:id="@+id/action_editProfileFragment_to_settingFragment"
+            android:id="@+id/editProfile_to_setting"
             app:destination="@id/settingFragment"
             app:popUpTo="@id/settingFragment" />
     </fragment>
 
-    <fragment android:id="@+id/customerCategoryFragment">
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.sunasterisk.thooi.ui.category.CategoryFragment"
+        tools:layout="@layout/fragment_category">
         <action
             android:id="@+id/customerCategory_to_profile"
-            app:destination="@id/profileFragment" />
-    </fragment>
-
-    <fragment android:id="@+id/fixerCategoryFragment">
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/fixerCategory_to_postDetails"
-            app:destination="@id/postDetailsFragment" />
+            app:destination="@id/postDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <argument android:name="categoryId" />
     </fragment>
 
     <action
         android:id="@+id/global_signIn"
         app:destination="@id/signInFragment"
-        app:popUpTo="@id/signInFragment" />
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popUpTo="@id/homeFragment"
+        app:popUpToInclusive="true" />
 
     <action
         android:id="@+id/global_home"
         app:destination="@+id/homeFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
         app:popUpTo="@id/homeFragment" />
 
     <action
@@ -161,14 +212,26 @@
     <action
         android:id="@+id/global_newPost"
         app:destination="@id/newPostFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
         app:popUpTo="@id/newPostFragment" />
     <action
         android:id="@+id/global_notification"
         app:destination="@id/notificationFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
         app:popUpTo="@id/notificationFragment" />
 
     <action
         android:id="@+id/global_setting"
         app:destination="@+id/settingFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
         app:popUpTo="@id/settingFragment" />
 </navigation>

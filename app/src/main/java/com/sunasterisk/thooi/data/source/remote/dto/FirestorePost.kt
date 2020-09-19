@@ -9,6 +9,7 @@ import com.sunasterisk.thooi.util.toTimeStamp
 data class FirestorePost(
     val address: String = "",
     val appointment: Timestamp = Timestamp.now(),
+    val createdDateTime: Timestamp = Timestamp.now(),
     val category: String = "",
     val customer: String = "",
     val description: String = "",
@@ -16,12 +17,14 @@ data class FirestorePost(
     val fixers_id: List<String> = emptyList(),
     val images: List<String> = emptyList(),
     val location: GeoPoint = GeoPoint(0.0, 0.0),
-    val suggestedPrice: Int = 0,
+    val suggestedPrice: String = "",
     val status: String = "",
-    val voucher: String? = null
+    val title: String = "",
+    val voucher: String? = null,
 ) {
     constructor() : this(
         "",
+        Timestamp.now(),
         Timestamp.now(),
         "",
         "",
@@ -30,7 +33,8 @@ data class FirestorePost(
         emptyList(),
         emptyList(),
         GeoPoint(0.0, 0.0),
-        0,
+        "",
+        "",
         "",
         null
     )
@@ -38,6 +42,7 @@ data class FirestorePost(
     constructor(post: Post) : this(
         post.address,
         post.appointment.toTimeStamp(),
+        post.createdDateTime.toTimeStamp(),
         post.categoryRef,
         post.customerRef,
         post.description,
@@ -47,6 +52,7 @@ data class FirestorePost(
         post.location.toGeoPoint(),
         post.suggestedPrice,
         post.status.name,
+        post.title,
         post.voucher
     )
 }

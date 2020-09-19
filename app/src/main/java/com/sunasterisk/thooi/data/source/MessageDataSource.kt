@@ -14,11 +14,14 @@ interface MessageDataSource {
     interface Remote {
         fun getAllConversations(): Flow<Result<List<Conversation>>>
 
-        fun createNewConversation(conversation: Conversation): Flow<Result<DocumentReference>>
+        fun getConversationById(id: String): Flow<Result<Conversation>>
 
-        fun sendMessage(
-            conversation: Conversation,
-            message: Message
-        ): Flow<Result<DocumentReference>>
+        fun getUserImgUrl(id: String, function: (String) -> Unit)
+
+        suspend fun createNewConversation(conversation: Conversation): Result<DocumentReference>
+
+        fun getMessagesByConversationId(id: String): Flow<Result<List<Message>>>
+
+        suspend fun sendMessage(message: Message): Result<DocumentReference>
     }
 }

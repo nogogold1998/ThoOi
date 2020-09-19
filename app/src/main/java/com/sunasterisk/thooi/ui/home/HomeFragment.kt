@@ -4,15 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.databinding.FragmentHomeBinding
+import com.sunasterisk.thooi.di.getViewModelFactory
 import com.sunasterisk.thooi.ui.home.model.HomeNavigationEvent
+import com.sunasterisk.thooi.ui.main.MainVM
 import com.sunasterisk.thooi.util.MarginItemDecoration
-import org.koin.android.ext.android.inject
+import com.sunasterisk.thooi.util.observeEvent
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun onCreateBinding(
@@ -21,20 +25,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         attachToRoot: Boolean,
     ) = FragmentHomeBinding.inflate(inflater, container, attachToRoot)
 
-    private val viewModel: HomeVM by inject()
+    private val viewModel: HomeVM by navGraphViewModels(R.id.nav_graph) { getViewModelFactory() }
+
+    private val mainVM: MainVM by activityViewModels { getViewModelFactory() }
 
     private var categoryAdapter: CategoryAdapter? = null
 
     private var summaryAdapter: SummaryPostAdapter? = null
-
-    private var concatAdapter: ConcatAdapter? = null
 
     override fun setupView() {
         setupRecyclerView()
     }
 
     private fun setupRecyclerView() {
-        val categoryAdapter = CategoryAdapter()
+        val categoryAdapter = CategoryAdapter {
+            findNavController().navigate(HomeFragmentDirections.homeToCategory(it.id))
+        }
         val summaryPostAdapter = SummaryPostAdapter {
             viewModel.navigateToPost(it.id)
         }
@@ -56,7 +62,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
         this.categoryAdapter = categoryAdapter
         this.summaryAdapter = summaryPostAdapter
-        this.concatAdapter = concatAdapter
     }
 
     override fun onObserveLiveData() {
@@ -68,7 +73,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             if (it == null) return@observe
             summaryAdapter?.submitList(it)
         }
-        viewModel.navigationEvent.observe(this) { event ->
+        viewModel.navigationEvent.observe(viewLifecycleOwner) { event ->
             if (event == null) return@observe
             when (event) {
                 is HomeNavigationEvent.ToPostDetailEvent -> {
@@ -78,18 +83,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 }
             }
         }
+        mainVM.scrollToTopEvent.observeEvent(viewLifecycleOwner) {
+            binding.recyclerHome.smoothScrollToPosition(0)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.loadDataByUserId("")
+        mainVM.loginUserId.observeEvent(viewLifecycleOwner) {
+            if (it == null) return@observeEvent
+            viewModel.loadDataByUserId(it)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         categoryAdapter = null
         summaryAdapter = null
-        concatAdapter = null
     }
 
     companion object {

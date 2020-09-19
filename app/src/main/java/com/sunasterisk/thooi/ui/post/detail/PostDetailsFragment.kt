@@ -13,6 +13,7 @@ import com.smarteist.autoimageslider.SliderAnimations
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.databinding.FragmentDetailPostBinding
+import com.sunasterisk.thooi.di.getViewModelFactory
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.CustomerAction.*
 import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.FixerAction.ApplyJob
@@ -20,15 +21,12 @@ import com.sunasterisk.thooi.ui.post.detail.model.PostDetailsAction.FixerAction.
 import com.sunasterisk.thooi.util.MarginItemDecoration
 import com.sunasterisk.thooi.util.observeEvent
 import com.sunasterisk.thooi.util.toast
-import org.koin.android.ext.android.get
 
 class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
 
     private val args: PostDetailsFragmentArgs by navArgs()
 
-    private val viewModel by viewModels<PostDetailsVM> {
-        PostDetailsVM.Factory(get(), get(), this)
-    }
+    private val viewModel by viewModels<PostDetailsVM> { getViewModelFactory() }
 
     override fun onCreateBinding(
         inflater: LayoutInflater,
@@ -52,12 +50,20 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.loadPost(args.postId)
+        savedInstanceState
+            ?.getInt(KEY_MOTION_STATE)
+            ?.let(binding.constraintLayout::transitionToState)
     }
 
     override fun onObserveLiveData() = with(viewModel) {
         toastStringRes.observeEvent(viewLifecycleOwner) {
             context?.toast(getString(it))
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(KEY_MOTION_STATE, binding.constraintLayout.currentState)
     }
 
     private fun setupSliderView() = with(binding.imageSliderJobThumbnails) {
@@ -73,14 +79,17 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
             adapter = PostDetailsAdapter(viewModel.postDetail, viewLifecycleOwner) { action ->
                 when (action) {
                     is PostDetailsAction.CustomerAction -> {
-                        val viewModel = checkViewModelInstance<CustomerPostDetailsVM>()
-                        when (action) {
-                            is SelectFixer -> viewModel.selectFixer(action.summaryUser)
-                            AssignFixer -> viewModel.assignFixer()
-                            ReassignFixer -> viewModel.reassignFixer()
-                            CancelFixing -> viewModel.cancelFixing()
-                            FinishFixing -> viewModel.finishFixing()
-                            ClosePost -> viewModel.closePost()
+                        try {
+                            val viewModel = checkViewModelInstance<CustomerPostDetailsVM>()
+                            when (action) {
+                                is SelectFixer -> viewModel.selectFixer(action.summaryUser)
+                                AssignFixer -> viewModel.assignFixer()
+                                ReassignFixer -> viewModel.reassignFixer()
+                                CancelFixing -> viewModel.cancelFixing()
+                                FinishFixing -> viewModel.finishFixing()
+                                ClosePost -> viewModel.closePost()
+                            }
+                        } catch (_: IllegalStateException) {
                         }
                     }
                     is PostDetailsAction.FixerAction -> {
@@ -90,6 +99,9 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
                             StartFixing -> viewModel.startFixing()
                         }
                     }
+                    is PostDetailsAction.ShowCustomer -> findNavController().navigate(
+                        PostDetailsFragmentDirections.postDetailsToProfile(action.customerId)
+                    )
                 }
             }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -103,3 +115,5 @@ class PostDetailsFragment : BaseFragment<FragmentDetailPostBinding>() {
             "Wrong instance of PostDetailsVM, required $expectClassName but was $actualClassName"
         }
 }
+
+private const val KEY_MOTION_STATE = "motion_state"

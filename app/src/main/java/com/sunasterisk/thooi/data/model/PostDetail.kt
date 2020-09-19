@@ -18,5 +18,8 @@ data class PostDetail(
     val status: PostStatus = PostStatus.NEW,
     val assignedFixerId: String? = null,
     val loggedInUserId: String = "",
+    val suggestedPrice: String = "",
+    val appointment: LocalDateTime = LocalDateTime.now(),
+    val category: String = "",
 )
 

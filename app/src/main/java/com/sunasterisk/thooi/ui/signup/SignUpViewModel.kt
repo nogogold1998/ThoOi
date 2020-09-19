@@ -1,33 +1,39 @@
 package com.sunasterisk.thooi.ui.signup
 
-import android.Manifest
 import android.annotation.SuppressLint
-import androidx.annotation.RequiresPermission
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.sunasterisk.thooi.R
 import com.sunasterisk.thooi.data.model.UserAddress
+import com.sunasterisk.thooi.data.repository.CategoryRepository
 import com.sunasterisk.thooi.data.repository.UserRepository
+import com.sunasterisk.thooi.data.source.entity.Category
 import com.sunasterisk.thooi.data.source.entity.User
 import com.sunasterisk.thooi.data.source.entity.UserType.CUSTOMER
 import com.sunasterisk.thooi.data.source.entity.UserType.FIXER
-import com.sunasterisk.thooi.util.*
+import com.sunasterisk.thooi.util.Event
+import com.sunasterisk.thooi.util.check
+import com.sunasterisk.thooi.util.isEmail
+import com.sunasterisk.thooi.util.isValidPassword
+import com.sunasterisk.thooi.util.livedata.NetworkState
+import com.sunasterisk.thooi.util.livedata.NetworkStateLiveData
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 
+@InternalCoroutinesApi
 class SignUpViewModel(
     private val userRepo: UserRepository,
-    private val placesClient: PlacesClient
+    private val categoryRepo: CategoryRepository,
+    network: NetworkStateLiveData
 ) : ViewModel() {
 
+    val isNetworkConnected = network.map { it != NetworkState.NO_NETWORK }
     val isGoogle = MutableLiveData(false)
     val fixer = MutableLiveData(false)
     val name = MutableLiveData<String>()
@@ -53,8 +59,23 @@ class SignUpViewModel(
     private val _googleSignIn = MutableLiveData<Event<Unit>>()
     val googleSignIn: LiveData<Event<Unit>> get() = _googleSignIn
 
-    private val _places = MutableLiveData<List<UserAddress>>()
-    val places: LiveData<List<UserAddress>> get() = _places
+    private val _category = MutableLiveData<List<Category>>()
+    val category: LiveData<List<Category>> get() = _category
+
+    private val _profession = MutableLiveData<List<String>>()
+    val profession: LiveData<List<String>> get() = _profession
+
+    init {
+        viewModelScope.launch {
+            categoryRepo.getAllCategories().collect { result ->
+                result.check({
+                    _category.value = it
+                }, {
+                    nameRule.value = R.string.msg_unknown_error
+                })
+            }
+        }
+    }
 
     fun signUp() {
         viewModelScope.launch {
@@ -88,13 +109,13 @@ class SignUpViewModel(
             isGoogle.value = true
             name.value = it.displayName
             email.value = it.email
-            imageUrl = it.photoUrl?.path
+            imageUrl = it.photoUrl?.toString()
             credential = it.idToken?.run { GoogleAuthProvider.getCredential(this, null) }
             viewModelScope.launch {
                 credential?.let { value ->
-                    userRepo.checkGoogleAccount(value).check {
-                        _googleSignIn.value = Event(Unit)
-                    }
+                    userRepo.checkGoogleAccount(value).check({ done ->
+                        if (done) _googleSignIn.value = Event(Unit)
+                    })
                 }
             }
         }
@@ -116,9 +137,12 @@ class SignUpViewModel(
                 email = emailVal,
                 fullName = nameVal,
                 phone = phoneVal,
-                imageUrl = imageUrl ?: "",
+                imageUrl = imageUrl
+                    ?: "https://firebasestorage.googleapis.com/v0/b/tho-oi.appspot.com/o/avatar%2Favatar.png?alt=media&token=bc002db7-3c76-4509-b7c8-f41f9372ccc3",
                 dateOfBirth = birthday.value?.second ?: LocalDate.now(),
                 address = address.value?.address ?: "",
+                professions = profession.value ?: emptyList(),
+                bio = bio.value ?: "",
                 location = address.value?.location ?: LatLng(0.0, 0.0),
                 userType = if (fixer.value == true) FIXER else CUSTOMER
             )
@@ -127,13 +151,8 @@ class SignUpViewModel(
         return result
     }
 
-    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE])
-    fun findAddress() {
-        viewModelScope.launch {
-            placesClient.getCurrentPlaces().run {
-                _places.value = map { it.place.run { UserAddress(id, name, address, latLng) } }
-            }
-        }
+    fun pickCategory(string: String) {
+        _profession.value = listOf(string)
     }
 
     @SuppressLint("NullSafeMutableLiveData")

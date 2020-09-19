@@ -6,6 +6,7 @@ import com.sunasterisk.thooi.base.BaseFragment
 import com.sunasterisk.thooi.data.model.Notification
 import com.sunasterisk.thooi.data.source.entity.NotificationType
 import com.sunasterisk.thooi.databinding.FragmentNotificationsBinding
+import kotlinx.android.synthetic.main.fragment_notifications.*
 import org.koin.android.ext.android.inject
 
 class NotificationsFragment : BaseFragment<FragmentNotificationsBinding>() {
@@ -23,6 +24,13 @@ class NotificationsFragment : BaseFragment<FragmentNotificationsBinding>() {
 
     override fun setupView() {
         setUpRecyclerView()
+        viewModel.getNotifications()
+    }
+
+    override fun onObserveLiveData() {
+        viewModel.notifications.observe(viewLifecycleOwner) {
+            (recyclerNotifications.adapter as NotificationAdapter).submitList(it)
+        }
     }
 
     private fun setUpRecyclerView() = with(binding.recyclerNotifications) {

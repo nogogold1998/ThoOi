@@ -52,4 +52,6 @@ sealed class PostDetailsAction {
             fun startFixing() = StartFixing
         }
     }
+
+    data class ShowCustomer(val customerId: String) : PostDetailsAction()
 }

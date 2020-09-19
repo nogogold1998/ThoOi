@@ -81,6 +81,7 @@
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
+                android:drawablePadding="@dimen/dp_8"
                 android:text="@{summaryPost.suggestedPrice}"
                 app:drawableStartCompat="@drawable/ic_round_money_coin_24"
                 tools:ignore="MissingConstraints"
@@ -95,6 +96,7 @@
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
+                android:drawablePadding="@dimen/dp_8"
                 app:drawableStartCompat="@drawable/ic_location_24"
                 tools:ignore="MissingConstraints"
                 tools:text="@tools:sample/cities" />

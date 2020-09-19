@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layoutDescription="@xml/activity_main_scene"
     tools:context=".ui.main.MainActivity">
 
         <fragment
@@ -18,6 +19,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/nav_graph"
             tools:ignore="FragmentTagUsage" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintBottom_toTopOf="@id/bottomNavView" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavView"
@@ -34,12 +42,14 @@
             app:menu="@menu/bottom_nav" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabButton"
+            android:id="@+id/floatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorAccent"
             android:src="@drawable/ic_round_add_24"
             app:elevation="@dimen/dp_8"
+            android:foregroundTint="@color/colorAccent"
+            app:tint="@android:color/white"
             app:layout_anchor="@id/bottomNavView"
             app:layout_anchorGravity="center_horizontal"
             app:layout_constraintBottom_toTopOf="@id/bottomNavView"
@@ -47,4 +57,4 @@
             app:layout_constraintStart_toStartOf="@id/bottomNavView"
             app:layout_constraintTop_toTopOf="@id/bottomNavView" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
